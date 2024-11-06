@@ -1,0 +1,9 @@
+generator:
+  features:
+    # 不必要な設定も有効になる可能性があるのですべて無効にしてから必要な設定のみ有効にする
+    disable_all: true
+    enable:
+      - 'paths/server'
+      - 'ogen/unimplemented'
+
+  ignore_not_implemented: ["complex form schema"]
