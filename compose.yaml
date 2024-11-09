@@ -20,7 +20,6 @@ services:
   db:
     image: mysql:8.0.40
     restart: always
-    platform: linux/amd64
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "auster"
