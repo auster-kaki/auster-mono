@@ -1,10 +1,3 @@
-openapi:
-	go run -mod=mod github.com/ogen-go/ogen/cmd/ogen -target ./pkg/openapi/ \
-	-package openapi \
-	-clean \
-	-config ogen.yml \
-	../spec/openapi.yaml
-
 lint:
 	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --timeout 5m
 
