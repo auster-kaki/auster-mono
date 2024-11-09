@@ -1,3 +1,5 @@
+USE `auster`;
+
 CREATE TABLE `user`
 (
     `id`           varchar(20) COLLATE utf8mb4_bin  NOT NULL,
