@@ -7,5 +7,5 @@ CREATE TABLE `user`
     `created_at`   datetime                         NOT NULL,
     `updated_at`   datetime                         NOT NULL,
     `deleted_flag` tinyint(3) unsigned NOT NULL,
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='ユーザ'
