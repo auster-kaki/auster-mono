@@ -16,5 +16,12 @@ func NewUserHandler(u *usecase.UserUseCase) *UserHandler {
 }
 
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "GetUsers")
+	out, err := h.userUseCase.GetUsers(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to get users: %v", err), http.StatusInternalServerError)
+		return
+	}
+	for i, user := range out {
+		fmt.Println(i, user)
+	}
 }
