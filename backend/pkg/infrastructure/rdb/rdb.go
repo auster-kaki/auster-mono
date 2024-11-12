@@ -2,6 +2,8 @@ package rdb
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
 	"github.com/auster-kaki/auster-mono/pkg/infrastructure/rdb/table"
@@ -17,7 +19,11 @@ type rdb struct {
 }
 
 func NewDB() (*rdb, error) {
-	dataSourceName := "root:@tcp(127.0.0.1:3306)/auster?charset=utf8mb4&parseTime=true"
+	host := "127.0.0.1"
+	if h := os.Getenv("MYSQL_HOST"); h != "" {
+		host = h
+	}
+	dataSourceName := fmt.Sprintf("root:@tcp(%s:3306)/auster?charset=utf8mb4&parseTime=true", host)
 	sqlDB, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
 		return nil, err
