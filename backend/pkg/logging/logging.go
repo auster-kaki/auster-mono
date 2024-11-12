@@ -2,8 +2,11 @@ package logging
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
+	"path/filepath"
+	"runtime"
 )
 
 func init() {
@@ -11,8 +14,17 @@ func init() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(w, &slog.HandlerOptions{
 		AddSource: true,
 		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
-			if a.Key == slog.MessageKey {
+			switch a.Key {
+			case slog.MessageKey:
 				return slog.Attr{Key: "message", Value: a.Value}
+			case slog.SourceKey:
+				const skip = 8
+				_, file, line, ok := runtime.Caller(skip)
+				if !ok {
+					return a
+				}
+				v := fmt.Sprintf("%s:%d", filepath.Base(file), line)
+				a.Value = slog.StringValue(v)
 			}
 			return a
 		},
