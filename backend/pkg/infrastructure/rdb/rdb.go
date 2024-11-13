@@ -1,6 +1,7 @@
 package rdb
 
 import (
+	"cmp"
 	"database/sql"
 	"fmt"
 	"os"
@@ -19,11 +20,10 @@ type rdb struct {
 }
 
 func NewDB() (*rdb, error) {
-	host := "127.0.0.1"
-	if h := os.Getenv("MYSQL_HOST"); h != "" {
-		host = h
-	}
-	dataSourceName := fmt.Sprintf("root:@tcp(%s:3306)/auster?charset=utf8mb4&parseTime=true", host)
+	var (
+		host           = cmp.Or(os.Getenv("MYSQL_HOST"), "127.0.0.1")
+		dataSourceName = fmt.Sprintf("root:@tcp(%s:3306)/auster?charset=utf8mb4&parseTime=true", host)
+	)
 	sqlDB, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
 		return nil, err
