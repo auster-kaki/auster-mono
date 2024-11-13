@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/auster-kaki/auster-mono/pkg/app/presenter/response"
 	"github.com/auster-kaki/auster-mono/pkg/app/usecase"
 )
 
@@ -24,4 +25,5 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	for i, user := range out {
 		fmt.Println(i, user)
 	}
+	response.OK(w, out)
 }
