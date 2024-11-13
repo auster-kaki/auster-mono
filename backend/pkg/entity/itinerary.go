@@ -1,6 +1,8 @@
 package entity
 
-import "github.com/uptrace/bun"
+import (
+	"github.com/uptrace/bun"
+)
 
 type ItineraryID string
 
