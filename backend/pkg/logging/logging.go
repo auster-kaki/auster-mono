@@ -31,14 +31,14 @@ func init() {
 	})))
 }
 
-func Info(ctx context.Context, msg string, args ...any) {
-	slog.InfoContext(ctx, msg, args)
+func Info(ctx context.Context, msg string) {
+	slog.InfoContext(ctx, msg)
 }
 
-func Warn(ctx context.Context, msg string, args ...any) {
-	slog.WarnContext(ctx, msg, args)
+func Warn(ctx context.Context, msg string) {
+	slog.WarnContext(ctx, msg)
 }
 
-func Error(ctx context.Context, msg string, args ...any) {
-	slog.ErrorContext(ctx, msg, args)
+func Error(ctx context.Context, msg string) {
+	slog.ErrorContext(ctx, msg)
 }
