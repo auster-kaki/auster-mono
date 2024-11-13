@@ -27,3 +27,9 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	response.OK(w, out)
 }
+
+func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.PathValue("id"))
+	fmt.Println(r.PathValue("name"))
+	response.OK(w, nil)
+}
