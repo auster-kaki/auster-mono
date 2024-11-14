@@ -6,7 +6,7 @@
 
 **/.DS_Store
 **/.classpath
-**/.dockerignore
+.dockerignore
 **/.env
 **/.git
 **/.gitignore
@@ -21,7 +21,7 @@
 **/bin
 **/charts
 **/docker-compose*
-**/Dockerfile*
+Dockerfile
 **/node_modules
 **/npm-debug.log
 **/obj
