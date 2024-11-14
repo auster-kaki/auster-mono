@@ -54,4 +54,5 @@ type TravelSpotItemRepository interface {
 type VendorRepository interface {
 	Create(ctx context.Context, vendors ...entity.Vendor) error
 	GetAll(ctx context.Context) (entity.Vendors, error)
+	FindByID(ctx context.Context, id entity.VendorID) (*entity.Vendor, error)
 }
