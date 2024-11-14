@@ -26,6 +26,8 @@ services:
       build:
         context: backend/python
         target: final
+      environment:
+        MYSQL_HOST: db
       ports:
         - "5050:5050"
   db:
