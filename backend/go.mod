@@ -7,6 +7,7 @@ require (
 	github.com/uptrace/bun v1.2.5
 	github.com/uptrace/bun/dialect/mysqldialect v1.2.5
 	github.com/uptrace/bun/extra/bundebug v1.2.5
+	github.com/uptrace/bun/extra/bunslog v1.2.5
 )
 
 require (

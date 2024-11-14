@@ -27,6 +27,8 @@ github.com/uptrace/bun/dialect/mysqldialect v1.2.5 h1:RMMMN9wH4azZiZmS0JhSsaL5NL
 github.com/uptrace/bun/dialect/mysqldialect v1.2.5/go.mod h1:VtwSZCmgm/UMxG9IUO+iokZq/KgWFaW4inelBvM2HIo=
 github.com/uptrace/bun/extra/bundebug v1.2.5 h1:DsI/gl4jvq5tQ84yPqnlRYIQ4U6AouTqxJ8Y5Oijfz4=
 github.com/uptrace/bun/extra/bundebug v1.2.5/go.mod h1:JFeYvklf5p92ZILXx4siMe2tEVn5JLelww3IGcJb4yA=
+github.com/uptrace/bun/extra/bunslog v1.2.5 h1:qH+FWH9aCa5xs6msjoVD1L50PefLgNEtnOgnzwJDksw=
+github.com/uptrace/bun/extra/bunslog v1.2.5/go.mod h1:VfyAF24ucGWXewdjMzdHimgUj/cDnasj9XwsJf+wNs0=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
