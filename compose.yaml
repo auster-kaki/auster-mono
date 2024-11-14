@@ -8,17 +8,26 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
+  api:
     build:
       context: backend/go
       target: final
     environment:
       MYSQL_HOST: db
+      DIARY_HOST: diary
     ports:
       - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
+      diary:
+        condition: service_healthy
+  diary:
+      build:
+        context: backend/python
+        target: final
+      ports:
+        - "5050:5050"
   db:
     image: mysql:8.0.40
     restart: always
