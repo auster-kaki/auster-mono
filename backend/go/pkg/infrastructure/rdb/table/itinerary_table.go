@@ -23,7 +23,7 @@ func (t *Itinerary) Create(ctx context.Context, ents ...entity.Itinerary) error 
 	return nil
 }
 
-func (t *Itinerary) GetByUserItineraryDiaryID(ctx context.Context, userItineraryDiaryID entity.UserItineraryDiaryID) (entity.Itineraries, error) {
+func (t *Itinerary) GetByUserItineraryHistoryID(ctx context.Context, userItineraryDiaryID entity.UserItineraryHistoryID) (entity.Itineraries, error) {
 	res := entity.Itineraries{}
 	if err := t.db.NewSelect().Model(&res).Where("user_itinerary_diary_id = ?", userItineraryDiaryID).Scan(ctx); err != nil {
 		return nil, err
