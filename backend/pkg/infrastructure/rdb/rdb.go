@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -13,6 +14,7 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/mysqldialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"github.com/uptrace/bun/extra/bunslog"
 )
 
 type rdb struct {
@@ -38,6 +40,8 @@ func NewDB() (*rdb, error) {
 
 	db := bun.NewDB(sqlDB, mysqldialect.New())
 	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+	db.AddQueryHook(bunslog.NewQueryHook(bunslog.WithLogger(slog.Default())))
+
 	return &rdb{
 		user:               table.NewUser(db),
 		vendor:             table.NewVendor(db),

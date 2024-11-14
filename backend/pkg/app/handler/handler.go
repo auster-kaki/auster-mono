@@ -13,6 +13,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 		u := usecase.NewUserUseCase(r)
 		h := NewUserHandler(u)
 		handlerMap["/users"] = h.GetUsers
+		handlerMap["/users/{id}/{name}"] = h.GetUser
 	}
 	return handlerMap
 }
