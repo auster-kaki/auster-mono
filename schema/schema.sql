@@ -1,4 +1,5 @@
-USE `auster`;
+USE
+`auster`;
 
 CREATE TABLE `user`
 (
@@ -11,29 +12,30 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='ユーザ';
 
-CREATE TABLE `user_itinerary_diary`
+CREATE TABLE `user_itinerary_history`
 (
     `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
     `user_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
     `name`    varchar(255) COLLATE utf8mb4_bin NOT NULL,
     `date`    date                             NOT NULL,
     PRIMARY KEY (`id`),
-    KEY `user_id` (`user_id`)
+    KEY       `user_id` (`user_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='ユーザの旅行記';
 
 CREATE TABLE `itinerary`
 (
-    `id`                      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `user_itinerary_diary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `kind`                    enum ('spot','move')             NOT NULL COMMENT 'spot: 観光地, move: 移動',
-    `travel_spot_id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL COMMENT 'kindがspotの場合のみ',
-    `from`                    varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'kindがmoveの場合のみ',
-    `to`                      varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'kindがmoveの場合のみ',
-    `take_time`               int(11)                          NOT NULL COMMENT '移動にかかる時間（分）, kindがspotの場合は0',
-    `order`                   int(11)                          NOT NULL,
-    PRIMARY KEY (`id`)
+    `id`                        varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `user_itinerary_history_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `kind`                      enum ('spot','move')             NOT NULL COMMENT 'spot: 観光地, move: 移動',
+    `travel_spot_id`            varchar(20) COLLATE utf8mb4_bin  NOT NULL COMMENT 'kindがspotの場合のみ',
+    `from`                      varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'kindがmoveの場合のみ',
+    `to`                        varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'kindがmoveの場合のみ',
+    `take_time`                 int(11)                          NOT NULL COMMENT '移動にかかる時間（分）, kindがspotの場合は0',
+    `order`                     int(11)                          NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY                         `user_itinerary_history_id` (`user_itinerary_history_id`),
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅程';
@@ -49,6 +51,40 @@ CREATE TABLE `itinerary_result`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅程の結果';
+
+CREATE TABLE `diary`
+(
+    `id`         varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `title`      varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `date`       date                             NOT NULL,
+    `photo_path` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `body`       text COLLATE utf8mb4_bin         NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='日記';
+
+CREATE TABLE `diary_tag`
+(
+    `id`       varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `diary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='日記のタグ';
+
+CREATE TABLE `diary_user`
+(
+    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `diary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `user_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY       `diary_id` (`diary_id`),
+    KEY       `user_id` (`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='日記のユーザ';
 
 CREATE TABLE `travel_spot`
 (
@@ -87,8 +123,8 @@ CREATE TABLE `travel_spot_item`
 
 CREATE TABLE `vendor`
 (
-    `id`   varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `name` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`    varchar(255) COLLATE utf8mb4_bin NOT NULL,
     `address` varchar(255) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

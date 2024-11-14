@@ -18,14 +18,17 @@ import (
 )
 
 type rdb struct {
-	user               *table.User
-	vendor             *table.Vendor
-	travelSpotItem     *table.TravelSpotItem
-	travelSpotPhoto    *table.TravelSpotPhoto
-	itinerary          *table.Itinerary
-	itineraryResult    *table.ItineraryResult
-	travelSpot         *table.TravelSpot
-	userItineraryDiary *table.UserItineraryDiary
+	user                 *table.User
+	vendor               *table.Vendor
+	travelSpotItem       *table.TravelSpotItem
+	travelSpotPhoto      *table.TravelSpotPhoto
+	itinerary            *table.Itinerary
+	itineraryResult      *table.ItineraryResult
+	travelSpot           *table.TravelSpot
+	userItineraryHistory *table.UserItineraryHistory
+	dairy                *table.Dairy
+	dairyTag             *table.DiaryTag
+	dairyUser            *table.DairyUser
 }
 
 func NewDB() (*rdb, error) {
@@ -43,14 +46,17 @@ func NewDB() (*rdb, error) {
 	db.AddQueryHook(bunslog.NewQueryHook(bunslog.WithLogger(slog.Default())))
 
 	return &rdb{
-		user:               table.NewUser(db),
-		vendor:             table.NewVendor(db),
-		travelSpotItem:     table.NewTravelSpotItem(db),
-		travelSpotPhoto:    table.NewTravelSpotPhoto(db),
-		itinerary:          table.NewItinerary(db),
-		itineraryResult:    table.NewItineraryResult(db),
-		travelSpot:         table.NewTravelSpot(db),
-		userItineraryDiary: table.NewUserItineraryDiary(db),
+		user:                 table.NewUser(db),
+		vendor:               table.NewVendor(db),
+		travelSpotItem:       table.NewTravelSpotItem(db),
+		travelSpotPhoto:      table.NewTravelSpotPhoto(db),
+		itinerary:            table.NewItinerary(db),
+		itineraryResult:      table.NewItineraryResult(db),
+		travelSpot:           table.NewTravelSpot(db),
+		userItineraryHistory: table.NewUserItineraryHistory(db),
+		dairy:                table.NewDairy(db),
+		dairyTag:             table.NewDiaryTag(db),
+		dairyUser:            table.NewDairyUser(db),
 	}, nil
 }
 
@@ -58,8 +64,8 @@ func (r *rdb) User() repository.UserRepository {
 	return r.user
 }
 
-func (r *rdb) UserItineraryDiary() repository.UserItineraryDiaryRepository {
-	return r.userItineraryDiary
+func (r *rdb) UserItineraryHistory() repository.UserItineraryHistoryRepository {
+	return r.userItineraryHistory
 }
 
 func (r *rdb) Itinerary() repository.ItineraryRepository {
@@ -84,4 +90,16 @@ func (r *rdb) TravelSpotItem() repository.TravelSpotItemRepository {
 
 func (r *rdb) Vendor() repository.VendorRepository {
 	return r.vendor
+}
+
+func (r *rdb) Diary() repository.DiaryRepository {
+	return r.dairy
+}
+
+func (r *rdb) DiaryTag() repository.DiaryTagRepository {
+	return r.dairyTag
+}
+
+func (r *rdb) DiaryUser() repository.DiaryUserRepository {
+	return r.dairyUser
 }
