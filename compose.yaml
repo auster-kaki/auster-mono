@@ -10,7 +10,7 @@
 services:
   server:
     build:
-      context: backend
+      context: backend/go
       target: final
     environment:
       MYSQL_HOST: db
