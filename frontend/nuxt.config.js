@@ -9,15 +9,15 @@ export default {
     titleTemplate: '%s - auster-frontend',
     title: 'auster-frontend',
     htmlAttrs: {
-      lang: 'ja',
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' },
+      { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -35,6 +35,8 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/composition-api/module',
+    '@pinia/nuxt'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -53,12 +55,12 @@ export default {
           info: '#03A9F4',
           warning: '#FFEB3B',
           error: '#F44336',
-          success: '#4CAF50',
-        },
-      },
-    },
+          success: '#4CAF50'
+        }
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {}
 }

@@ -3,10 +3,13 @@
 ## requirement
 
 * node.js
-  * v20系
+  * v20系を推奨
 
 ```bash
-# nodebrew使っても良い
+# setup
+$ nodebrew install v20.18.0
+$ nodebrew use v20.18.0
+
 $ node -v
 # v20.18.0
 ```
