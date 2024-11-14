@@ -10,7 +10,7 @@ type DiaryTag struct {
 	db *bun.DB
 }
 
-func NewDiaryTagTable(db *bun.DB) *DiaryTag {
+func NewDiaryTag(db *bun.DB) *DiaryTag {
 	return &DiaryTag{db: db}
 }
 

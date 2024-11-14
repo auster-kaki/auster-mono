@@ -10,7 +10,7 @@ type DairyUser struct {
 	db *bun.DB
 }
 
-func NewDairyUserTable(db *bun.DB) *DairyUser {
+func NewDairyUser(db *bun.DB) *DairyUser {
 	return &DairyUser{db: db}
 }
 

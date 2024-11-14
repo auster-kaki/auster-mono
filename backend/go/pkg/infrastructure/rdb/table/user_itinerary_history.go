@@ -12,7 +12,7 @@ type UserItineraryHistory struct {
 	db *bun.DB
 }
 
-func NewUserItineraryDiary(db *bun.DB) *UserItineraryHistory {
+func NewUserItineraryHistory(db *bun.DB) *UserItineraryHistory {
 	return &UserItineraryHistory{db: db}
 }
 

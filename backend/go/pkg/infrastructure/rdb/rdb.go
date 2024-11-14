@@ -53,7 +53,10 @@ func NewDB() (*rdb, error) {
 		itinerary:            table.NewItinerary(db),
 		itineraryResult:      table.NewItineraryResult(db),
 		travelSpot:           table.NewTravelSpot(db),
-		userItineraryHistory: table.NewUserItineraryDiary(db),
+		userItineraryHistory: table.NewUserItineraryHistory(db),
+		dairy:                table.NewDairy(db),
+		dairyTag:             table.NewDiaryTag(db),
+		dairyUser:            table.NewDairyUser(db),
 	}, nil
 }
 
@@ -87,4 +90,16 @@ func (r *rdb) TravelSpotItem() repository.TravelSpotItemRepository {
 
 func (r *rdb) Vendor() repository.VendorRepository {
 	return r.vendor
+}
+
+func (r *rdb) Diary() repository.DiaryRepository {
+	return r.dairy
+}
+
+func (r *rdb) DiaryTag() repository.DiaryTagRepository {
+	return r.dairyTag
+}
+
+func (r *rdb) DiaryUser() repository.DiaryUserRepository {
+	return r.dairyUser
 }
