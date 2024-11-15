@@ -17,7 +17,7 @@ const (
 
 type Itinerary struct {
 	ID                   ItineraryID
-	UserItineraryDiaryID UserItineraryDiaryID
+	UserItineraryDiaryID UserItineraryHistoryID
 	Kind                 ItineraryKind
 	TravelSpotID         TravelSpotID
 	From                 string

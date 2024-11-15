@@ -8,27 +8,30 @@ import (
 
 type Repository interface {
 	User() UserRepository
-	UserItineraryDiary() UserItineraryDiaryRepository
+	UserItineraryHistory() UserItineraryHistoryRepository
 	Itinerary() ItineraryRepository
 	ItineraryResult() ItineraryResultRepository
 	TravelSpot() TravelSpotRepository
 	TravelSpotPhoto() TravelSpotPhotoRepository
 	TravelSpotItem() TravelSpotItemRepository
 	Vendor() VendorRepository
+	Diary() DiaryRepository
+	DiaryTag() DiaryTagRepository
+	DiaryUser() DiaryUserRepository
 }
 
 type UserRepository interface {
 	GetAll(ctx context.Context) (entity.Users, error)
 }
 
-type UserItineraryDiaryRepository interface {
-	Create(ctx context.Context, userItineraryDiaries ...entity.UserItineraryDiary) error
-	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserItineraryDiaries, error)
+type UserItineraryHistoryRepository interface {
+	Create(ctx context.Context, userItineraryDiaries ...entity.UserItineraryHistory) error
+	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserItineraryHistories, error)
 }
 
 type ItineraryRepository interface {
 	Create(ctx context.Context, itineraries ...entity.Itinerary) error
-	GetByUserItineraryDiaryID(ctx context.Context, userItineraryDiaryID entity.UserItineraryDiaryID) (entity.Itineraries, error)
+	GetByUserItineraryHistoryID(ctx context.Context, userItineraryDiaryID entity.UserItineraryHistoryID) (entity.Itineraries, error)
 }
 
 type ItineraryResultRepository interface {
@@ -55,4 +58,20 @@ type VendorRepository interface {
 	Create(ctx context.Context, vendors ...entity.Vendor) error
 	GetAll(ctx context.Context) (entity.Vendors, error)
 	FindByID(ctx context.Context, id entity.VendorID) (*entity.Vendor, error)
+}
+
+type DiaryRepository interface {
+	Create(ctx context.Context, diaries ...entity.Diary) error
+	FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error)
+	GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error)
+}
+
+type DiaryTagRepository interface {
+	Create(ctx context.Context, diaryTags ...entity.DiaryTag) error
+	GetByDiaryID(ctx context.Context, diaryID entity.DiaryID) (entity.DiaryTags, error)
+}
+
+type DiaryUserRepository interface {
+	Create(ctx context.Context, diaryUsers ...entity.DiaryUser) error
+	GetByUserID(ctx context.Context, userID entity.UserID) (entity.DiaryUsers, error)
 }
