@@ -30,3 +30,9 @@ $ yarn start
 # generate static project
 $ yarn generate
 ```
+
+## 動作確認
+
+以下のURLを参照することでホーム画面が表示  
+http://localhost:3000/c/home
+
