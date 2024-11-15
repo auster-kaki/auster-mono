@@ -26,9 +26,9 @@ type rdb struct {
 	itineraryResult      *table.ItineraryResult
 	travelSpot           *table.TravelSpot
 	userItineraryHistory *table.UserItineraryHistory
-	dairy                *table.Dairy
-	dairyTag             *table.DiaryTag
-	dairyUser            *table.DairyUser
+	diary                *table.Diary
+	diaryTag             *table.DiaryTag
+	diaryUser            *table.DiaryUser
 }
 
 func NewDB() (*rdb, error) {
@@ -54,9 +54,9 @@ func NewDB() (*rdb, error) {
 		itineraryResult:      table.NewItineraryResult(db),
 		travelSpot:           table.NewTravelSpot(db),
 		userItineraryHistory: table.NewUserItineraryHistory(db),
-		dairy:                table.NewDairy(db),
-		dairyTag:             table.NewDiaryTag(db),
-		dairyUser:            table.NewDairyUser(db),
+		diary:                table.NewDairy(db),
+		diaryTag:             table.NewDiaryTag(db),
+		diaryUser:            table.NewDairyUser(db),
 	}, nil
 }
 
@@ -93,13 +93,13 @@ func (r *rdb) Vendor() repository.VendorRepository {
 }
 
 func (r *rdb) Diary() repository.DiaryRepository {
-	return r.dairy
+	return r.diary
 }
 
 func (r *rdb) DiaryTag() repository.DiaryTagRepository {
-	return r.dairyTag
+	return r.diaryTag
 }
 
 func (r *rdb) DiaryUser() repository.DiaryUserRepository {
-	return r.dairyUser
+	return r.diaryUser
 }
