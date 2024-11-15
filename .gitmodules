@@ -1,0 +1,3 @@
+[submodule "backend/python/roopapi"]
+	path = backend/python/roopapi
+	url = https://github.com/lvalics/roopapi.git
