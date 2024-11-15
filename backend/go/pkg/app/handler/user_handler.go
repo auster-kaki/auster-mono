@@ -12,8 +12,12 @@ type UserHandler struct {
 	userUseCase *usecase.UserUseCase
 }
 
-func NewUserHandler(u *usecase.UserUseCase) *UserHandler {
-	return &UserHandler{userUseCase: u}
+func NewUserHandler(u *usecase.UserUseCase) map[string]http.HandlerFunc {
+	h := &UserHandler{userUseCase: u}
+	return map[string]http.HandlerFunc{
+		"/users":      h.GetUsers,
+		"/users/{id}": h.GetUser,
+	}
 }
 
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {

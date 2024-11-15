@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -9,11 +10,29 @@ import (
 
 func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 	handlerMap := make(map[string]http.HandlerFunc)
-	{
-		u := usecase.NewUserUseCase(r)
-		h := NewUserHandler(u)
-		handlerMap["/users"] = h.GetUsers
-		handlerMap["/users/{id}/{name}"] = h.GetUser
+	for path, handlerFunc := range NewUserHandler(usecase.NewUserUseCase(r)) {
+		if _, ok := handlerMap[path]; ok {
+			panic(fmt.Sprintf("duplicate path: %s", path))
+		}
+		handlerMap[path] = handlerFunc
+	}
+	for path, handlerFunc := range NewVendorHandler(usecase.NewVendorUseCase(r)) {
+		if _, ok := handlerMap[path]; ok {
+			panic(fmt.Sprintf("duplicate path: %s", path))
+		}
+		handlerMap[path] = handlerFunc
+	}
+	for path, handlerFunc := range NewDiaryHandler(usecase.NewDiaryUseCase(r)) {
+		if _, ok := handlerMap[path]; ok {
+			panic(fmt.Sprintf("duplicate path: %s", path))
+		}
+		handlerMap[path] = handlerFunc
+	}
+	for path, handlerFunc := range NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)) {
+		if _, ok := handlerMap[path]; ok {
+			panic(fmt.Sprintf("duplicate path: %s", path))
+		}
+		handlerMap[path] = handlerFunc
 	}
 	return handlerMap
 }

@@ -63,7 +63,7 @@ type VendorRepository interface {
 type DiaryRepository interface {
 	Create(ctx context.Context, diaries ...entity.Diary) error
 	FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error)
-	GetByID(ctx context.Context, id entity.DiaryID) (entity.Diaries, error)
+	GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error)
 }
 
 type DiaryTagRepository interface {

@@ -6,25 +6,25 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type Dairy struct {
+type Diary struct {
 	db *bun.DB
 }
 
-func NewDairy(db *bun.DB) *Dairy {
-	return &Dairy{db: db}
+func NewDairy(db *bun.DB) *Diary {
+	return &Diary{db: db}
 }
 
-func (t *Dairy) Create(ctx context.Context, ents ...entity.Diary) error {
+func (t *Diary) Create(ctx context.Context, ents ...entity.Diary) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *Dairy) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error) {
+func (t *Diary) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *Dairy) GetByID(ctx context.Context, id entity.DiaryID) (entity.Diaries, error) {
+func (t *Diary) GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error) {
 	//TODO implement me
 	panic("implement me")
 }

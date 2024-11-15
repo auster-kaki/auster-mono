@@ -17,8 +17,8 @@ func Created(w http.ResponseWriter, body any) {
 }
 
 // NoContent - 204
-func NoContent(w http.ResponseWriter, body any) {
-	writeResponseJSON(w, http.StatusNoContent, body)
+func NoContent(w http.ResponseWriter) {
+	writeResponseJSON(w, http.StatusNoContent, nil)
 }
 
 func writeResponseJSON(w http.ResponseWriter, statusCode int, body any) {
