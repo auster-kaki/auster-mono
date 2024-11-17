@@ -2,8 +2,6 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col cols="12">
-        <h2 class="text-center mb-4">ホーム画面</h2>
-
         <!-- TODO リスト -->
         <v-card v-if="todos.length > 0" class="mb-4">
           <v-card-title>準備リスト</v-card-title>
@@ -20,23 +18,34 @@
         </v-card>
 
         <!-- 申し込み中の予約 -->
-        <v-card v-if="pendingReservations.length > 0" class="mb-4">
+        <v-card v-if="reservations.length > 0" class="mb-4">
           <v-card-title>申し込み中の予約</v-card-title>
           <v-list>
-            <v-list-item v-for="reservation in pendingReservations" :key="reservation.id">
+            <v-list-item
+              v-for="reservation in reservations"
+              :key="reservation.id"
+            >
               <v-list-item-content>
                 <v-list-item-title>{{ reservation.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ reservation.date }}</v-list-item-subtitle>
+                <v-list-item-subtitle
+                  >{{ reservation.date }}
+                </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>
 
         <!-- 新しい絵日記の通知 -->
-        <v-alert v-if="newDiary" type="info" class="mb-4">
-          新しい絵日記が届いています！
-          <v-btn @click="showNewDiary" text color="primary">確認する</v-btn>
-        </v-alert>
+        <v-card v-if="newDiaries.length > 0" class="mb-4">
+          <v-card-title>新しい絵日記が届いています！</v-card-title>
+          <v-list>
+            <v-list-item v-for="newDiary in newDiaries" :key="newDiary.id">
+              <v-list-item-content>
+                <v-list-item-title>{{ newDiary.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
 
         <!-- 絵日記の表示 -->
         <v-card v-if="currentDiary" class="mb-4">
@@ -48,26 +57,36 @@
             <v-btn color="primary" @click="reserveDiary">予約する</v-btn>
           </v-card-actions>
         </v-card>
+
+        <!-- 新しい絵日記のモーダル -->
+        <v-dialog v-model="showNewDiary" max-width="600px">
+          <Diary :diary="newDiary" @close="closeNewDiary" />
+        </v-dialog>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import Diary from '~/components/c/diary/DiaryComponent.vue'
+
 export default {
   name: 'IndexPage',
+  components: { Diary },
   layout: 'mobile',
   data() {
     return {
       todos: [],
-      pendingReservations: [],
-      newDiary: false,
+      reservations: [],
+      newDiaries: [],
+      showNewDiary: false,
       currentDiary: null,
     }
   },
   mounted() {
     this.fetchTodos()
-    this.fetchPendingReservations()
+    this.fetchreservations()
+    this.fetchNewDiary()
     this.checkNewDiary()
   },
   methods: {
@@ -82,16 +101,25 @@ export default {
         { text: '乗車券の準備', completed: true },
       ]
     },
-    fetchPendingReservations() {
+    fetchreservations() {
       // API通信のコメントアウト
       // const response = await axios.get('/api/pending-reservations')
-      // this.pendingReservations = response.data
+      // this.reservations = response.data
 
       // ダミーデータ
-      this.pendingReservations = [
+      this.reservations = [
         { id: 1, title: '山登り体験', date: '2023-06-15' },
         { id: 2, title: '料理教室', date: '2023-06-20' },
       ]
+    },
+    fetchNewDiary() {
+      // 新しい日記を取得してくる
+      this.newDiary = {
+        title: '',
+        tags: [],
+        date: '',
+        img: '',
+      }
     },
     checkNewDiary() {
       // API通信のコメントアウト
@@ -101,7 +129,7 @@ export default {
       // ダミーデータ
       this.newDiary = true
     },
-    showNewDiary() {
+    showNewDiaryClick() {
       // API通信のコメントアウト
       // const response = await axios.get('/api/latest-diary')
       // this.currentDiary = response.data
@@ -111,14 +139,17 @@ export default {
         date: '2023-06-10',
         title: '素晴らしい山登り体験',
         image: 'https://example.com/mountain.jpg',
-        content: '今日は素晴らしい山登り体験をしました。景色が最高でした！'
+        content: '今日は素晴らしい山登り体験をしました。景色が最高でした！',
       }
-      this.newDiary = false
+      this.showNewDiary = true
+    },
+    closeNewDiary() {
+      this.showNewDiary = false
     },
     reserveDiary() {
       // 予約処理のロジックをここに実装
       alert('予約が完了しました！')
-    }
-  }
+    },
+  },
 }
 </script>

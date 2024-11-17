@@ -31,6 +31,22 @@ $ yarn start
 $ yarn generate
 ```
 
+## Deploy
+
+gh-pagesブランチにビルドしたソースコードをpushすることでデプロイされる  
+
+```bash
+$ git checkout gh-pages
+$ git pull origin main # 最新のmainを取得
+$ cd ./frontend/
+$ yarn generate
+$ cd ../
+$ cp -r frontend/dist/* .  
+$ git add .
+$ git commit -m "deploy"
+$ git push origin gh-pages
+```
+
 ## 動作確認
 
 以下のURLを参照することでホーム画面が表示  
