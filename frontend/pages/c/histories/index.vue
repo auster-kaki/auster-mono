@@ -17,8 +17,8 @@
               md="4"
             >
               <diary-card
-                :diary="diary"
-                @click:diary="openDiaryModal(diary)"
+                :value="diary"
+                @click="openDiaryModal(diary)"
               ></diary-card>
             </v-col>
           </v-row>

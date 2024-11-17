@@ -5,23 +5,16 @@
         <h1 class="text-h4 mb-4">行き先を選択してください</h1>
         <v-row>
           <v-col v-for="destination in destinations" :key="destination.name" cols="12" sm="6">
-            <v-card
-              :class="{ 'selected': selectedDestination === destination }" @click="selectDestination(destination)">
+            <v-card @click="goToExperienceSelection(destination.id)">
+              <v-img :src="destination.image" height="200"></v-img>
               <v-card-title>{{ destination.name }}</v-card-title>
+              <v-card-text>
+                <p>{{ destination.description }}</p>
+                <v-btn :to="destination.experiencesLink" text color="primary">体験一覧を見る</v-btn>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-        <v-dialog v-model="selectedDestination" max-width="500">
-          <v-card v-if="selectedDestination">
-            <v-card-title>{{ selectedDestination.name }}の動画</v-card-title>
-            <v-card-text>
-              <video controls :src="selectedDestination.video" width="100%"></video>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" @click="selectedDestination = null">閉じる</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-container>
     </v-main>
   </v-layout>
@@ -33,17 +26,43 @@ export default {
   data() {
     return {
       destinations: [
-        { name: '銚子', video: 'https://example.com/choshi.mp4' },
-        { name: '鎌倉', video: 'https://example.com/kamakura.mp4' },
-        { name: '熱海', video: 'https://example.com/atami.mp4' },
-        { name: '伊豆', video: 'https://example.com/izu.mp4' }
+        {
+          id: 1,
+          name: '銚子',
+          image: 'https://example.com/choshi.jpg',
+          description: '銚子は千葉県の東端に位置し、新鮮な海産物と美しい海岸線で知られています。',
+          experiencesLink: '/experiences/choshi'
+        },
+        {
+          id: 2,
+          name: '鎌倉',
+          image: 'https://example.com/kamakura.jpg',
+          description: '鎌倉は歴史的な寺院や神社、そして美しい海岸を持つ古都です。',
+          experiencesLink: '/experiences/kamakura'
+        },
+        {
+          id: 3,
+          name: '熱海',
+          image: 'https://example.com/atami.jpg',
+          description: '熱海は温泉と海の両方を楽しめる人気のリゾート地です。',
+          experiencesLink: '/experiences/atami'
+        },
+        {
+          id: 4,
+          name: '伊豆',
+          image: 'https://example.com/izu.jpg',
+          description: '伊豆半島は美しい海岸線、温泉、そして豊かな自然で知られています。',
+          experiencesLink: '/experiences/izu'
+        }
       ],
-      selectedDestination: null
     }
   },
   methods: {
-    selectDestination(destination) {
-      this.selectedDestination = destination
+    goToExperienceSelection(id) {
+      this.$router.push({
+        path: '/c/new-diary/experience-selection',
+        query: { id }
+      })
     }
   }
 }

@@ -4,12 +4,13 @@
       <v-col cols="12" sm="8" md="6">
         <h1 class="text-center mb-6">日記作成画面</h1>
         <v-form ref="form" :model-value="valid" @submit.prevent="onSubmit">
-          <v-text-field
+          <v-select
             v-model="departure"
+            :items="departureOptions"
             label="出発地"
             :rules="[v => !!v || '出発地は必須です']"
             required
-          ></v-text-field>
+          ></v-select>
           <v-select
             v-model="interests"
             :items="interestOptions"
@@ -45,7 +46,8 @@ export default {
       interests: [],
       interestOptions: [
         '旅行', '料理', 'スポーツ', '音楽', '映画', '読書', 'アート', 'テクノロジー'
-      ]
+      ],
+      departureOptions: []
     }
   },
   watch: {
@@ -59,6 +61,9 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    this.fetchDepartureOptions()
+  },
   methods: {
     validateForm() {
       this.valid = this.departure !== '' && this.interests.length > 0
@@ -68,6 +73,25 @@ export default {
         // 行き先選択画面へ遷移
         this.$router.push('/c/new-diary/destination-selection')
       }
+    },
+    async fetchDepartureOptions() {
+      try {
+        // API通信のダミーコード
+        const response = await this.getDummyDepartureOptions()
+        this.departureOptions = response.data
+      } catch (error) {
+        console.error('出発地の取得に失敗しました:', error)
+      }
+    },
+    getDummyDepartureOptions() {
+      // ダミーデータを返す関数
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            data: ['東京', '大阪', '名古屋', '福岡', '札幌', '仙台', '広島', '那覇']
+          })
+        }, 500)
+      })
     }
   }
 }

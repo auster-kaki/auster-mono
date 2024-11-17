@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 
 interface Diary {
   id: number
@@ -11,21 +11,22 @@ interface Diary {
 }
 
 const props = defineProps<{
-  diary: Diary
+  value: Diary
 }>()
 
-const openDiaryModal = (diary: Diary) => {
-  // ここにモーダルを開く処理を実装
-  console.log('Opening modal for Diary:', diary)
+const emit = defineEmits(['click'])
+
+const openDiaryModal = () => {
+  emit('click', props.value)
 }
 </script>
 
 <template>
-  <v-card @click="openDiaryModal(diary)">
-    <v-img :src="diary.image" height="200"></v-img>
-    <v-card-title>{{ diary.title }}</v-card-title>
-    <v-card-subtitle>{{ diary.date }} - {{ diary.location }}</v-card-subtitle>
-    <v-card-text>{{ diary.content.substring(0, 100) }}...</v-card-text>
+  <v-card @click="openDiaryModal">
+    <v-img :src="value.image" height="200"></v-img>
+    <v-card-title>{{ value.title }}</v-card-title>
+    <v-card-subtitle>{{ value.date }} - {{ value.location }}</v-card-subtitle>
+    <v-card-text>{{ value.content.substring(0, 100) }}...</v-card-text>
   </v-card>
 </template>
 
