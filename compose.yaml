@@ -25,7 +25,6 @@ services:
   diary:
       build:
         context: backend/python
-        target: final
       environment:
         MYSQL_HOST: db
       ports:
