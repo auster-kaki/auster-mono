@@ -95,5 +95,6 @@ type DiaryUserRepository interface {
 
 type EncounterRepository interface {
 	Create(ctx context.Context, encounters ...entity.Encounter) error
+	Update(ctx context.Context, encounter *entity.Encounter) error
 	GetByUserID(ctx context.Context, userID entity.UserID) (entity.Encounters, error)
 }

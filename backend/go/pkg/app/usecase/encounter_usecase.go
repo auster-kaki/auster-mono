@@ -29,9 +29,29 @@ type CrateEncounterInput struct {
 	Description string
 }
 
-func (u *EncounterUseCase) CreateEncounter(ctx context.Context, input *CrateEncounterInput) error {
+func (u *EncounterUseCase) Create(ctx context.Context, input *CrateEncounterInput) error {
 	return u.repository.Encounter().Create(ctx, entity.Encounter{
 		ID:          austerid.Generate[entity.EncounterID](),
+		Name:        input.Name,
+		Place:       input.Place,
+		UserID:      input.UserID,
+		Date:        input.Date,
+		Description: input.Description,
+	})
+}
+
+type UpdateEncounterInput struct {
+	ID          entity.EncounterID
+	Name        string
+	Place       string
+	UserID      entity.UserID
+	Date        time.Time
+	Description string
+}
+
+func (u *EncounterUseCase) Update(ctx context.Context, input *UpdateEncounterInput) error {
+	return u.repository.Encounter().Update(ctx, &entity.Encounter{
+		ID:          input.ID,
 		Name:        input.Name,
 		Place:       input.Place,
 		UserID:      input.UserID,

@@ -51,5 +51,13 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 		alreadyPath[path] = struct{}{}
 		handlerMap[h.path] = h.handler
 	}
+	for _, h := range NewEncounterHandler(usecase.NewEncounterUseCase(r)) {
+		path := fmt.Sprintf("%s %s", h.method, h.path)
+		if _, ok := alreadyPath[path]; ok {
+			panic(fmt.Sprintf("duplicate path: %s", path))
+		}
+		alreadyPath[path] = struct{}{}
+		handlerMap[h.path] = h.handler
+	}
 	return handlerMap
 }

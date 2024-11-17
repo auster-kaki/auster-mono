@@ -2,7 +2,9 @@ package table
 
 import (
 	"context"
+
 	"github.com/auster-kaki/auster-mono/pkg/entity"
+
 	"github.com/uptrace/bun"
 )
 
@@ -16,6 +18,13 @@ func NewEncounter(db *bun.DB) *Encounter {
 
 func (t *Encounter) Create(ctx context.Context, ents ...entity.Encounter) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *Encounter) Update(ctx context.Context, ent *entity.Encounter) error {
+	if _, err := t.db.NewUpdate().Model(&ent).Where("id = ?", ent.ID).Exec(ctx); err != nil {
 		return err
 	}
 	return nil
