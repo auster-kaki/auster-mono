@@ -35,17 +35,17 @@ RUN adduser \
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=./app/roopaip/requirements.txt,target=./app/roopaip/requirements.txt \
-    python -m pip install -r ./app/roopaip/requirements.txt
+    --mount=type=bind,source=./backend/python/roopapi/requirements.txt,target=requirements.txt \
+    python -m pip install -r requirements.txt
 
 # Switch to the non-privileged user to run the application.
 USER appuser
 
 # Copy the source code into the container.
-COPY . .
+COPY ./backend/python/roopapi .
 
 # Expose the port that the application listens on.
 EXPOSE 5050
 
 # Run the application.
-CMD python ./roopaip/rapp.py
+CMD python /app/rapp.py
