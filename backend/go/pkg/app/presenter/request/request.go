@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 func Decode[T any](r *http.Request, v *T) error {
@@ -17,4 +18,18 @@ func Decode[T any](r *http.Request, v *T) error {
 		return fmt.Errorf("failed to decode request body:[%s] %w", buf.String(), err)
 	}
 	return nil
+}
+
+type User struct {
+	Name    string   `json:"name"`
+	Age     int      `json:"age"`
+	Gender  string   `json:"gender"`
+	Hobbies []string `json:"hobbies"`
+}
+
+type Encounter struct {
+	Name        string    `json:"name"`
+	Place       string    `json:"place"`
+	Date        time.Time `json:"date"`
+	Description string    `json:"description"`
 }

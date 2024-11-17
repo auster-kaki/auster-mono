@@ -31,6 +31,7 @@ type rdb struct {
 	diary                *table.Diary
 	diaryTag             *table.DiaryTag
 	diaryUser            *table.DiaryUser
+	encounter            *table.Encounter
 }
 
 func NewDB() (*rdb, error) {
@@ -61,6 +62,7 @@ func NewDB() (*rdb, error) {
 		diary:                table.NewDairy(db),
 		diaryTag:             table.NewDiaryTag(db),
 		diaryUser:            table.NewDairyUser(db),
+		encounter:            table.NewEncounter(db),
 	}, nil
 }
 
@@ -110,4 +112,8 @@ func (r *rdb) DiaryTag() repository.DiaryTagRepository {
 
 func (r *rdb) DiaryUser() repository.DiaryUserRepository {
 	return r.diaryUser
+}
+
+func (r *rdb) Encounter() repository.EncounterRepository {
+	return r.encounter
 }

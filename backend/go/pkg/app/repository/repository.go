@@ -20,6 +20,7 @@ type Repository interface {
 	Diary() DiaryRepository
 	DiaryTag() DiaryTagRepository
 	DiaryUser() DiaryUserRepository
+	Encounter() EncounterRepository
 }
 
 type UserRepository interface {
@@ -90,4 +91,11 @@ type DiaryTagRepository interface {
 type DiaryUserRepository interface {
 	Create(ctx context.Context, diaryUsers ...entity.DiaryUser) error
 	GetByUserID(ctx context.Context, userID entity.UserID) (entity.DiaryUsers, error)
+}
+
+type EncounterRepository interface {
+	Create(ctx context.Context, encounters ...entity.Encounter) error
+	Update(ctx context.Context, encounter *entity.Encounter) error
+	FindByID(ctx context.Context, id entity.EncounterID) (*entity.Encounter, error)
+	GetByUserID(ctx context.Context, userID entity.UserID) (entity.Encounters, error)
 }
