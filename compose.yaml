@@ -21,15 +21,14 @@ services:
       db:
         condition: service_healthy
       diary:
-        condition: service_healthy
+        condition: service_started
   diary:
       build:
         context: backend/python
-        target: final
       environment:
         MYSQL_HOST: db
       ports:
-        - "5050:5050"
+        - "5050:80"
   db:
     image: mysql:8.0.40
     restart: always
