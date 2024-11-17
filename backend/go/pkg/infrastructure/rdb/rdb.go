@@ -19,6 +19,8 @@ import (
 
 type rdb struct {
 	user                 *table.User
+	hobby                *table.Hobby
+	userHobby            *table.UserHobby
 	vendor               *table.Vendor
 	travelSpotItem       *table.TravelSpotItem
 	travelSpotPhoto      *table.TravelSpotPhoto
@@ -47,6 +49,8 @@ func NewDB() (*rdb, error) {
 
 	return &rdb{
 		user:                 table.NewUser(db),
+		hobby:                table.NewHobby(db),
+		userHobby:            table.NewUserHobby(db),
 		vendor:               table.NewVendor(db),
 		travelSpotItem:       table.NewTravelSpotItem(db),
 		travelSpotPhoto:      table.NewTravelSpotPhoto(db),
@@ -63,6 +67,10 @@ func NewDB() (*rdb, error) {
 func (r *rdb) User() repository.UserRepository {
 	return r.user
 }
+
+func (r *rdb) Hobby() repository.HobbyRepository { return r.hobby }
+
+func (r *rdb) UserHobby() repository.UserHobbyRepository { return r.userHobby }
 
 func (r *rdb) UserItineraryHistory() repository.UserItineraryHistoryRepository {
 	return r.userItineraryHistory

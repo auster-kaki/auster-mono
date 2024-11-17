@@ -15,16 +15,24 @@ func NewDairy(db *bun.DB) *Diary {
 }
 
 func (t *Diary) Create(ctx context.Context, ents ...entity.Diary) error {
-	//TODO implement me
-	panic("implement me")
+	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *Diary) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error) {
-	//TODO implement me
-	panic("implement me")
+	diary := &entity.Diary{}
+	if err := t.db.NewSelect().Model(diary).Where("id = ?", id).Scan(ctx); err != nil {
+		return nil, err
+	}
+	return diary, nil
 }
 
 func (t *Diary) GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error) {
-	//TODO implement me
-	panic("implement me")
+	res := entity.Diaries{}
+	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", ids).Scan(ctx); err != nil {
+		return nil, err
+	}
+	return res, nil
 }

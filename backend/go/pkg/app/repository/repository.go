@@ -8,6 +8,8 @@ import (
 
 type Repository interface {
 	User() UserRepository
+	Hobby() HobbyRepository
+	UserHobby() UserHobbyRepository
 	UserItineraryHistory() UserItineraryHistoryRepository
 	Itinerary() ItineraryRepository
 	ItineraryResult() ItineraryResultRepository
@@ -22,6 +24,20 @@ type Repository interface {
 
 type UserRepository interface {
 	GetAll(ctx context.Context) (entity.Users, error)
+	FindByID(ctx context.Context, id entity.UserID) (*entity.User, error)
+	Create(ctx context.Context, users ...*entity.User) error
+	Update(ctx context.Context, user *entity.User) error
+}
+
+type HobbyRepository interface {
+	GetAll(ctx context.Context) (entity.Hobbies, error)
+	GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobbies, error)
+}
+
+type UserHobbyRepository interface {
+	Create(ctx context.Context, userHobbies ...entity.UserHobby) error
+	DeleteByUserID(ctx context.Context, userID entity.UserID) error
+	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserHobbies, error)
 }
 
 type UserItineraryHistoryRepository interface {

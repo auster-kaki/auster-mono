@@ -8,6 +8,7 @@ type UserID string
 
 type User struct {
 	ID          UserID
+	Name        string
 	Gender      string
 	Age         int
 	ProfilePath string
