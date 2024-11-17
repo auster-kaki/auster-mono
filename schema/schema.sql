@@ -24,12 +24,12 @@ CREATE TABLE `hobby`
 
 CREATE TABLE `user_hobby`
 (
-    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `user_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `hobby_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `user_id`  varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `hobby_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`id`),
-    KEY       `user_id` (`user_id`),
-    KEY       `hobby_id` (`hobby_id`)
+    KEY        `user_id` (`user_id`),
+    KEY        `hobby_id` (`hobby_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='ユーザの趣味';
@@ -98,12 +98,12 @@ CREATE TABLE `diary_tag`
 
 CREATE TABLE `diary_user`
 (
-    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `diary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `user_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `diary_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `user_id`  varchar(20) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`id`),
-    KEY       `diary_id` (`diary_id`),
-    KEY       `user_id` (`user_id`)
+    KEY        `diary_id` (`diary_id`),
+    KEY        `user_id` (`user_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='日記のユーザ';
@@ -152,3 +152,17 @@ CREATE TABLE `vendor`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行会社';
+
+CREATE TABLE `encounter`
+(
+    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`        varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `place`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `user_id`     varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `date`        date                             NOT NULL,
+    `description` text COLLATE utf8mb4_bin         NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY           `user_id` (`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='出会った人';
