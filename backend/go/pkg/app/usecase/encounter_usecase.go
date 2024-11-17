@@ -21,6 +21,10 @@ func (u *EncounterUseCase) GetEncounters(ctx context.Context, userID entity.User
 	return u.repository.Encounter().GetByUserID(ctx, userID)
 }
 
+func (u *EncounterUseCase) GetEncounter(ctx context.Context, id entity.EncounterID) (*entity.Encounter, error) {
+	return u.repository.Encounter().FindByID(ctx, id)
+}
+
 type CrateEncounterInput struct {
 	UserID      entity.UserID
 	Name        string

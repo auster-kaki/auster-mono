@@ -18,6 +18,7 @@ func NewEncounterHandler(e *usecase.EncounterUseCase) []Input {
 	return []Input{
 		{method: http.MethodGet, path: "/{user_id}/encounters", handler: h.GetEncounters},
 		{method: http.MethodPost, path: "/{user_id}/encounters", handler: h.Create},
+		{method: http.MethodGet, path: "/{user_id}/encounters/{id}", handler: h.GetEncounter},
 		{method: http.MethodPatch, path: "/{user_id}/encounters/{id}", handler: h.Update},
 	}
 }
@@ -49,6 +50,15 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.Created(w, nil)
+}
+
+func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) {
+	out, err := h.encounterUseCase.GetEncounter(r.Context(), entity.EncounterID(r.URL.Query().Get("id")))
+	if err != nil {
+		http.Error(w, "failed to get encounter", http.StatusInternalServerError)
+		return
+	}
+	response.OK(w, out)
 }
 
 func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {

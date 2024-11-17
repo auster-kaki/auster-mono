@@ -30,6 +30,14 @@ func (t *Encounter) Update(ctx context.Context, ent *entity.Encounter) error {
 	return nil
 }
 
+func (t *Encounter) FindByID(ctx context.Context, id entity.EncounterID) (*entity.Encounter, error) {
+	res := &entity.Encounter{}
+	if err := t.db.NewSelect().Model(res).Where("id = ?", id).Scan(ctx); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (t *Encounter) GetByUserID(ctx context.Context, userID entity.UserID) (entity.Encounters, error) {
 	res := entity.Encounters{}
 	if err := t.db.NewSelect().Model(&res).Where("user_id = ?", userID).Scan(ctx); err != nil {
