@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Diary from '~/components/c/diary/Diary.vue'
+import Diary from '~/components/c/diary/DiaryComponent.vue'
 
 export default {
   name: 'IndexPage',

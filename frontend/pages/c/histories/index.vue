@@ -46,7 +46,7 @@
       </v-tab-item>
     </v-tabs-items>
     <v-dialog v-model="diaryModalOpen" max-width="600">
-      <diary :diary="selectedDiary" />
+      <diary-component :diary="selectedDiary" />
     </v-dialog>
     <v-dialog v-model="personModalOpen" max-width="600">
       <v-card v-if="selectedPerson">
@@ -63,14 +63,14 @@
 
 <script>
 import DiaryCard from '@/components/c/diary/DiaryCard.vue'
-import Diary from '@/components/c/diary/Diary.vue'
+import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
 
 export default {
-  layout: 'mobile',
   components: {
     DiaryCard,
-    Diary,
+    DiaryComponent,
   },
+  layout: 'mobile',
   data() {
     return {
       activeTab: null,

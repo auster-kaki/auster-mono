@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
+import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
 
 const baseUrl = ref('https://api.example.com')
 const endpoint = ref('/users')
@@ -10,6 +11,16 @@ const queryParams = ref('')
 const requestBody = ref('')
 const response = ref('')
 
+const diaryData = ref({
+  id: 1,
+  title: '美しい富士山',
+  date: '2023-05-01',
+  location: '山梨県',
+  content:
+    '富士山の麓でキャンプを楽しみました。澄んだ空気と雄大な景色に感動しました。',
+  image: 'https://example.com/fuji.jpg'
+})
+
 const sendRequest = async () => {
   try {
     const url = `${baseUrl.value}${endpoint.value}${pathParams.value}`
@@ -17,7 +28,7 @@ const sendRequest = async () => {
       method: method.value,
       url,
       params: queryParams.value ? JSON.parse(queryParams.value) : {},
-      data: requestBody.value ? JSON.parse(requestBody.value) : {},
+      data: requestBody.value ? JSON.parse(requestBody.value) : {}
     }
     const result = await axios(config)
     response.value = JSON.stringify(result.data, null, 2)
@@ -29,6 +40,8 @@ const sendRequest = async () => {
 
 <template>
   <div>
+    <h1>Diaryテスト画面</h1>
+    <diary-component :diary="diaryData" />
     <h1>API テスト画面</h1>
     <div>
       <label>

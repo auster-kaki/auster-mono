@@ -1,14 +1,5 @@
-<!--
-Usage example:
-<diary :diary="selectedDiary" />
--->
-
 <script setup lang="ts">
 import { defineProps } from 'vue'
-
-const props = defineProps<{
-  diary: Diary | null
-}>()
 
 interface Diary {
   image: string
@@ -17,6 +8,10 @@ interface Diary {
   location: string
   content: string
 }
+
+const { diary } = defineProps<{
+  diary: Diary | null
+}>()
 </script>
 
 <template>
