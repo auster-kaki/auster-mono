@@ -1,8 +1,13 @@
 package entity
 
+import "github.com/uptrace/bun"
+
 type DiaryUser struct {
 	DiaryID DiaryID
 	UserID  UserID
+
+	// これで設定したtableタグでbunがテーブル名を解決する
+	bun.BaseModel `bun:"table:diary_user,alias:du"`
 }
 
 type DiaryUsers []*DiaryUser

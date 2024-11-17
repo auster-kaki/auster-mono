@@ -17,11 +17,16 @@ func NewUserItineraryHistory(db *bun.DB) *UserItineraryHistory {
 }
 
 func (t *UserItineraryHistory) Create(ctx context.Context, ents ...entity.UserItineraryHistory) error {
-	//TODO implement me
-	panic("implement me")
+	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *UserItineraryHistory) GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserItineraryHistories, error) {
-	//TODO implement me
-	panic("implement me")
+	res := entity.UserItineraryHistories{}
+	if err := t.db.NewSelect().Model(&res).Where("user_id = ?", userID).Scan(ctx); err != nil {
+		return nil, err
+	}
+	return res, nil
 }

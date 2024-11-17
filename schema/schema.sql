@@ -4,6 +4,7 @@ USE
 CREATE TABLE `user`
 (
     `id`           varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`         varchar(255) COLLATE utf8mb4_bin NOT NULL,
     `gender`       varchar(10) COLLATE utf8mb4_bin  NOT NULL,
     `age`          int(11)                          NOT NULL,
     `profile_path` varchar(255) COLLATE utf8mb4_bin NOT NULL,
@@ -11,6 +12,27 @@ CREATE TABLE `user`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='ユーザ';
+
+CREATE TABLE `hobby`
+(
+    `id`   varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='趣味';
+
+CREATE TABLE `user_hobby`
+(
+    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `user_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `hobby_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY       `user_id` (`user_id`),
+    KEY       `hobby_id` (`hobby_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='ユーザの趣味';
 
 CREATE TABLE `user_itinerary_history`
 (
