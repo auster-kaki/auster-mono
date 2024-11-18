@@ -28,6 +28,7 @@ type User struct {
 }
 
 type Encounter struct {
+	UserID      string    `json:"user_id"`
 	Name        string    `json:"name"`
 	Place       string    `json:"place"`
 	Date        time.Time `json:"date"`
