@@ -22,6 +22,11 @@ services:
         condition: service_healthy
       diary:
         condition: service_started
+    develop:
+        watch:
+          - action: rebuild
+            path: backend/go
+            target: final
   diary:
       build:
         context: backend/python
