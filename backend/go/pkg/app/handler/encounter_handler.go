@@ -27,7 +27,7 @@ func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request)
 	userID := r.PathValue("user_id")
 	out, err := h.encounterUseCase.GetEncounters(r.Context(), entity.UserID(userID))
 	if err != nil {
-		http.Error(w, "failed to get encounters", http.StatusInternalServerError)
+		response.InternalError(w, err)
 		return
 	}
 	response.OK(w, out)
@@ -36,7 +36,7 @@ func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request)
 func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req request.Encounter
 	if err := request.Decode(r, &req); err != nil {
-		http.Error(w, "failed to decode request", http.StatusBadRequest)
+		response.BadRequest(w, err)
 		return
 	}
 	if err := h.encounterUseCase.Create(r.Context(), &usecase.CrateEncounterInput{
@@ -46,7 +46,7 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Date:        req.Date,
 		Description: req.Description,
 	}); err != nil {
-		http.Error(w, "failed to create encounter", http.StatusInternalServerError)
+		response.InternalError(w, err)
 		return
 	}
 	response.Created(w, nil)
@@ -55,7 +55,7 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) {
 	out, err := h.encounterUseCase.GetEncounter(r.Context(), entity.EncounterID(r.URL.Query().Get("id")))
 	if err != nil {
-		http.Error(w, "failed to get encounter", http.StatusInternalServerError)
+		response.InternalError(w, err)
 		return
 	}
 	response.OK(w, out)
@@ -64,7 +64,7 @@ func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) 
 func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 	var req request.Encounter
 	if err := request.Decode(r, &req); err != nil {
-		http.Error(w, "failed to decode request", http.StatusBadRequest)
+		response.BadRequest(w, err)
 		return
 	}
 	if err := h.encounterUseCase.Update(r.Context(), &usecase.UpdateEncounterInput{
@@ -74,7 +74,7 @@ func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Date:        req.Date,
 		Description: req.Description,
 	}); err != nil {
-		http.Error(w, "failed to update encounter", http.StatusInternalServerError)
+		response.InternalError(w, err)
 		return
 	}
 	response.OK(w, nil)
