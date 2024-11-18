@@ -10,6 +10,8 @@ import (
 	"github.com/auster-kaki/auster-mono/pkg/app/handler"
 	"github.com/auster-kaki/auster-mono/pkg/infrastructure/rdb"
 	"github.com/auster-kaki/auster-mono/pkg/logging"
+
+	"github.com/rs/cors"
 )
 
 func init() {
@@ -40,7 +42,7 @@ func _main() error {
 	}
 
 	logging.Info(context.Background(), "server is running on :8080")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := http.ListenAndServe(":8080", cors.AllowAll().Handler(mux)); err != nil {
 		return err
 	}
 	return nil
