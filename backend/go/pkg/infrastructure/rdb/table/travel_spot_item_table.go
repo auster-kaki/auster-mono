@@ -18,7 +18,7 @@ func NewTravelSpotItem(db *bun.DB) *TravelSpotItem {
 
 func (t *TravelSpotItem) Create(ctx context.Context, ents ...entity.TravelSpotItem) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
-		return err
+		return handleError(err)
 	}
 	return nil
 }
@@ -26,7 +26,7 @@ func (t *TravelSpotItem) Create(ctx context.Context, ents ...entity.TravelSpotIt
 func (t *TravelSpotItem) GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotItems, error) {
 	res := entity.TravelSpotItems{}
 	if err := t.db.NewSelect().Model(&res).Where("travel_spot_id = ?", travelSpotID).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return res, nil
 }

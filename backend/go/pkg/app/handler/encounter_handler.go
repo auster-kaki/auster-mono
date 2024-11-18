@@ -24,7 +24,7 @@ func NewEncounterHandler(e *usecase.EncounterUseCase) []Input {
 }
 
 func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request) {
-	userID := r.PathValue("user_id")
+	userID := r.URL.Query().Get("user_id")
 	out, err := h.encounterUseCase.GetEncounters(r.Context(), entity.UserID(userID))
 	if err != nil {
 		response.InternalError(w, err)
@@ -53,7 +53,8 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) {
-	out, err := h.encounterUseCase.GetEncounter(r.Context(), entity.EncounterID(r.URL.Query().Get("id")))
+	id := r.PathValue("id")
+	out, err := h.encounterUseCase.GetEncounter(r.Context(), entity.EncounterID(id))
 	if err != nil {
 		response.InternalError(w, err)
 		return
@@ -68,7 +69,7 @@ func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.encounterUseCase.Update(r.Context(), &usecase.UpdateEncounterInput{
-		ID:          entity.EncounterID(r.URL.Query().Get("id")),
+		ID:          entity.EncounterID(r.PathValue("id")),
 		Name:        req.Name,
 		Place:       req.Place,
 		Date:        req.Date,

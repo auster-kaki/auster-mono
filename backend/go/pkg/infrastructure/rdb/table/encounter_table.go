@@ -2,6 +2,8 @@ package table
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/auster-kaki/auster-mono/pkg/entity"
 
@@ -33,6 +35,9 @@ func (t *Encounter) Update(ctx context.Context, ent *entity.Encounter) error {
 func (t *Encounter) FindByID(ctx context.Context, id entity.EncounterID) (*entity.Encounter, error) {
 	res := &entity.Encounter{}
 	if err := t.db.NewSelect().Model(res).Where("id = ?", id).Scan(ctx); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+
+		}
 		return nil, err
 	}
 	return res, nil

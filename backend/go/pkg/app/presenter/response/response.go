@@ -2,8 +2,11 @@ package response
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/auster-kaki/auster-mono/pkg/app/repository"
 )
 
 // OK - 200
@@ -24,36 +27,53 @@ func NoContent(w http.ResponseWriter) {
 // BadRequest - 400
 func BadRequest(w http.ResponseWriter, err error) {
 	writeResponseJSON(w, http.StatusBadRequest, map[string]any{
-		"message": err.Error(),
+		"message": handleErrorMessage(err),
 	})
 }
 
 // Unauthorized - 401
 func Unauthorized(w http.ResponseWriter, err error) {
 	writeResponseJSON(w, http.StatusUnauthorized, map[string]any{
-		"message": err.Error(),
+		"message": handleErrorMessage(err),
 	})
 }
 
 // Forbidden - 403
 func Forbidden(w http.ResponseWriter, err error) {
 	writeResponseJSON(w, http.StatusForbidden, map[string]any{
-		"message": err.Error(),
+		"message": handleErrorMessage(err),
 	})
 }
 
 // NotFound - 404
 func NotFound(w http.ResponseWriter, err error) {
 	writeResponseJSON(w, http.StatusNotFound, map[string]any{
-		"message": err.Error(),
+		"message": handleErrorMessage(err),
 	})
 }
 
 // InternalError - 500
 func InternalError(w http.ResponseWriter, err error) {
 	writeResponseJSON(w, http.StatusInternalServerError, map[string]any{
-		"message": err.Error(),
+		"message": handleErrorMessage(err),
 	})
+}
+
+func handleErrorMessage(err error) string {
+	switch {
+	case errors.Is(err, repository.ErrNotFound):
+		return "見つかりませんでした"
+	case errors.Is(err, repository.ErrAlreadyExists):
+		return "既に存在します"
+	case errors.Is(err, repository.ErrDuplicate):
+		return "重複しています"
+	case errors.Is(err, repository.ErrNotExists):
+		return "存在しません"
+	case errors.Is(err, repository.ErrUnimplemented):
+		return "未実装です"
+	default:
+		return err.Error()
+	}
 }
 
 func writeResponseJSON(w http.ResponseWriter, statusCode int, body any) {

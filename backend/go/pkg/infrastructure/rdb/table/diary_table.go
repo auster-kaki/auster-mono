@@ -2,7 +2,9 @@ package table
 
 import (
 	"context"
+
 	"github.com/auster-kaki/auster-mono/pkg/entity"
+
 	"github.com/uptrace/bun"
 )
 
@@ -16,7 +18,7 @@ func NewDairy(db *bun.DB) *Diary {
 
 func (t *Diary) Create(ctx context.Context, ents ...entity.Diary) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
-		return err
+		return handleError(err)
 	}
 	return nil
 }
@@ -24,7 +26,7 @@ func (t *Diary) Create(ctx context.Context, ents ...entity.Diary) error {
 func (t *Diary) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error) {
 	diary := &entity.Diary{}
 	if err := t.db.NewSelect().Model(diary).Where("id = ?", id).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return diary, nil
 }
@@ -32,7 +34,7 @@ func (t *Diary) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary,
 func (t *Diary) GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error) {
 	res := entity.Diaries{}
 	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", ids).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return res, nil
 }

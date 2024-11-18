@@ -46,7 +46,7 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	id := r.PathValue("id")
 	out, err := h.userUseCase.GetUser(r.Context(), entity.UserID(id))
 	if err != nil {
 		response.InternalError(w, err)
@@ -139,7 +139,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var (
-		id  = r.URL.Query().Get("id")
+		id  = r.PathValue("id")
 		req request.User
 	)
 	if err := request.Decode(r, &req); err != nil {
