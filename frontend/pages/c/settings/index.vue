@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       valid: false,
-      selectedUser: null,
+      selectedUser: 1,
       users: [
         { id: 1, name: 'ユーザー1' },
         { id: 2, name: 'ユーザー2' },
@@ -89,36 +89,41 @@ export default {
       hobbyOptions: ['読書', '映画鑑賞', 'スポーツ', '料理', '旅行', '音楽'],
     }
   },
+  mounted() {
+    this.loadUserSettings()
+  },
   methods: {
     loadUserSettings() {
-      // ダミーAPI呼び出し
       this.fetchUserSettings(this.selectedUser).then((response) => {
         this.settings = response.data
       })
     },
     updateSettings() {
       if (this.$refs.form.validate()) {
-        // ダミーAPI呼び出し
         this.saveUserSettings(this.selectedUser, this.settings).then(() => {
           alert('設定が更新されました')
         })
       }
     },
-    // ダミーAPI関数
     fetchUserSettings(userId) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: {
-              name: `ユーザー${userId}`,
-              gender: 'male',
-              age: 30,
-              hobbies: ['読書', 'スポーツ'],
-              photo: null,
-            },
-          })
-        }, 500)
+      return fetch(`http://localhost:8080/users/${userId}`, {
+        headers: {
+          "Content-Type": "application/json"
+        }
       })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          return { data };
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          throw error;
+        });
     },
     saveUserSettings(userId, settings) {
       return new Promise((resolve) => {
