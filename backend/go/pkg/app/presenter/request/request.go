@@ -21,10 +21,15 @@ func Decode[T any](r *http.Request, v *T) error {
 }
 
 type User struct {
-	Name    string   `json:"name"`
-	Age     int      `json:"age"`
-	Gender  string   `json:"gender"`
-	Hobbies []string `json:"hobbies"`
+	Name    string  `json:"name"`
+	Age     int     `json:"age"`
+	Gender  string  `json:"gender"`
+	Hobbies []Hobby `json:"hobbies"`
+}
+
+type Hobby struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type Encounter struct {

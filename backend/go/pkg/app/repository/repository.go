@@ -31,12 +31,13 @@ type UserRepository interface {
 }
 
 type HobbyRepository interface {
+	Create(ctx context.Context, hobbies ...*entity.Hobby) error
 	GetAll(ctx context.Context) (entity.Hobbies, error)
 	GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobbies, error)
 }
 
 type UserHobbyRepository interface {
-	Create(ctx context.Context, userHobbies ...entity.UserHobby) error
+	Create(ctx context.Context, userHobbies ...*entity.UserHobby) error
 	DeleteByUserID(ctx context.Context, userID entity.UserID) error
 	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserHobbies, error)
 }

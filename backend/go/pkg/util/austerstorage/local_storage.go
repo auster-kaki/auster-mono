@@ -2,7 +2,6 @@ package austerstorage
 
 import (
 	"fmt"
-	"github.com/auster-kaki/auster-mono/pkg/util/austerid"
 	"io"
 	"os"
 	"path/filepath"
@@ -16,7 +15,7 @@ const (
 )
 
 // Save はローカルにデータを保存しパスを返す
-func Save(content ContentType, data []byte) (string, error) {
+func Save(content ContentType, filename string, data []byte) (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
 		return "", err
@@ -25,11 +24,15 @@ func Save(content ContentType, data []byte) (string, error) {
 	var path string
 	switch content {
 	case JPEG:
-		path = filepath.Join(pwd, "assets", "images", fmt.Sprintf("%s.jpg", austerid.Generate[string]()))
+		path = filepath.Join(pwd, "assets", "images", filename)
 	case PNG:
-		path = filepath.Join(pwd, "assets", "images", fmt.Sprintf("%s.png", austerid.Generate[string]()))
+		path = filepath.Join(pwd, "assets", "images", filename)
 	default:
 		return "", fmt.Errorf("invalid content type: %s", content)
+	}
+
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return "", err
 	}
 
 	file, err := os.Create(path)

@@ -66,16 +66,50 @@ func (u *UserUseCase) GetUser(ctx context.Context, id entity.UserID) (*UserGetOu
 }
 
 type UserInput struct {
-	ID     entity.UserID
-	Name   string
-	Gender string
-	Age    int
-	Photo  []byte
+	ID      entity.UserID
+	Name    string
+	Gender  string
+	Age     int
+	Photo   UserPhoto
+	Hobbies entity.Hobbies
+}
+
+type UserPhoto struct {
+	Filename    string
+	Body        []byte
+	ContentType string
 }
 
 func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
-	path, err := austerstorage.Save(austerstorage.JPEG, input.Photo)
+	path, err := austerstorage.Save(
+		austerstorage.ContentType(input.Photo.ContentType),
+		input.Photo.Filename,
+		input.Photo.Body,
+	)
 	if err != nil {
+		return err
+	}
+
+	var (
+		newHobbies  = make(entity.Hobbies, 0, len(input.Hobbies))
+		userHobbies = make(entity.UserHobbies, len(input.Hobbies))
+	)
+	for i, hobby := range input.Hobbies {
+		if hobby.ID == "" {
+			hobby.ID = austerid.Generate[entity.HobbyID]()
+			newHobbies = append(newHobbies, hobby)
+		}
+		userHobbies[i] = &entity.UserHobby{
+			UserID:  input.ID,
+			HobbyID: hobby.ID,
+		}
+	}
+
+	if err := u.repository.UserHobby().Create(ctx, userHobbies...); err != nil {
+		return err
+	}
+
+	if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
 		return err
 	}
 
@@ -89,10 +123,36 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 }
 
 func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
-	path, err := austerstorage.Save(austerstorage.JPEG, input.Photo)
+	path, err := austerstorage.Save(
+		austerstorage.ContentType(input.Photo.ContentType),
+		input.Photo.Filename,
+		input.Photo.Body,
+	)
 	if err != nil {
 		return err
 	}
+	var (
+		newHobbies  = make(entity.Hobbies, 0, len(input.Hobbies))
+		userHobbies = make(entity.UserHobbies, len(input.Hobbies))
+	)
+	for i, hobby := range input.Hobbies {
+		if hobby.ID == "" {
+			hobby.ID = austerid.Generate[entity.HobbyID]()
+			newHobbies = append(newHobbies, hobby)
+		}
+		userHobbies[i] = &entity.UserHobby{
+			UserID:  input.ID,
+			HobbyID: hobby.ID,
+		}
+	}
+
+	if err := u.repository.UserHobby().DeleteByUserID(ctx, input.ID); err != nil {
+		return err
+	}
+	if err := u.repository.UserHobby().Create(ctx, userHobbies...); err != nil {
+		return err
+	}
+
 	return u.repository.User().Update(ctx, &entity.User{
 		ID:          input.ID,
 		Name:        input.Name,
