@@ -21,6 +21,14 @@ CREATE TABLE `hobby`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='趣味';
 
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83so0', '読書');
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sog', '映画鑑賞');
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sp0', 'スポーツ');
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83spg', '料理');
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sq0', '旅行');
+INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sqg', '音楽');
+
+
 CREATE TABLE `user_hobby`
 (
     `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
