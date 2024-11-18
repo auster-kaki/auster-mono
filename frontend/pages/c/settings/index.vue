@@ -51,16 +51,33 @@
             prepend-icon="mdi-camera"
           ></v-file-input>
 
-          <v-btn
-            color="primary"
-            class="mt-4"
-            block
-            type="submit"
-            :disabled="!valid"
-          >
-            設定を更新
-          </v-btn>
+          <v-row>
+            <v-col cols="6">
+              <v-btn
+                color="primary"
+                class="mt-4"
+                block
+                type="submit"
+                @click="updateUser"
+              >
+                <v-icon left>mdi-content-save</v-icon>
+                設定を更新
+              </v-btn>
+            </v-col>
+            <v-col cols="6">
+              <v-btn
+                color="primary"
+                class="mt-4"
+                block
+                @click="addNewUser"
+              >
+                <v-icon left>mdi-account-plus</v-icon>
+                新規で追加
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-form>
+        {{ settings }}
       </v-col>
     </v-row>
   </v-container>
@@ -74,12 +91,9 @@ export default {
     return {
       valid: false,
       selectedUser: 1,
-      users: [
-        { id: 1, name: 'ユーザー1' },
-        { id: 2, name: 'ユーザー2' },
-        { id: 3, name: 'ユーザー3' },
-      ],
+      users: [],
       settings: {
+        id: '',
         name: '',
         gender: '',
         age: null,
@@ -125,13 +139,50 @@ export default {
           throw error;
         });
     },
-    saveUserSettings(userId, settings) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log(`User ${userId} settings updated:`, settings)
-          resolve()
-        }, 500)
+    updateUser(userId, settings) {
+      return fetch(`http://localhost:8080/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settings),
       })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          throw error;
+        });
+    },
+    addNewUser() {
+      if (this.$refs.form.validate()) {
+        fetch('http://localhost:8080/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.settings),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert('新規ユーザーが追加されました');
+            this.users.push({ id: data.id, name: data.name });
+            this.selectedUser = data.id;
+          })
+          .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('ユーザーの追加に失敗しました');
+          });
+      }
     },
   },
 }
