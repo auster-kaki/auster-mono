@@ -28,7 +28,6 @@ INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83spg', '料理');
 INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sq0', '旅行');
 INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sqg', '音楽');
 
-
 CREATE TABLE `user_hobby`
 (
     `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
