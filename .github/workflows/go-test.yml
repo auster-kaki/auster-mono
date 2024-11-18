@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         if: ${{ steps.setup-go.outputs.cache-hit != 'true' }}
-        run: go mod download
+        run: cd backend/go && go mod download
 
       - name: Test
-        run: go test ./...
+        run: cd backend/go && go test ./...
