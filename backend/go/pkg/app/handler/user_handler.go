@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/presenter/request"
 	"github.com/auster-kaki/auster-mono/pkg/app/presenter/response"
@@ -106,13 +107,22 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req request.User
-	if err := request.Decode(r, &req); err != nil {
+	req.Name = r.FormValue("name")
+	req.Gender = r.FormValue("gender")
+
+	age, err := strconv.Atoi(r.FormValue("age"))
+	if err != nil {
+		response.HandleError(r.Context(), w, err)
+		return
+	}
+	req.Age = age
+
+	if err := json.Unmarshal([]byte(r.FormValue("hobbies")), &req.Hobbies); err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
 
-	// 画像ファイルを []byte で受け取る処理
-	file, _, err := r.FormFile("image")
+	file, handler, err := r.FormFile("photo")
 	if err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
@@ -129,7 +139,21 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Name:   req.Name,
 		Gender: req.Gender,
 		Age:    req.Age,
-		Photo:  photo,
+		Hobbies: func() entity.Hobbies {
+			hobbies := make(entity.Hobbies, len(req.Hobbies))
+			for i, hobby := range req.Hobbies {
+				hobbies[i] = &entity.Hobby{
+					ID:   entity.HobbyID(hobby.ID),
+					Name: hobby.Name,
+				}
+			}
+			return hobbies
+		}(),
+		Photo: usecase.UserPhoto{
+			Filename:    handler.Filename,
+			Body:        photo,
+			ContentType: handler.Header.Get("Content-Type"),
+		},
 	}); err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
@@ -138,17 +162,23 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	var (
-		id  = r.PathValue("id")
-		req request.User
-	)
-	if err := request.Decode(r, &req); err != nil {
+	var req request.User
+	req.Name = r.FormValue("name")
+	req.Gender = r.FormValue("gender")
+
+	age, err := strconv.Atoi(r.FormValue("age"))
+	if err != nil {
+		response.HandleError(r.Context(), w, err)
+		return
+	}
+	req.Age = age
+
+	if err := json.Unmarshal([]byte(r.FormValue("hobbies")), &req.Hobbies); err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
 
-	// 画像ファイルを []byte で受け取る処理
-	file, _, err := r.FormFile("image")
+	file, handler, err := r.FormFile("photo")
 	if err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
@@ -162,11 +192,25 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.userUseCase.UpdateUser(r.Context(), &usecase.UserInput{
-		ID:     entity.UserID(id),
+		ID:     entity.UserID(r.PathValue("id")),
 		Name:   req.Name,
 		Gender: req.Gender,
 		Age:    req.Age,
-		Photo:  photo,
+		Hobbies: func() entity.Hobbies {
+			hobbies := make(entity.Hobbies, len(req.Hobbies))
+			for i, hobby := range req.Hobbies {
+				hobbies[i] = &entity.Hobby{
+					ID:   entity.HobbyID(hobby.ID),
+					Name: hobby.Name,
+				}
+			}
+			return hobbies
+		}(),
+		Photo: usecase.UserPhoto{
+			Filename:    handler.Filename,
+			Body:        photo,
+			ContentType: handler.Header.Get("Content-Type"),
+		},
 	}); err != nil {
 		response.HandleError(r.Context(), w, err)
 		return

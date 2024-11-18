@@ -14,6 +14,13 @@ type Hobby struct {
 
 func NewHobby(db *bun.DB) *Hobby { return &Hobby{db: db} }
 
+func (t *Hobby) Create(ctx context.Context, ents ...*entity.Hobby) error {
+	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
+		return handleError(err)
+	}
+	return nil
+}
+
 func (t *Hobby) GetAll(ctx context.Context) (entity.Hobbies, error) {
 	res := entity.Hobbies{}
 	if err := t.db.NewSelect().Model(&res).Scan(ctx); err != nil {
