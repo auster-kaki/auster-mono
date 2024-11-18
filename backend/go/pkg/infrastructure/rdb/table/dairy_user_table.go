@@ -16,7 +16,7 @@ func NewDairyUser(db *bun.DB) *DiaryUser {
 
 func (t *DiaryUser) Create(ctx context.Context, ents ...entity.DiaryUser) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
-		return err
+		return handleError(err)
 	}
 	return nil
 }
@@ -24,7 +24,7 @@ func (t *DiaryUser) Create(ctx context.Context, ents ...entity.DiaryUser) error 
 func (t *DiaryUser) GetByUserID(ctx context.Context, userID entity.UserID) (entity.DiaryUsers, error) {
 	res := entity.DiaryUsers{}
 	if err := t.db.NewSelect().Model(&res).Where("user_id = ?", userID).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return res, nil
 }

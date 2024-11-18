@@ -18,7 +18,7 @@ func NewVendor(db *bun.DB) *Vendor {
 
 func (t *Vendor) Create(ctx context.Context, ents ...entity.Vendor) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
-		return err
+		return handleError(err)
 	}
 	return nil
 }
@@ -26,7 +26,7 @@ func (t *Vendor) Create(ctx context.Context, ents ...entity.Vendor) error {
 func (t *Vendor) GetAll(ctx context.Context) (entity.Vendors, error) {
 	res := entity.Vendors{}
 	if err := t.db.NewSelect().Model(&entity.Vendor{}).Scan(ctx, &res); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return res, nil
 }
@@ -34,7 +34,7 @@ func (t *Vendor) GetAll(ctx context.Context) (entity.Vendors, error) {
 func (t *Vendor) FindByID(ctx context.Context, id entity.VendorID) (*entity.Vendor, error) {
 	res := entity.Vendor{}
 	if err := t.db.NewSelect().Model(&res).Where("id = ?", id).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return &res, nil
 }

@@ -18,7 +18,7 @@ func NewItineraryResult(db *bun.DB) *ItineraryResult {
 
 func (t *ItineraryResult) Create(ctx context.Context, ents ...entity.ItineraryResult) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
-		return err
+		return handleError(err)
 	}
 	return nil
 }
@@ -26,7 +26,7 @@ func (t *ItineraryResult) Create(ctx context.Context, ents ...entity.ItineraryRe
 func (t *ItineraryResult) GetByItineraryID(ctx context.Context, itineraryID entity.ItineraryID) (entity.ItineraryResults, error) {
 	res := entity.ItineraryResults{}
 	if err := t.db.NewSelect().Model(&res).Where("itinerary_id = ?", itineraryID).Scan(ctx); err != nil {
-		return nil, err
+		return nil, handleError(err)
 	}
 	return res, nil
 }
