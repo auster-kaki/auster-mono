@@ -34,6 +34,11 @@ services:
         MYSQL_HOST: db
       ports:
         - "5050:80"
+      develop:
+        watch:
+          - action: sync
+            path: backend/python
+            target: /app
   db:
     image: mysql:8.0.40
     restart: always
