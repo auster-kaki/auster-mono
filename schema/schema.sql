@@ -1,5 +1,4 @@
-USE
-`auster`;
+USE `auster`;
 
 CREATE TABLE `user`
 (
@@ -57,7 +56,7 @@ CREATE TABLE `itinerary`
     `take_time`                 int(11)                          NOT NULL COMMENT '移動にかかる時間（分）, kindがspotの場合は0',
     `order`                     int(11)                          NOT NULL,
     PRIMARY KEY (`id`),
-    KEY                         `user_itinerary_history_id` (`user_itinerary_history_id`),
+    KEY                         `user_itinerary_history_id` (`user_itinerary_history_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅程';
