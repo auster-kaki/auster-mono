@@ -30,7 +30,7 @@ func NewUserHandler(u *usecase.UserUseCase) []Input {
 func (h *UserHandler) GetHobbies(w http.ResponseWriter, r *http.Request) {
 	out, err := h.userUseCase.GetHobbies(r.Context())
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, out)
@@ -39,7 +39,7 @@ func (h *UserHandler) GetHobbies(w http.ResponseWriter, r *http.Request) {
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	out, err := h.userUseCase.GetUsers(r.Context())
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, out)
@@ -49,7 +49,7 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	out, err := h.userUseCase.GetUser(r.Context(), entity.UserID(id))
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
@@ -59,14 +59,14 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	// マルチパートレスポンスを生成
 	multipartWriter := multipart.NewWriter(w)
 	if err := multipartWriter.SetBoundary("boundary123"); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
 	// ユーザー情報をjsonで返す
 	userJSON, err := json.Marshal(out.User)
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
@@ -75,11 +75,11 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		"Content-Type": {"application/json"},
 	})
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	if _, err := userPart.Write(userJSON); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
@@ -88,18 +88,18 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		"Content-Type": {"image/jpeg"},
 	})
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
 	if _, err := imagePart.Write(out.Photo); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
 	// マルチパートレスポンスを閉じる
 	if err := multipartWriter.Close(); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 }
@@ -107,21 +107,21 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req request.User
 	if err := request.Decode(r, &req); err != nil {
-		response.BadRequest(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
 	// 画像ファイルを []byte で受け取る処理
 	file, _, err := r.FormFile("image")
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	defer file.Close()
 
 	photo, err := io.ReadAll(file)
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
@@ -131,7 +131,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Age:    req.Age,
 		Photo:  photo,
 	}); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.Created(w, nil)
@@ -143,21 +143,21 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		req request.User
 	)
 	if err := request.Decode(r, &req); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
 	// 画像ファイルを []byte で受け取る処理
 	file, _, err := r.FormFile("image")
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	defer file.Close()
 
 	photo, err := io.ReadAll(file)
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 
@@ -168,7 +168,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		Age:    req.Age,
 		Photo:  photo,
 	}); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, nil)
