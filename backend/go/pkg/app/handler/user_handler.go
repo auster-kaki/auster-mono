@@ -24,6 +24,7 @@ func NewUserHandler(u *usecase.UserUseCase) []Input {
 		{method: http.MethodGet, path: "/users/{id}", handler: h.GetUser},
 		{method: http.MethodPost, path: "/users", handler: h.CreateUser},
 		{method: http.MethodPatch, path: "/users/{id}", handler: h.UpdateUser},
+		{method: http.MethodGet, path: "/hobbies", handler: h.GetHobbies},
 	}
 }
 
