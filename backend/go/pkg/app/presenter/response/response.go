@@ -72,6 +72,7 @@ func handleErrorMessage(err error) string {
 	case errors.Is(err, repository.ErrUnimplemented):
 		return "未実装です"
 	default:
+		return err.Error()
 	}
 }
 
