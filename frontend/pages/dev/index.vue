@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
+import DiaryCarousel from '@/components/c/diary/DiaryCarousel.vue'
 
 const baseUrl = ref('https://api.example.com')
 const endpoint = ref('/users')
@@ -42,7 +43,11 @@ const sendRequest = async () => {
   <div>
     <h1>Diaryテスト画面</h1>
     <diary-component :diary="diaryData" />
-    <h1>API テスト画面</h1>
+    <diary-carousel />
+    <div>
+      <h1>DiaryCarouselテスト画面</h1>
+  </div>
+      <h1>API テスト画面</h1>
     <div>
       <label>
         ベースURL:

@@ -54,7 +54,7 @@ export default {
       themes: {
         light: {
           primary: '#3CB371',
-          accent: '#FDF5E6',
+          accent: '#4E97E0',
           secondary: '#5f7a54',
           info: '#03A9F4',
           warning: '#FFEB3B',
