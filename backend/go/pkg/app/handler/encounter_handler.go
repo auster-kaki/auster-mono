@@ -16,15 +16,15 @@ type EncounterHandler struct {
 func NewEncounterHandler(e *usecase.EncounterUseCase) []Input {
 	h := &EncounterHandler{encounterUseCase: e}
 	return []Input{
-		{method: http.MethodGet, path: "/{user_id}/encounters", handler: h.GetEncounters},
-		{method: http.MethodPost, path: "/{user_id}/encounters", handler: h.Create},
-		{method: http.MethodGet, path: "/{user_id}/encounters/{id}", handler: h.GetEncounter},
-		{method: http.MethodPatch, path: "/{user_id}/encounters/{id}", handler: h.Update},
+		{method: http.MethodGet, path: "/encounters", handler: h.GetEncounters},
+		{method: http.MethodPost, path: "/encounters", handler: h.Create},
+		{method: http.MethodGet, path: "/encounters/{id}", handler: h.GetEncounter},
+		{method: http.MethodPatch, path: "/encounters/{id}", handler: h.Update},
 	}
 }
 
 func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request) {
-	userID := r.URL.Query().Get("user_id")
+	userID := r.PathValue("user_id")
 	out, err := h.encounterUseCase.GetEncounters(r.Context(), entity.UserID(userID))
 	if err != nil {
 		http.Error(w, "failed to get encounters", http.StatusInternalServerError)
@@ -40,7 +40,7 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.encounterUseCase.Create(r.Context(), &usecase.CrateEncounterInput{
-		UserID:      entity.UserID(r.URL.Query().Get("user_id")),
+		UserID:      entity.UserID(req.UserID),
 		Name:        req.Name,
 		Place:       req.Place,
 		Date:        req.Date,
