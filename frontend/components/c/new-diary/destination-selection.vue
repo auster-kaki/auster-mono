@@ -1,28 +1,23 @@
 <template>
-  <v-layout mobile>
-    <v-main>
-      <v-container>
-        <h1 class="text-h4 mb-4">行き先を選択してください</h1>
-        <v-row>
-          <v-col v-for="destination in destinations" :key="destination.name" cols="12" sm="6">
-            <v-card @click="goToExperienceSelection(destination.id)">
-              <v-img :src="destination.image" height="200"></v-img>
-              <v-card-title>{{ destination.name }}</v-card-title>
-              <v-card-text>
-                <p>{{ destination.description }}</p>
-                <v-btn :to="destination.experiencesLink" text color="primary">体験一覧を見る</v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-layout>
+  <v-container>
+    <h1 class="text-h4 mb-4">行き先を選択してください</h1>
+    <v-row>
+      <v-col v-for="destination in destinations" :key="destination.name" cols="12" sm="6">
+        <v-card @click="selectDestination(destination.id)">
+          <v-img :src="destination.image" height="200"></v-img>
+          <v-card-title>{{ destination.name }}</v-card-title>
+          <v-card-text>
+            <p>{{ destination.description }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
-  layout: 'mobile',
+  name: 'DestinationSelection',
   data() {
     return {
       destinations: [
@@ -58,11 +53,8 @@ export default {
     }
   },
   methods: {
-    goToExperienceSelection(id) {
-      this.$router.push({
-        path: '/c/new-diary/experience-selection',
-        query: { id }
-      })
+    selectDestination(id) {
+      this.$emit('destination-selected', id)
     }
   }
 }

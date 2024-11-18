@@ -1,37 +1,35 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+
+interface ExpressTicket {
+  date: string
+  time: string
+  trainName: string
+  price: number
+}
+
+interface Experience {
+  name: string
+  price: number
+}
+
+interface BookingInfo {
+  expressTickets: ExpressTicket[]
+  experience: Experience
+}
 
 export default defineComponent({
-  name: 'Confirm',
-  data() {
-    return {
-      bookingInfo: {
-        expressTickets: [
-          {
-            date: '2024/11/09',
-            time: '11:00~',
-            trainName: 'しおさい３号',
-            price: 1500
-          },
-          {
-            date: '2024/11/10',
-            time: '11:00~',
-            trainName: 'しおさい14号',
-            price: 1500
-          }
-        ],
-        experience: {
-          name: '一本釣り体験',
-          price: 3000
-        }
-      }
+  name: 'NewDiaryConfirm',
+  props: {
+    bookingInfo: {
+      type: Object as PropType<BookingInfo>,
+      required: true
     }
   },
+  emits: ['confirm'],
   methods: {
     confirmBooking() {
-      // ここに予約処理を実装
-      console.log('予約が確認されました')
-      this.$router.push(`/c/home`)
+      this.$emit('confirm')
     }
   }
 })
