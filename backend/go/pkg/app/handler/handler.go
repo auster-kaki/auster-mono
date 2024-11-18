@@ -25,7 +25,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 			panic(fmt.Sprintf("duplicate path: %s", path))
 		}
 		alreadyPath[path] = struct{}{}
-		handlerMap[h.path] = h.handler
+		handlerMap[path] = h.handler
 	}
 	for _, h := range NewVendorHandler(usecase.NewVendorUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
@@ -33,7 +33,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 			panic(fmt.Sprintf("duplicate path: %s", path))
 		}
 		alreadyPath[path] = struct{}{}
-		handlerMap[h.path] = h.handler
+		handlerMap[path] = h.handler
 	}
 	for _, h := range NewDiaryHandler(usecase.NewDiaryUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
@@ -41,7 +41,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 			panic(fmt.Sprintf("duplicate path: %s", path))
 		}
 		alreadyPath[path] = struct{}{}
-		handlerMap[h.path] = h.handler
+		handlerMap[path] = h.handler
 	}
 	for _, h := range NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
@@ -49,7 +49,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 			panic(fmt.Sprintf("duplicate path: %s", path))
 		}
 		alreadyPath[path] = struct{}{}
-		handlerMap[h.path] = h.handler
+		handlerMap[path] = h.handler
 	}
 	for _, h := range NewEncounterHandler(usecase.NewEncounterUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
@@ -57,7 +57,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 			panic(fmt.Sprintf("duplicate path: %s", path))
 		}
 		alreadyPath[path] = struct{}{}
-		handlerMap[h.path] = h.handler
+		handlerMap[path] = h.handler
 	}
 	return handlerMap
 }
