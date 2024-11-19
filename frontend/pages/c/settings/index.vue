@@ -37,6 +37,7 @@
           <v-combobox
             v-model="settings.hobbies"
             :items="hobbyOptions"
+            item-text="name"
             label="趣味"
             multiple
             chips
@@ -77,13 +78,14 @@
             </v-col>
           </v-row>
         </v-form>
-        {{ settings }}
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { useUserStore } from '~/store/user'
+
 export default {
   name: 'IndexPage',
   layout: 'mobile',
@@ -98,23 +100,34 @@ export default {
         gender: '',
         age: null,
         hobbies: [],
-        photo: null,
+        photo: null
       },
-      hobbyOptions: ['読書', '映画鑑賞', 'スポーツ', '料理', '旅行', '音楽'],
+      hobbyOptions: [
+        { id: 'cstkdiat6c3011a83so0', name: '釣り' },
+        { id: 'cstkdiat6c3011a83sog', name: 'キャンプ' }
+      ],
+      userInfo: null,
     }
   },
   mounted() {
     this.loadUserSettings()
+    const userStore = useUserStore();
+    userStore.initializeUser();
+    this.userInfo = userStore.userInfo;
   },
   methods: {
     loadUserSettings() {
       this.fetchUserSettings(this.selectedUser).then((response) => {
         this.settings = response.data
+        this.settings.hobbies = this.settings.hobbies.map(hobby =>
+          this.hobbyOptions.find(option => option.id === hobby.id) || hobby
+        )
       })
     },
     updateSettings() {
       if (this.$refs.form.validate()) {
         this.saveUserSettings(this.selectedUser, this.settings).then(() => {
+          userStore.updateUserInfo({ id: this.selectedUser})
           alert('設定が更新されました')
         })
       }
@@ -122,86 +135,86 @@ export default {
     fetchUserSettings(userId) {
       return fetch(`http://localhost:8080/users/${userId}`, {
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         }
       })
         .then(response => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok')
           }
-          return response.json();
+          return response.json()
         })
         .then(data => {
-          return { data };
+          return { data }
         })
         .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-          throw error;
-        });
+          console.error('There was a problem with the fetch operation:', error)
+          throw error
+        })
     },
     updateUser() {
       if (this.$refs.form.validate()) {
-        const formData = new FormData();
-        formData.append('id', this.settings.id);
-        formData.append('name', this.settings.name);
-        formData.append('gender', this.settings.gender);
-        formData.append('age', this.settings.age);
-        formData.append('hobbies', JSON.stringify(this.settings.hobbies));
+        const formData = new FormData()
+        formData.append('id', this.settings.id)
+        formData.append('name', this.settings.name)
+        formData.append('gender', this.settings.gender)
+        formData.append('age', this.settings.age)
+        formData.append('hobbies', JSON.stringify(this.settings.hobbies))
         if (this.settings.photo) {
-          formData.append('photo', this.settings.photo);
+          formData.append('photo', this.settings.photo)
         }
 
         fetch(`http://localhost:8080/users/${this.selectedUser}`, {
           method: 'PUT',
-          body: formData,
+          body: formData
         })
           .then(response => {
             if (!response.ok) {
-              throw new Error('Network response was not ok');
+              throw new Error('Network response was not ok')
             }
-            return response.json();
+            return response.json()
           })
           .then(() => {
-            alert('設定が更新されました');
+            alert('設定が更新されました')
           })
           .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('設定の更新に失敗しました');
-          });
+            console.error('There was a problem with the fetch operation:', error)
+            alert('設定の更新に失敗しました')
+          })
       }
     },
     addNewUser() {
       if (this.$refs.form.validate()) {
-        const formData = new FormData();
-        formData.append('name', this.settings.name);
-        formData.append('gender', this.settings.gender);
-        formData.append('age', this.settings.age);
-        formData.append('hobbies', JSON.stringify(this.settings.hobbies));
+        const formData = new FormData()
+        formData.append('name', this.settings.name)
+        formData.append('gender', this.settings.gender)
+        formData.append('age', this.settings.age)
+        formData.append('hobbies', JSON.stringify(this.settings.hobbies))
         if (this.settings.photo) {
-          formData.append('photo', this.settings.photo);
+          formData.append('photo', this.settings.photo)
         }
 
         fetch('http://localhost:8080/users', {
           method: 'POST',
-          body: formData,
+          body: formData
         })
           .then(response => {
             if (!response.ok) {
-              throw new Error('Network response was not ok');
+              throw new Error('Network response was not ok')
             }
-            return response.json();
+            return response.json()
           })
           .then(data => {
-            alert('新規ユーザーが追加されました');
-            this.users.push({ id: data.id, name: data.name });
-            this.selectedUser = data.id;
+            alert('新規ユーザーが追加されました')
+            this.users.push({ id: data.id, name: data.name })
+            this.selectedUser = data.id
           })
           .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('ユーザーの追加に失敗しました');
-          });
+            console.error('There was a problem with the fetch operation:', error)
+            alert('ユーザーの追加に失敗しました')
+          })
       }
-    },
-  },
+    }
+  }
 }
 </script>
