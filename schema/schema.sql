@@ -143,7 +143,6 @@ INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('3', 'cs
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('4', 'cstkdiat6c3011a83so0');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('5', 'cstkdiat6c3011a83so0');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('6', 'cstkdiat6c3011a83so0');
-INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('6', 'cstkdiat6c3011a83so0');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('10', 'cstkdiat6c3011a83sog');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('11', 'cstkdiat6c3011a83sog');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('12', 'cstkdiat6c3011a83sog');
@@ -159,6 +158,17 @@ CREATE TABLE `travel_spot_photo`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットでの写真';
+
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('1', '1', '釣り体験 ヒラマサ画像','/assets/images/travel_spot_photo_1.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('2', '10', 'キャンプ場運営体験 イベントのスタッフ画像','/assets/images/travel_spot_photo_2.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('3', '11', 'キャンプ中級者体験 ブッシュクラフト火おこし画像','/assets/images/travel_spot_photo_3.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('4', '12', 'トレインランニング画像','/assets/images/travel_spot_photo_4.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('5', '13', 'スペシャルオファー<複業画像','/assets/images/travel_spot_photo_5.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('6', '2', '釣り体験 クロカジキ画像','/assets/images/travel_spot_photo_6.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('7', '3', '釣り体験 ヒラメ画像','/assets/images/travel_spot_photo_7.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('8', '4', '漁業体験 競りの見学画像','/assets/images/travel_spot_photo_8.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('9', '5', '漁業体験 定置網漁画像','/assets/images/travel_spot_photo_9.jpg');
+INSERT INTO auster.travel_spot_photo (id, travel_spot_id, name, path) VALUES ('10', '6', '社会貢献活動 浜辺のゴミ拾い画像','/assets/images/travel_spot_photo_10.jpg');
 
 CREATE TABLE `travel_spot_item`
 (

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
 	"github.com/auster-kaki/auster-mono/pkg/entity"
 )
@@ -14,15 +15,27 @@ func NewTravelSpotUseCase(r repository.Repository) *TravelSpotUseCase {
 	return &TravelSpotUseCase{repository: r}
 }
 
-func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.UserID, hobbyID entity.HobbyID) (entity.TravelSpots, error) {
+type TravelSpotsGetOutput struct {
+	TravelSpots entity.TravelSpots
+	Photos      entity.TravelSpotPhotos
+}
+
+func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.UserID, hobbyID entity.HobbyID) (*TravelSpotsGetOutput, error) {
 	travelSpotHobbies, err := u.repository.TravelSpotHobby().GetByHobbyID(ctx, hobbyID)
 	if err != nil {
 		return nil, err
 	}
-
-	travelSpots, err := u.repository.TravelSpot().GetByIDs(ctx, travelSpotHobbies.TravelSpotIDs())
+	travelSpotIDs := travelSpotHobbies.TravelSpotIDs()
+	travelSpots, err := u.repository.TravelSpot().GetByIDs(ctx, travelSpotIDs)
 	if err != nil {
 		return nil, err
 	}
-	return travelSpots, nil
+	travelSpotPhotos, err := u.repository.TravelSpotPhoto().GetByTravelSpotIDs(ctx, travelSpotIDs)
+	if err != nil {
+		return nil, err
+	}
+	return &TravelSpotsGetOutput{
+		TravelSpots: travelSpots,
+		Photos:      travelSpotPhotos,
+	}, nil
 }
