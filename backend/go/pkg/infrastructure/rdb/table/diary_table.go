@@ -33,7 +33,7 @@ func (t *Diary) FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary,
 
 func (t *Diary) GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error) {
 	res := entity.Diaries{}
-	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", ids).Scan(ctx); err != nil {
+	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", bun.In(ids)).Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
