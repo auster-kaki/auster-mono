@@ -88,6 +88,7 @@ import DestinationSelection from '~/components/c/new-diary/destination-selection
 import ExperienceSelection from '~/components/c/new-diary/experience-selection.vue'
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
 import NewDiaryConfirm from '~/components/c/new-diary/confirm.vue'
+import { useUserStore } from '~/store/user'
 
 export default {
   components: { NewDiaryConfirm, NewDiaryItinerary, ExperienceSelection, DestinationSelection, DepartureSelection },
@@ -122,8 +123,16 @@ export default {
       bookingInfo: {
         expressTickets: [],
         experience: {}
+      },
+      userInfo: {
+        id: ''
       }
     }
+  },
+  mounted() {
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
   },
   methods: {
     submitForm() {
@@ -205,9 +214,9 @@ export default {
     },
     handleConfirm() {
       // 予約処理を実装
-      console.log('予約が確認されました')
       this.$router.push('/c/home')
+      alert('予約が確認されました')
     }
-  },
+  }
 }
 </script>

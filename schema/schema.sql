@@ -123,6 +123,17 @@ CREATE TABLE `travel_spot`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポット';
 
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('1', 'gyo1', '釣り体験 ヒラマサ', 180, '船釣りでヒラマサを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('10', 'can2', 'キャンプ場運営体験 イベントのスタッフ', 300, '周辺地域のショップ様と共同開催するイベントのスタッフ業務をお任せします', '千葉県大網白里市四天木2761-40');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('11', 'can1', 'キャンプ中級者体験 ブッシュクラフト火おこし', 60, 'キャンパーが一度は憧れるブッシュクラフト、火おこし体験ができます', '千葉県長生郡一宮町東浪見1611');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('12', 'can3', 'トレインランニング', 300, '銚子電鉄の駅を自分の足で巡りながら大自然を駆け抜けるトレインランニングを体験できます', '千葉県銚子市新生町2丁目297番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('13', 'can2', 'スペシャルオファー<複業> ショップの企画担当', 0, 'キャンプ場周辺のショップで企画担当を募集します', '千葉県大網白里市四天木2761-40');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('2', 'gyo1', '釣り体験 クロカジキ', 240, '船釣りでクロカジキを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('3', 'gyo1', '釣り体験 ヒラメ', 180, '船釣りでヒラメを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('4', 'gyo1', '漁業体験 競りの見学', 120, '競りの市場を見学できます', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
+
 CREATE TABLE `travel_spot_photo`
 (
     `id`             varchar(20) COLLATE utf8mb4_bin  NOT NULL,
@@ -154,6 +165,13 @@ CREATE TABLE `vendor`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行会社';
+
+INSERT INTO auster.vendor (id, name, address) VALUES ('can1', 'CampsiteTORAMI', '千葉県長生郡一宮町東浪見1611');
+INSERT INTO auster.vendor (id, name, address) VALUES ('can2', 'Beach Camp 九十九里', '千葉県大網白里市四天木2761-40');
+INSERT INTO auster.vendor (id, name, address) VALUES ('can3', '銚子電気鉄道', '千葉県銚子市新生町2丁目297番地');
+INSERT INTO auster.vendor (id, name, address) VALUES ('gyo1', '銚子市漁業協同組合', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.vendor (id, name, address) VALUES ('gyo2', '銚子市生活環境課 清掃美化班', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
+
 
 CREATE TABLE `encounter`
 (

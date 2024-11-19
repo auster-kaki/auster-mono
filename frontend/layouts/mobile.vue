@@ -3,12 +3,10 @@
     <v-app-bar app>
       <v-spacer></v-spacer>
       <v-toolbar-title>SUNT</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-title>{{ username }}</v-toolbar-title>
     </v-app-bar>
     <v-main>
       <v-container>
-        <Nuxt/>
+        <Nuxt />
       </v-container>
     </v-main>
     <v-bottom-navigation v-model="value" fixed>
@@ -26,11 +24,12 @@
 
 <script>
 import NavigationButton from '~/components/c/common/NavicationButton.vue'
+import { useUserStore } from '~/store/user'
 
 export default {
   name: 'DefaultLayout',
   components: {
-    NavigationButton,
+    NavigationButton
   },
   data() {
     return {
@@ -41,20 +40,14 @@ export default {
         { value: 'create', to: '/c/new-diary', icon: 'mdi-pencil', label: '日記作成' },
         { value: 'reservations', to: '/c/reservations', icon: 'mdi-calendar-check', label: '予約確認' },
         { value: 'history', to: '/c/histories', icon: 'mdi-history', label: '過去日記' },
-        { value: 'settings', to: '/c/settings', icon: 'mdi-cog', label: '設定' },
-      ],
+        { value: 'settings', to: '/c/settings', icon: 'mdi-cog', label: '設定' }
+      ]
     }
   },
   // ユーザー名を取得するためのメソッドを追加（実際の実装はアプリケーションの仕様に応じて変更してください）
   mounted() {
-    this.fetchUsername()
+    const userStore = useUserStore()
+    userStore.initializeUser()
   },
-  methods: {
-    async fetchUsername() {
-      // ここでユーザー名を取得するAPIを呼び出すなどの処理を行う
-      // 例: this.username = await this.$api.getUsername()
-      this.username = 'ユーザー名' // 仮の実装
-    }
-  }
 }
 </script>
