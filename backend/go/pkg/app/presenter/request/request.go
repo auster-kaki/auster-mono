@@ -39,3 +39,8 @@ type Encounter struct {
 	Date        time.Time `json:"date"`
 	Description string    `json:"description"`
 }
+
+type TravelSpot struct {
+	UserID  string `json:"user_id"`
+	HobbyID string `json:"hobby_id"`
+}

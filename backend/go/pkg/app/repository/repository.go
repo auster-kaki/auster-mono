@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-
 	"github.com/auster-kaki/auster-mono/pkg/entity"
 )
 
@@ -16,6 +15,7 @@ type Repository interface {
 	TravelSpot() TravelSpotRepository
 	TravelSpotPhoto() TravelSpotPhotoRepository
 	TravelSpotItem() TravelSpotItemRepository
+	TravelSpotHobby() TravelSpotHobbyRepository
 	Vendor() VendorRepository
 	Diary() DiaryRepository
 	DiaryTag() DiaryTagRepository
@@ -34,6 +34,7 @@ type HobbyRepository interface {
 	Create(ctx context.Context, hobbies ...*entity.Hobby) error
 	GetAll(ctx context.Context) (entity.Hobbies, error)
 	GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobbies, error)
+	GetByID(ctx context.Context, id entity.HobbyID) (*entity.Hobby, error)
 }
 
 type UserHobbyRepository interface {
@@ -55,11 +56,13 @@ type ItineraryRepository interface {
 type ItineraryResultRepository interface {
 	Create(ctx context.Context, itineraryResults ...entity.ItineraryResult) error
 	GetByItineraryID(ctx context.Context, itineraryID entity.ItineraryID) (entity.ItineraryResults, error)
+	GetByUserID(ctx context.Context, userID entity.UserID) (entity.ItineraryResults, error)
 }
 
 type TravelSpotRepository interface {
 	Create(ctx context.Context, travelSpots ...entity.TravelSpot) error
 	GetByVendorID(ctx context.Context, vendorID entity.VendorID) (entity.TravelSpots, error)
+	GetByIDs(ctx context.Context, ids []entity.TravelSpotID) (entity.TravelSpots, error)
 }
 
 type TravelSpotPhotoRepository interface {
@@ -99,4 +102,8 @@ type EncounterRepository interface {
 	Update(ctx context.Context, encounter *entity.Encounter) error
 	FindByID(ctx context.Context, id entity.EncounterID) (*entity.Encounter, error)
 	GetByUserID(ctx context.Context, userID entity.UserID) (entity.Encounters, error)
+}
+
+type TravelSpotHobbyRepository interface {
+	GetByHobbyID(ctx context.Context, hobbyID entity.HobbyID) (entity.TravelSpotHobbies, error)
 }

@@ -36,3 +36,11 @@ func (t *Hobby) GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobb
 	}
 	return res, nil
 }
+
+func (t *Hobby) GetByID(ctx context.Context, id entity.HobbyID) (*entity.Hobby, error) {
+	res := &entity.Hobby{}
+	if err := t.db.NewSelect().Model(res).Where("id = ?", id).Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}
