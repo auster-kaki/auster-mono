@@ -91,6 +91,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 	}
 
 	var (
+		userID      = austerid.Generate[entity.UserID]()
 		newHobbies  = make(entity.Hobbies, 0, len(input.Hobbies))
 		userHobbies = make(entity.UserHobbies, len(input.Hobbies))
 	)
@@ -100,7 +101,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 			newHobbies = append(newHobbies, hobby)
 		}
 		userHobbies[i] = &entity.UserHobby{
-			UserID:  input.ID,
+			UserID:  userID,
 			HobbyID: hobby.ID,
 		}
 	}
@@ -114,7 +115,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 	}
 
 	return u.repository.User().Create(ctx, &entity.User{
-		ID:          austerid.Generate[entity.UserID](),
+		ID:          userID,
 		Name:        input.Name,
 		Gender:      input.Gender,
 		Age:         input.Age,
