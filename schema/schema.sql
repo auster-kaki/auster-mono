@@ -128,6 +128,27 @@ INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, add
 INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地');
 INSERT INTO auster.travel_spot (id, vendor_id, name, take_time, description, address) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
 
+CREATE TABLE `travel_spot_hobby`
+(
+    `travel_spot_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `hobby_id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`travel_spot_id`, `hobby_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='体験スポットに当てはまる趣味';
+
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('1', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('2', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('3', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('4', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('5', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('6', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('6', 'cstkdiat6c3011a83so0');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('10', 'cstkdiat6c3011a83sog');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('11', 'cstkdiat6c3011a83sog');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('12', 'cstkdiat6c3011a83sog');
+INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('13', 'cstkdiat6c3011a83sog');
+
 CREATE TABLE `travel_spot_photo`
 (
     `id`             varchar(20) COLLATE utf8mb4_bin  NOT NULL,

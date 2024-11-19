@@ -17,7 +17,7 @@ type Client struct {
 func NewClient() *Client {
 	return &Client{
 		client: http.DefaultClient,
-		host:   cmp.Or(os.Getenv(""), "localhost"),
+		host:   cmp.Or(os.Getenv("DIARY_HOST"), "localhost"),
 	}
 }
 
