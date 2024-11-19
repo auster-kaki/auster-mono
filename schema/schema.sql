@@ -97,7 +97,6 @@ CREATE TABLE `diary_tag`
 
 CREATE TABLE `diary_user`
 (
-    `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `diary_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `user_id`  varchar(20) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`diary_id`, `user_id`)
