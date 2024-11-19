@@ -32,7 +32,7 @@
           @destination-selected="handleDestinationSelected"
         />
         <v-btn text @click="currentStep -= 1">
-          Back
+          戻る
         </v-btn>
       </v-stepper-content>
 
@@ -42,14 +42,17 @@
           :video-title="experienceForm.videoTitle"
           :video-description="experienceForm.videoDescription"
           :experiences="experienceForm.experiences"
-          @select-experience="handleSelectExperience"
         />
-        <v-btn text @click="currentStep -= 1">
-          Back
-        </v-btn>
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+              <v-spacer />
+            <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
+          </v-row>
+        </v-container>
       </v-stepper-content>
       <v-stepper-content step="4">
-        <v-btn text @click="currentStep += 1">体験詳細</v-btn>
+        <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
         <v-btn text @click="currentStep -= 1">
           Back
         </v-btn>
@@ -60,12 +63,9 @@
         />
         <v-container>
           <v-row class="mt-4 pb-4">
-            <v-col cols="6">
-              <v-btn block @click="currentStep += 1">戻る</v-btn>
-            </v-col>
-            <v-col cols="6">
-              <v-btn block color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
-            </v-col>
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
           </v-row>
         </v-container>
       </v-stepper-content>
@@ -89,9 +89,17 @@ import ExperienceSelection from '~/components/c/new-diary/experience-selection.v
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
 import NewDiaryConfirm from '~/components/c/new-diary/confirm.vue'
 import { useUserStore } from '~/store/user'
+import DiaryCarousel from '~/components/c/diary/DiaryCarousel.vue'
 
 export default {
-  components: { NewDiaryConfirm, NewDiaryItinerary, ExperienceSelection, DestinationSelection, DepartureSelection },
+  components: {
+    DiaryCarousel,
+    NewDiaryConfirm,
+    NewDiaryItinerary,
+    ExperienceSelection,
+    DestinationSelection,
+    DepartureSelection
+  },
   layout: 'mobile',
   data() {
     return {
@@ -119,6 +127,7 @@ export default {
           experiences: []
         }
       },
+      diaries: [],
       itinerary: [],
       bookingInfo: {
         expressTickets: [],
@@ -174,12 +183,37 @@ export default {
             description: '色とりどりの魚たちと泳ぐ underwater adventure',
             hasFurusatoNozei: false
           }
-
         ]
       }
       this.currentStep += 1
     },
-    handleSelectExperience(id) {
+    handleSelectExperience() {
+      // TODO 地域情報からこれらの情報取ってくる
+      this.diaries = [
+        {
+          id: 1,
+          date: '2024/11/23',
+          image: '/placeholder.svg?height=400&width=600',
+          title: '大物ヒラマサとの出会い',
+          content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
+        },
+        {
+          id: 2,
+          date: '2024/11/24',
+          image: '/placeholder.svg?height=400&width=600',
+          title: '穏やかな朝の散歩',
+          content: '今朝は日の出とともに目覚め、近所の公園を散歩しました。紅葉が見頃で、朝日に照らされた葉が美しく輝いていました。静かな朝の時間を過ごすことで、一日を穏やかな気持ちで始められそうです。'
+        },
+        {
+          id: 3,
+          date: '2024/11/25',
+          image: '/placeholder.svg?height=400&width=600',
+          title: '新しいカフェでの発見',
+          content: '街中にオープンしたという評判のカフェに行ってきました。インテリアがとてもおしゃれで、窓から差し込む光が心地よい空間でした。注文したラテアートが素晴らしく、バリスタの技術に感動。また訪れたい場所が増えました。'
+        }]
+      this.currentStep += 1
+    },
+    handleSelectDiary(id) {
       this.itinerary = [
         { type: '移動', duration: 30, description: '目安: 30分' },
         { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
