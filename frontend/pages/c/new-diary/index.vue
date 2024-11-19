@@ -1,89 +1,89 @@
 <template>
-    <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
-      <v-stepper-header>
-        <v-stepper-step :complete="currentStep > 1" step="1" />
-        <v-divider />
-        <v-stepper-step :complete="currentStep > 2" step="2" />
-        <v-divider />
-        <v-stepper-step :complete="currentStep > 3" step="3" />
-        <v-divider />
-        <v-stepper-step :complete="currentStep > 4" step="4" />
-        <v-divider />
-        <v-stepper-step :complete="currentStep > 5" step="5" />
-        <v-divider />
-        <v-stepper-step :complete="currentStep > 6" step="6" />
-      </v-stepper-header>
+  <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
+    <v-stepper-header>
+      <v-stepper-step :complete="currentStep > 1" step="1" />
+      <v-divider />
+      <v-stepper-step :complete="currentStep > 2" step="2" />
+      <v-divider />
+      <v-stepper-step :complete="currentStep > 3" step="3" />
+      <v-divider />
+      <v-stepper-step :complete="currentStep > 4" step="4" />
+      <v-divider />
+      <v-stepper-step :complete="currentStep > 5" step="5" />
+      <v-divider />
+      <v-stepper-step :complete="currentStep > 6" step="6" />
+    </v-stepper-header>
 
-      <v-stepper-items>
-        <v-stepper-content step="1">
-          <departure-selection
-            :departure-place="departureForm.departurePlace"
-            :departure-date="departureForm.departureDate"
-            :return-date="departureForm.returnDate"
-            :departure-time="departureForm.departureTime"
-            :return-time="departureForm.returnTime"
-            :interests="departureForm.interests"
-            @submit="currentStep += 1"
-          />
-        </v-stepper-content>
+    <v-stepper-items>
+      <v-stepper-content step="1">
+        <departure-selection
+          :departure-place="departureForm.departurePlace"
+          :departure-date="departureForm.departureDate"
+          :return-date="departureForm.returnDate"
+          :departure-time="departureForm.departureTime"
+          :return-time="departureForm.returnTime"
+          :interests="departureForm.interests"
+          @submit="currentStep += 1"
+        />
+      </v-stepper-content>
 
-        <v-stepper-content step="2">
-          <destination-selection
-            @destination-selected="handleDestinationSelected"
-          />
-          <v-btn text @click="currentStep -= 1">
-            戻る
-          </v-btn>
-        </v-stepper-content>
+      <v-stepper-content step="2">
+        <destination-selection
+          @destination-selected="handleDestinationSelected"
+        />
+        <v-btn text @click="currentStep -= 1">
+          戻る
+        </v-btn>
+      </v-stepper-content>
 
-        <v-stepper-content step="3">
-          <experience-selection
-            :video="experienceForm.video"
-            :video-title="experienceForm.videoTitle"
-            :video-description="experienceForm.videoDescription"
-            :experiences="experienceForm.experiences"
-          />
-          <v-container>
-            <v-row class="mt-4 pb-4">
-              <v-btn text @click="currentStep -= 1">戻る</v-btn>
-              <v-spacer />
-              <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
-            </v-row>
-          </v-container>
-        </v-stepper-content>
-        <v-stepper-content style="padding: 8px" step="4">
-          <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
-          <v-btn text @click="currentStep -= 1">
-            戻る
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-content step="5">
-          <NewDiaryItinerary
-            :itinerary="itinerary"
-          />
-          <v-container>
-            <v-row class="mt-4 pb-4">
-              <v-btn text @click="currentStep -= 1">戻る</v-btn>
-              <v-spacer />
-              <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
-            </v-row>
-          </v-container>
-        </v-stepper-content>
-        <v-stepper-content step="6">
-          <NewDiaryConfirm
-            :booking-info="bookingInfo"
-            @confirm="handleConfirm"
-          />
-          <v-container>
-            <v-row class="mt-4 pb-4">
-              <v-btn text @click="currentStep -= 1">戻る</v-btn>
-              <v-spacer />
-              <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
-            </v-row>
-          </v-container>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
+      <v-stepper-content step="3">
+        <experience-selection
+          :video="experienceForm.video"
+          :video-title="experienceForm.videoTitle"
+          :video-description="experienceForm.videoDescription"
+          :experiences="experienceForm.experiences"
+        />
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
+          </v-row>
+        </v-container>
+      </v-stepper-content>
+      <v-stepper-content style="padding: 8px" step="4">
+        <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
+        <v-btn text @click="currentStep -= 1">
+          戻る
+        </v-btn>
+      </v-stepper-content>
+      <v-stepper-content step="5">
+        <NewDiaryItinerary
+          :itinerary="itinerary"
+        />
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
+          </v-row>
+        </v-container>
+      </v-stepper-content>
+      <v-stepper-content step="6">
+        <NewDiaryConfirm
+          :booking-info="bookingInfo"
+          @confirm="handleConfirm"
+        />
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
+          </v-row>
+        </v-container>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
 </template>
 
 <script>
