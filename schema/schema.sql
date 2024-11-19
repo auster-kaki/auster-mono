@@ -26,12 +26,9 @@ INSERT INTO auster.hobby (id, name) VALUES ('cstkdiat6c3011a83sog', 'キャン�
 
 CREATE TABLE `user_hobby`
 (
-    `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `user_id`  varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `hobby_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY        `user_id` (`user_id`),
-    KEY        `hobby_id` (`hobby_id`)
+    PRIMARY KEY (`user_id`, `hobby_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='ユーザの趣味';
@@ -100,12 +97,9 @@ CREATE TABLE `diary_tag`
 
 CREATE TABLE `diary_user`
 (
-    `id`       varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `diary_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
     `user_id`  varchar(20) COLLATE utf8mb4_bin NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY        `diary_id` (`diary_id`),
-    KEY        `user_id` (`user_id`)
+    PRIMARY KEY (`diary_id`, `user_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='日記のユーザ';
