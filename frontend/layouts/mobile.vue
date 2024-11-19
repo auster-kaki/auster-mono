@@ -5,9 +5,7 @@
       <v-toolbar-title>SUNT</v-toolbar-title>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
+      <Nuxt />
     </v-main>
     <v-bottom-navigation v-model="value" fixed>
       <navigation-button
@@ -48,6 +46,6 @@ export default {
   mounted() {
     const userStore = useUserStore()
     userStore.initializeUser()
-  },
+  }
 }
 </script>

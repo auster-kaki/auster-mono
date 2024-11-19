@@ -1,85 +1,89 @@
 <template>
-  <v-stepper v-model="currentStep" class="mb-16">
-    <v-stepper-header>
-      <v-stepper-step :complete="currentStep > 1" step="1" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 2" step="2" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 3" step="3" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 4" step="4" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 5" step="5" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 6" step="6" />
-    </v-stepper-header>
+    <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
+      <v-stepper-header>
+        <v-stepper-step :complete="currentStep > 1" step="1" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 2" step="2" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 3" step="3" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 4" step="4" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 5" step="5" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 6" step="6" />
+      </v-stepper-header>
 
-    <v-stepper-items>
-      <v-stepper-content step="1">
-        <departure-selection
-          :departure-place="departureForm.departurePlace"
-          :departure-date="departureForm.departureDate"
-          :return-date="departureForm.returnDate"
-          :departure-time="departureForm.departureTime"
-          :return-time="departureForm.returnTime"
-          :interests="departureForm.interests"
-          @submit="currentStep += 1"
-        />
-      </v-stepper-content>
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <departure-selection
+            :departure-place="departureForm.departurePlace"
+            :departure-date="departureForm.departureDate"
+            :return-date="departureForm.returnDate"
+            :departure-time="departureForm.departureTime"
+            :return-time="departureForm.returnTime"
+            :interests="departureForm.interests"
+            @submit="currentStep += 1"
+          />
+        </v-stepper-content>
 
-      <v-stepper-content step="2">
-        <destination-selection
-          @destination-selected="handleDestinationSelected"
-        />
-        <v-btn text @click="currentStep -= 1">
-          戻る
-        </v-btn>
-      </v-stepper-content>
+        <v-stepper-content step="2">
+          <destination-selection
+            @destination-selected="handleDestinationSelected"
+          />
+          <v-btn text @click="currentStep -= 1">
+            戻る
+          </v-btn>
+        </v-stepper-content>
 
-      <v-stepper-content step="3">
-        <experience-selection
-          :video="experienceForm.video"
-          :video-title="experienceForm.videoTitle"
-          :video-description="experienceForm.videoDescription"
-          :experiences="experienceForm.experiences"
-        />
-        <v-container>
-          <v-row class="mt-4 pb-4">
-            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+        <v-stepper-content step="3">
+          <experience-selection
+            :video="experienceForm.video"
+            :video-title="experienceForm.videoTitle"
+            :video-description="experienceForm.videoDescription"
+            :experiences="experienceForm.experiences"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
               <v-spacer />
-            <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
-          </v-row>
-        </v-container>
-      </v-stepper-content>
-      <v-stepper-content step="4">
-        <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
-        <v-btn text @click="currentStep -= 1">
-          Back
-        </v-btn>
-      </v-stepper-content>
-      <v-stepper-content step="5">
-        <NewDiaryItinerary
-          :itinerary="itinerary"
-        />
-        <v-container>
-          <v-row class="mt-4 pb-4">
-            <v-btn text @click="currentStep -= 1">戻る</v-btn>
-            <v-spacer />
-            <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
-          </v-row>
-        </v-container>
-      </v-stepper-content>
-      <v-stepper-content step="6">
-        <NewDiaryConfirm
-          :booking-info="bookingInfo"
-          @confirm="handleConfirm"
-        />
-        <v-btn text @click="currentStep -= 1">
-          Back
-        </v-btn>
-      </v-stepper-content>
-    </v-stepper-items>
-  </v-stepper>
+              <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+        <v-stepper-content style="padding: 8px" step="4">
+          <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
+          <v-btn text @click="currentStep -= 1">
+            戻る
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="5">
+          <NewDiaryItinerary
+            :itinerary="itinerary"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
+              <v-spacer />
+              <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+        <v-stepper-content step="6">
+          <NewDiaryConfirm
+            :booking-info="bookingInfo"
+            @confirm="handleConfirm"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
+              <v-spacer />
+              <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
 </template>
 
 <script>
@@ -193,21 +197,21 @@ export default {
         {
           id: 1,
           date: '2024/11/23',
-          image: '/placeholder.svg?height=400&width=600',
+          image: 'choshi.jpg',
           title: '大物ヒラマサとの出会い',
           content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
         },
         {
           id: 2,
           date: '2024/11/24',
-          image: '/placeholder.svg?height=400&width=600',
+          image: 'choshi.jpg',
           title: '穏やかな朝の散歩',
           content: '今朝は日の出とともに目覚め、近所の公園を散歩しました。紅葉が見頃で、朝日に照らされた葉が美しく輝いていました。静かな朝の時間を過ごすことで、一日を穏やかな気持ちで始められそうです。'
         },
         {
           id: 3,
           date: '2024/11/25',
-          image: '/placeholder.svg?height=400&width=600',
+          image: 'choshi.jpg',
           title: '新しいカフェでの発見',
           content: '街中にオープンしたという評判のカフェに行ってきました。インテリアがとてもおしゃれで、窓から差し込む光が心地よい空間でした。注文したラテアートが素晴らしく、バリスタの技術に感動。また訪れたい場所が増えました。'
         }]
@@ -248,8 +252,8 @@ export default {
     },
     handleConfirm() {
       // 予約処理を実装
-      this.$router.push('/c/home')
-      alert('予約が確認されました')
+      console.log('予約が確認されました')
+      this.$router.push({ path: '/c/home', query: { reservation: 'success' } })
     }
   }
 }
