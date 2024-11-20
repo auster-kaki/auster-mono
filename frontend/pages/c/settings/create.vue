@@ -19,7 +19,7 @@ export default {
       hobbyOptions: [
         { id: 'cstkdiat6c3011a83so0', name: '釣り' },
         { id: 'cstkdiat6c3011a83sog', name: 'キャンプ' }
-      ],
+      ]
     }
   },
   methods: {
@@ -34,22 +34,21 @@ export default {
         formData.append('photo', this.newUser.photo)
         fetch('http://localhost:8080/users', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
           body: formData
         })
           .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`)
+            }
             return response.json()
           })
           .then(data => {
-            if (data != null) {
-              useUserStore().updateUserInfo({ id: data.ID })
-            } else {
-              // TODO この実装はやめたい
-              useUserStore().updateUserInfo({ id: 'csuk4ob6mh8s73e2f2ug' })
-            }
+            useUserStore().updateUserInfo({ id: data.id })
             this.$router.push({ path: '/c/home', query: { createUser: 'success' } })
+          })
+          .catch(error => {
+            console.error('Error:', error)
+            // エラーハンドリングをここに追加
           })
       }
     }
