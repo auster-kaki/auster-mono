@@ -49,6 +49,10 @@ func NewDB() (*rdb, error) {
 	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	db.AddQueryHook(bunslog.NewQueryHook(bunslog.WithLogger(slog.Default())))
 
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
 	return &rdb{
 		user:                 table.NewUser(db),
 		hobby:                table.NewHobby(db),
