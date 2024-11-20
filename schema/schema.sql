@@ -211,3 +211,96 @@ CREATE TABLE `encounter`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='出会った人';
+
+--
+
+CREATE TABLE `vendor`
+(
+    `id`      varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`    varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `address` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行会社';
+
+INSERT INTO auster.vendor (id, name, address) VALUES ('can1', 'CampsiteTORAMI', '千葉県長生郡一宮町東浪見1611');
+INSERT INTO auster.vendor (id, name, address) VALUES ('can2', 'Beach Camp 九十九里', '千葉県大網白里市四天木2761-40');
+INSERT INTO auster.vendor (id, name, address) VALUES ('can3', '銚子電気鉄道', '千葉県銚子市新生町2丁目297番地');
+INSERT INTO auster.vendor (id, name, address) VALUES ('gyo1', '銚子市漁業協同組合', '千葉県銚子市川口町 2丁目6528番地');
+INSERT INTO auster.vendor (id, name, address) VALUES ('gyo2', '銚子市生活環境課 清掃美化班', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
+
+CREATE TABLE `travel_spot_v2`
+(
+    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `vendor_id`   varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `title`        varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `description` text COLLATE utf8mb4_bin         NOT NULL COMMENT '説明',
+    `address`     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポット';
+
+CREATE TABLE `travel_spot_itinerary`
+(
+    `id`                varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `kind`              enum ('spot','move')             NOT NULL COMMENT 'spot: 観光地, move: 移動',
+    `travel_spot_v2_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL COMMENT 'kindがspotの場合のみ',
+    `take_time`         int(11)                          NOT NULL COMMENT '所要時間（分）',
+    `price`             int(11)                          NOT NULL,
+    `order`             int(11)                          NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットと旅程の関連';
+
+CREATE TABLE `travel_spot_itinerary_item`
+(
+    `id`                       varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `travel_spot_itinerary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`                     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `number`                   int(11)                          NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットで必要な持ち物';
+
+CREATE TABLE `travel_spot_diary`
+(
+    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `title`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `date`        date                             NOT NULL,
+    `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `description` text COLLATE utf8mb4_bin         NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='日記';
+
+CREATE TABLE `reservation`
+(
+    `id`                   varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `user_id`              varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `travel_spot_v2_id`    varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `travel_spot_diary_id` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+    `date`                 date                            NOT NULL,
+    `is_offer`             tinyint(1)                      NOT NULL,
+    `number`               int(11)                         NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='予約';
+
+CREATE TABLE `encounter`
+(
+    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`        varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `place`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `user_id`     varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `date`        date                             NOT NULL,
+    `description` text COLLATE utf8mb4_bin         NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY           `user_id` (`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='出会った人';
