@@ -44,3 +44,8 @@ type TravelSpot struct {
 	UserID  string `json:"user_id"`
 	HobbyID string `json:"hobby_id"`
 }
+
+type CreateDiary struct {
+	UserID       string `json:"user_id"`
+	TravelSpotID string `json:"travel_spot_id"`
+}
