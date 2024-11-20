@@ -80,14 +80,14 @@ type UserPhoto struct {
 	ContentType string
 }
 
-func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
+func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.UserID, error) {
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
 		input.Photo.Filename,
 		input.Photo.Body,
 	)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	var (
@@ -107,21 +107,25 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 	}
 
 	if err := u.repository.UserHobby().Create(ctx, userHobbies...); err != nil {
-		return err
+		return "", err
 	}
 	if len(newHobbies) > 0 {
 		if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
-			return err
+			return "", err
 		}
 	}
 
-	return u.repository.User().Create(ctx, &entity.User{
+	if err := u.repository.User().Create(ctx, &entity.User{
 		ID:          userID,
 		Name:        input.Name,
 		Gender:      input.Gender,
 		Age:         input.Age,
 		ProfilePath: path,
-	})
+	}); err != nil {
+		return "", err
+	}
+
+	return userID, nil
 }
 
 func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {

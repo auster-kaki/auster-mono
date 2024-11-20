@@ -135,7 +135,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.userUseCase.CreateUser(r.Context(), &usecase.UserInput{
+	id, err := h.userUseCase.CreateUser(r.Context(), &usecase.UserInput{
 		Name:   req.Name,
 		Gender: req.Gender,
 		Age:    req.Age,
@@ -154,11 +154,12 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 			Body:        photo,
 			ContentType: handler.Header.Get("Content-Type"),
 		},
-	}); err != nil {
+	})
+	if err != nil {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.Created(w, nil)
+	response.Created(w, map[string]string{"id": string(id)})
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
