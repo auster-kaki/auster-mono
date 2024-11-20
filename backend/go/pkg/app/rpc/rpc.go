@@ -22,8 +22,8 @@ type GetStatusInput struct {
 }
 
 type GetStatusOutput struct {
-	Status   string
-	ImageURL string
+	JobID  string
+	Status string
 }
 
 type GetImagePathInput struct {
