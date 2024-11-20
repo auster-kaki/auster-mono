@@ -168,7 +168,7 @@ export default {
       })
 
       try {
-        const response = await fetch(`http://localhost:8080/travel_spots?${params.toString()}`, {
+        const response = await fetch(`${process.env.BASE_URL}/travel_spots?${params.toString()}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -216,7 +216,7 @@ export default {
     },
     async handleSelectExperience(id) {
       try {
-        const response = await fetch('http://localhost:8080/diaries', {
+        const response = await fetch(`${process.env.BASE_URL}/diaries`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

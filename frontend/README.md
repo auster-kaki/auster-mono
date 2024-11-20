@@ -12,6 +12,9 @@ $ nodebrew use v20.18.0
 
 $ node -v
 # v20.18.0
+
+以下で.envを作成する
+BASE_URL=http://localhost:8080
 ```
 
 ## Build Setup
