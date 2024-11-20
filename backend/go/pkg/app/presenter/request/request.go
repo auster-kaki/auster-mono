@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"time"
 )
 
 func Decode[T any](r *http.Request, v *T) error {
@@ -33,11 +32,11 @@ type Hobby struct {
 }
 
 type Encounter struct {
-	UserID      string    `json:"user_id"`
-	Name        string    `json:"name"`
-	Place       string    `json:"place"`
-	Date        time.Time `json:"date"`
-	Description string    `json:"description"`
+	UserID      string `json:"user_id"`
+	Name        string `json:"name"`
+	Place       string `json:"place"`
+	Date        string `json:"date"`
+	Description string `json:"description"`
 }
 
 type TravelSpot struct {
@@ -46,9 +45,9 @@ type TravelSpot struct {
 }
 
 type Diary struct {
-	UserID          string    `json:"user_id"`
-	HobbyID         string    `json:"hobby_id"`
-	TravelSpotID    string    `json:"travel_spot_id"`
-	DestinationName string    `json:"destination_name"`
-	Date            time.Time `json:"date"`
+	UserID          string `json:"user_id"`
+	HobbyID         string `json:"hobby_id"`
+	TravelSpotID    string `json:"travel_spot_id"`
+	DestinationName string `json:"destination_name"`
+	Date            string `json:"date"`
 }

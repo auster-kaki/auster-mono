@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/presenter/request"
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -38,10 +39,15 @@ func (u *DiaryUseCase) CreateDiary(ctx context.Context, req *request.Diary) (*en
 		return nil, errors.New("diaries map dummy data not found. travel_spot_id: " + req.TravelSpotID)
 	}
 
+	d, err := time.ParseInLocation(time.DateOnly, req.Date, time.Local)
+	if err != nil {
+		return nil, err
+	}
+
 	res := entity.Diary{
 		ID:        austerid.Generate[entity.DiaryID](),
 		Title:     dairy.Title,
-		Date:      req.Date,
+		Date:      d,
 		PhotoPath: dairy.PhotoPath,
 		Body:      dairy.Body,
 	}
