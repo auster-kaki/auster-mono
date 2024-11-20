@@ -9,7 +9,7 @@ type TravelSpotID string
 type TravelSpot struct {
 	ID          TravelSpotID
 	VendorID    VendorID
-	Name        string
+	Title       string
 	TakeTime    int
 	Description string
 	Address     string

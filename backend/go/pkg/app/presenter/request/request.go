@@ -51,3 +51,15 @@ type Diary struct {
 	DestinationName string `json:"destination_name"`
 	Date            string `json:"date"`
 }
+
+type Reservation struct {
+	UserID            string `json:"user_id"`
+	TravelSpotID      string `json:"travel_spot_id"`
+	TravelSpotDiaryID string `json:"travel_spot_diary_id"`
+	FromDate          string `json:"from_date"`
+	ToDate            string `json:"to_date"`
+}
+
+type DiaryDescription struct {
+	Description string `json:"description"`
+}
