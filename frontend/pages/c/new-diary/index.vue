@@ -57,6 +57,7 @@
         </v-btn>
       </v-stepper-content>
       <v-stepper-content step="5">
+        <h2 class="text-center mb-4">旅程</h2>
         <NewDiaryItinerary
           :bring="bring"
           :itinerary="itinerary"
@@ -65,7 +66,7 @@
           <v-row class="mt-4 pb-4">
             <v-btn text @click="currentStep -= 1">戻る</v-btn>
             <v-spacer />
-            <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
+            <v-btn color="primary" @click="onGoToConfirm">申し込み確認画面へ</v-btn>
           </v-row>
         </v-container>
       </v-stepper-content>
@@ -224,7 +225,7 @@ export default {
             user_id: this.userInfo.id,
             hobby_id: this.departureForm.interests,
             travel_spot_id: id,
-            date: this.departureForm.departureDate + 'T00:00:00Z'
+            date: this.departureForm.departureDate
           })
         })
 
@@ -287,7 +288,7 @@ export default {
     handleConfirm() {
       // 予約処理を実装
       console.log('予約が確認されました')
-      this.$router.push({ path: '/c/home', query: { reservation: 'success' } })
+      this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
     }
   }
 }

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col cols="12">
-        <h2 class="text-center mb-4">予約一覧</h2>
+        <h2 class="text-center mb-4">予約確認</h2>
         <v-card v-if="reservations.length === 0" flat>
           <v-card-text class="text-center">予約がありません</v-card-text>
         </v-card>
@@ -11,20 +11,54 @@
           v-else
           :key="reservation.id"
           class="mb-4"
-          @click="goToItinerary(reservation.id)"
         >
-          <v-img
-            :src="reservation.image"
-            height="200"
-            cover
-          ></v-img>
-          <v-card-title>{{ reservation.title }}</v-card-title>
-          <v-card-subtitle>
-            {{ formatDate(reservation.departureDate) }} - {{ reservation.departureCity }}
-          </v-card-subtitle>
+          <v-row no-gutters>
+            <v-col cols="4">
+              <v-img
+                :src="reservation.image"
+                height="100%"
+                cover
+              />
+            </v-col>
+            <v-col cols="8">
+              <v-card-title>{{ reservation.title }}</v-card-title>
+              <v-card-subtitle>
+                {{ formatDate(reservation.departureDate) }} - {{ reservation.departureCity }}
+              </v-card-subtitle>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="goToItinerary(reservation.id)"
+                >
+                  旅程確認・日記更新
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      dense
+      :close-text="snackbar.closeText"
+      :close-icon="snackbar.closeIcon"
+    >
+      {{ snackbar.text }}
+      <template #action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          <v-icon>{{ snackbar.closeIcon }}</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -34,11 +68,24 @@ export default {
   layout: 'mobile',
   data() {
     return {
-      reservations: []
+      reservations: [],
+      snackbar: {
+        show: false,
+        text: '',
+        timeout: 3000,
+        color: 'success',
+        closeText: '閉じる',
+        closeIcon: 'mdi-close'
+      }
     }
   },
   async created() {
     await this.fetchReservations()
+  },
+  mounted() {
+    if (this.$route.query.reservation === 'success') {
+      this.showSnackbar('予約が完了しました！')
+    }
   },
   methods: {
     formatDate(date) {
@@ -50,7 +97,7 @@ export default {
     async fetchReservations() {
       try {
         // API呼び出しのコメントアウト
-        // const response = await this.$axios.get('/api/reservations')
+        // const response = await this.$axios.get('/api/reservations_filter=yet')
         // this.reservations = response.data
 
         // ダミーデータを返す
@@ -80,6 +127,10 @@ export default {
       } catch (error) {
         console.error('予約の取得に失敗しました', error)
       }
+    },
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
     }
   }
 }

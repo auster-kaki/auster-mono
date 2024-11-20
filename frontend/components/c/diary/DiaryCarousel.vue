@@ -23,16 +23,30 @@
         </v-row>
       </v-container>
 
-      <v-card-text class="text-body-1" style="height:250px; overflow-y: auto;">
-        {{ diary.content }}
+      <v-card-text class="text-body-1" style="overflow-y: auto;">
+        <div v-if="!isHistory">{{ diary.content }}</div>
+        <v-textarea
+          v-else
+          v-model="localContent"
+          label="日記本文"
+          auto-grow
+          rows="7"
+          outlined
+          dense
+          @input="updateContent"
+        />
       </v-card-text>
-      <v-sheet class="d-flex justify-center" style="position: relative;">
+      <v-card-actions v-if="!!isHistory">
+        <v-spacer />
+        <v-btn dense class="primary" @click="updateDiary">日記更新</v-btn>
+      </v-card-actions>
+      <v-sheet v-if="!isHistory" class="d-flex justify-center" style="position: relative;">
         <v-btn
           color="primary"
           class="px-4 py-2 mb-2"
           @click="handleSelect"
         >
-          <span class="text-white font-weight-bold">体験詳細</span>
+          <span class="text-white font-weight-bold">この日記で旅程を組む</span>
         </v-btn>
         <v-sheet style="position: absolute; top: 0; right: 0;">
           <v-btn icon @click="showShareMessage">
@@ -51,18 +65,31 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 export default {
   props: {
     diary: {
       type: [Object],
       required: true
+    },
+    isHistory: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
     const snackbar = ref(false)
     const snackbarMessage = ref('')
+    const localContent = ref(props.diary.content)
+
+    watch(() => props.diary.content, (newContent) => {
+      localContent.value = newContent
+    })
+
+    const updateContent = (value) => {
+      emit('update:content', value)
+    }
 
     const showMessage = (message) => {
       snackbarMessage.value = message
@@ -85,13 +112,20 @@ export default {
       emit('select', props.diary.id)
     }
 
+    const updateDiary = () => {
+      showMessage('日記が更新されました')
+    }
+
     return {
       snackbar,
       snackbarMessage,
+      localContent,
+      updateContent,
       showDownloadMessage,
       showBookmarkMessage,
       showShareMessage,
-      handleSelect
+      handleSelect,
+      updateDiary
     }
   }
 }

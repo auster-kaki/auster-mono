@@ -27,11 +27,10 @@ export default {
   },
   data() {
     return {
-      value: 'home',
+      value: 'create',
       username: '', // ユーザー名を保持するためのプロパティを追加
       navigationItems: [
-        { value: 'home', to: '/c/home', icon: 'mdi-home', label: 'ホーム' },
-        { value: 'create', to: '/c/new-diary', icon: 'mdi-pencil', label: '日記作成' },
+        { value: 'create', to: '/c/new-diary', icon: 'mdi-pencil', label: '予約' },
         { value: 'reservations', to: '/c/reservations', icon: 'mdi-calendar-check', label: '予約確認' },
         { value: 'history', to: '/c/histories', icon: 'mdi-history', label: '過去日記' },
         { value: 'settings', to: '/c/settings', icon: 'mdi-cog', label: '設定' }
