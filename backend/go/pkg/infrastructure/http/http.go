@@ -2,20 +2,14 @@ package http
 
 import (
 	"bytes"
-	"bytes"
 	"cmp"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
-	"encoding/json"
-	"fmt"
-	"io"
-	"mime/multipart"
 	"net/http"
 	"os"
-	"path/filepath"
 	"path/filepath"
 
 	appRPC "github.com/auster-kaki/auster-mono/pkg/app/rpc"
@@ -27,22 +21,14 @@ type Client struct {
 	client *http.Client
 	host   string
 	port   string
-	port   string
 }
 
 func NewClient() *Client {
 	return &Client{
 		client: &http.Client{},
-		client: &http.Client{},
 		host:   cmp.Or(os.Getenv("DIARY_HOST"), "localhost"),
 		port:   cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
-		port:   cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
 	}
-}
-
-// URL
-func (c *Client) URL() string {
-	return fmt.Sprintf("http://%s:%s", c.host, c.port)
 }
 
 // URL
