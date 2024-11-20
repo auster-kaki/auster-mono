@@ -14,7 +14,7 @@ type UserHobby struct {
 
 func NewUserHobby(db *bun.DB) *UserHobby { return &UserHobby{db: db} }
 
-func (t *UserHobby) Create(ctx context.Context, ents ...entity.UserHobby) error {
+func (t *UserHobby) Create(ctx context.Context, ents ...*entity.UserHobby) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
 		return handleError(err)
 	}

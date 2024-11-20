@@ -30,3 +30,11 @@ func (t *TravelSpot) GetByVendorID(ctx context.Context, vendorID entity.VendorID
 	}
 	return res, nil
 }
+
+func (t *TravelSpot) GetByIDs(ctx context.Context, ids []entity.TravelSpotID) (entity.TravelSpots, error) {
+	res := entity.TravelSpots{}
+	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", bun.In(ids)).Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}

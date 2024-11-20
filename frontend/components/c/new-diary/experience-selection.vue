@@ -23,7 +23,7 @@ export default defineComponent({
   },
   methods: {
     selectExperience(id: string) {
-      this.$emit('select-experience', id)
+      this.$emit('click', id)
     }
   }
 })
@@ -51,8 +51,9 @@ export default defineComponent({
             <v-card>
               <v-img :src="experience.image" :alt="experience.title" height="200" style="position:relative" cover>
                 <v-chip
-                  v-if="experience.hasFurusatoNozei" color="primary"
-                  style="position:absolute; top: 10px; right: 10px;">ふるさと納税対象
+                  v-if="experience.hasFurusatoNozei" color="accent" outlined
+                  style="position:absolute; top: 10px; right: 10px; background: #fafafa !important;">
+                  <strong>ふるさと納税対象</strong>
                 </v-chip>
               </v-img>
               <v-card-title>{{ experience.title }}</v-card-title>
@@ -61,7 +62,7 @@ export default defineComponent({
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="selectExperience(experience.id)">体験する</v-btn>
+                <v-btn class="primary" @click="selectExperience(experience.id)">この体験の日記を見る</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

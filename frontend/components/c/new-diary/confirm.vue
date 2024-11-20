@@ -37,7 +37,7 @@ export default defineComponent({
 
 <template>
   <v-container>
-    <v-card>
+    <v-card elevation="0">
       <v-card-title>以下で申し込みますか</v-card-title>
       <v-card-text>
         <h3>特急券</h3>
@@ -59,11 +59,6 @@ export default defineComponent({
           </v-list-item>
         </v-list>
       </v-card-text>
-      <v-card-actions>
-        <v-btn to="/c/new-diary/itinerary">戻る</v-btn>
-        <v-spacer />
-        <v-btn color="primary" @click="confirmBooking">予約する</v-btn>
-      </v-card-actions>
     </v-card>
   </v-container>
 </template>

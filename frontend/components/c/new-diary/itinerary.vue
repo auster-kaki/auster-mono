@@ -2,6 +2,10 @@
 export default {
   name: 'NewDiaryItinerary',
   props: {
+    bring: {
+      type: Array,
+      required: true
+    },
     itinerary: {
       type: Array,
       required: true
@@ -22,6 +26,23 @@ export default {
 <template>
   <v-container>
     <v-timeline align-top dense>
+      <v-timeline-item
+        color="secondary"
+        small
+      >
+        <v-card>
+          <v-card-title class="text-h6">
+            持ち物リスト
+          </v-card-title>
+          <v-card-text>
+            <ul>
+              <li v-for="(item, index) in bring" :key="index">
+                {{ item }}
+              </li>
+            </ul>
+          </v-card-text>
+        </v-card>
+      </v-timeline-item>
       <v-timeline-item
         v-for="(item, index) in itinerary"
         :key="index"

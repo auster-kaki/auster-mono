@@ -30,3 +30,11 @@ func (t *ItineraryResult) GetByItineraryID(ctx context.Context, itineraryID enti
 	}
 	return res, nil
 }
+
+func (t *ItineraryResult) GetByUserID(ctx context.Context, userID entity.UserID) (entity.ItineraryResults, error) {
+	res := entity.ItineraryResults{}
+	if err := t.db.NewSelect().Model(&res).Where("user_id = ?", userID).Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}

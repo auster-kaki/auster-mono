@@ -28,7 +28,7 @@
               <v-list-item-content>
                 <v-list-item-title>{{ reservation.title }}</v-list-item-title>
                 <v-list-item-subtitle
-                  >{{ reservation.date }}
+                >{{ reservation.date }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -64,6 +64,25 @@
         </v-dialog>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      dense
+      :close-text="snackbar.closeText"
+      :close-icon="snackbar.closeIcon"
+    >
+      {{ snackbar.text }}
+      <template #action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          <v-icon>{{ snackbar.closeIcon }}</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -81,6 +100,14 @@ export default {
       newDiaries: [],
       showNewDiary: false,
       currentDiary: null,
+      snackbar: {
+        show: false,
+        text: '',
+        timeout: 3000,
+        color: 'success',
+        closeText: '閉じる',
+        closeIcon: 'mdi-close'
+      }
     }
   },
   mounted() {
@@ -88,6 +115,12 @@ export default {
     this.fetchreservations()
     this.fetchNewDiary()
     this.checkNewDiary()
+    if (this.$route.query.reservation === 'success') {
+      this.showSnackbar('予約が完了しました！')
+    }
+    if (this.$route.query.createUser === 'success') {
+      this.showSnackbar('ユーザー作成が完了しました！')
+    }
   },
   methods: {
     fetchTodos() {
@@ -98,7 +131,7 @@ export default {
       // ダミーデータ
       this.todos = [
         { text: '持ち物の準備', completed: false },
-        { text: '乗車券の準備', completed: true },
+        { text: '乗車券の準備', completed: true }
       ]
     },
     fetchreservations() {
@@ -109,7 +142,7 @@ export default {
       // ダミーデータ
       this.reservations = [
         { id: 1, title: '山登り体験', date: '2023-06-15' },
-        { id: 2, title: '料理教室', date: '2023-06-20' },
+        { id: 2, title: '料理教室', date: '2023-06-20' }
       ]
     },
     fetchNewDiary() {
@@ -118,7 +151,7 @@ export default {
         title: '',
         tags: [],
         date: '',
-        img: '',
+        img: ''
       }
     },
     checkNewDiary() {
@@ -139,7 +172,7 @@ export default {
         date: '2023-06-10',
         title: '素晴らしい山登り体験',
         image: 'https://example.com/mountain.jpg',
-        content: '今日は素晴らしい山登り体験をしました。景色が最高でした！',
+        content: '今日は素晴らしい山登り体験をしました。景色が最高でした！'
       }
       this.showNewDiary = true
     },
@@ -148,8 +181,15 @@ export default {
     },
     reserveDiary() {
       // 予約処理のロジックをここに実装
-      alert('予約が完了しました！')
+      this.showSnackbar('予約が完了しました！')
     },
-  },
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
+    }
+  }
 }
 </script>
+
+<style>
+</style>
