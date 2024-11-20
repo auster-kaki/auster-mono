@@ -31,6 +31,7 @@ ARG TARGETARCH
 # source code into the container.
 
 COPY ./ ./
+
 RUN CGO_ENABLED=0 GOARCH=$TARGETARCH go build -trimpath -ldflags "-s -w" -o /bin/server ./cmd/api
 
 ################################################################################
