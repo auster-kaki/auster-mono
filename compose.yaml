@@ -40,26 +40,22 @@ services:
             path: backend/python
             target: /app
   db:
-    build:
-        context: schema/
+    image: mysql:8.0.40
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "auster"
+      TZ: "Asia/Tokyo"
+    volumes:
+        - db-data:/var/lib/mysql
+        - ./schema/mysql/my.conf:/etc/mysql/my.cnf
+        - ./schema/schema.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
-#    image: mysql:8.0.40
-#    restart: always
-#    environment:
-#      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-#      MYSQL_DATABASE: "auster"
-#      TZ: "Asia/Tokyo"
-#    volumes:
-#        - db-data:/var/lib/mysql
-#        - ./schema/mysql/my.conf:/etc/mysql/my.cnf
-#        - ./schema/schema.sql:/docker-entrypoint-initdb.d/init.sql
-#    ports:
-#      - "3306:3306"
-#    healthcheck:
-#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   db-data:
