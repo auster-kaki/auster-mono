@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"path/filepath"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
 	"github.com/auster-kaki/auster-mono/pkg/entity"
@@ -81,9 +82,10 @@ type UserPhoto struct {
 }
 
 func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.UserID, error) {
+	userID := austerid.Generate[entity.UserID]()
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		input.Photo.Filename,
+		filepath.Join(string(userID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
@@ -91,7 +93,6 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.
 	}
 
 	var (
-		userID      = austerid.Generate[entity.UserID]()
 		newHobbies  = make(entity.Hobbies, 0, len(input.Hobbies))
 		userHobbies = make(entity.UserHobbies, len(input.Hobbies))
 	)
@@ -131,7 +132,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.
 func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		input.Photo.Filename,
+		filepath.Join(string(input.ID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
@@ -149,6 +150,12 @@ func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
 		userHobbies[i] = &entity.UserHobby{
 			UserID:  input.ID,
 			HobbyID: hobby.ID,
+		}
+	}
+
+	if len(newHobbies) > 0 {
+		if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
+			return err
 		}
 	}
 
