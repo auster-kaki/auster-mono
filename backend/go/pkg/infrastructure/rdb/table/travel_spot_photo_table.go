@@ -30,3 +30,11 @@ func (t *TravelSpotPhoto) GetByTravelSpotID(ctx context.Context, travelSpotID en
 	}
 	return res, nil
 }
+
+func (t *TravelSpotPhoto) GetByTravelSpotIDs(ctx context.Context, travelSpotIDs []entity.TravelSpotID) (entity.TravelSpotPhotos, error) {
+	res := entity.TravelSpotPhotos{}
+	if err := t.db.NewSelect().Model(&res).Where("travel_spot_id IN (?)", bun.In(travelSpotIDs)).Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}

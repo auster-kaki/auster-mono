@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
+import DiaryCarousel from '@/components/c/diary/DiaryCarousel.vue'
 
 const baseUrl = ref('https://api.example.com')
 const endpoint = ref('/users')
@@ -41,60 +42,16 @@ const sendRequest = async () => {
 <template>
   <div>
     <h1>Diaryテスト画面</h1>
-    <diary-component :diary="diaryData" />
-    <h1>API テスト画面</h1>
+    <diary-carousel
+      :diary="{
+          id: 1,
+          date: '2024/11/23',
+          image: 'choshi.jpg',
+          title: '大物ヒラマサとの出会い',
+          content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
+        }" />
     <div>
-      <label>
-        ベースURL:
-        <input v-model="baseUrl" type="text" />
-      </label>
-    </div>
-    <div>
-      <label>
-        エンドポイント:
-        <input v-model="endpoint" type="text" />
-      </label>
-    </div>
-    <div>
-      <label>
-        メソッド:
-        <select v-model="method">
-          <option>GET</option>
-          <option>POST</option>
-          <option>PUT</option>
-          <option>DELETE</option>
-        </select>
-      </label>
-    </div>
-    <div>
-      <label>
-        パスパラメータ:
-        <input v-model="pathParams" type="text" placeholder="/1" />
-      </label>
-    </div>
-    <div>
-      <label>
-        クエリパラメータ (JSON):
-        <input
-          v-model="queryParams"
-          type="text"
-          placeholder='{"key": "value"}'
-        />
-      </label>
-    </div>
-    <div>
-      <label>
-        リクエストボディ (JSON):
-        <textarea
-          v-model="requestBody"
-          placeholder='{"key": "value"}'
-        ></textarea>
-      </label>
-    </div>
-    <button @click="sendRequest">送信</button>
-    <div v-if="response">
-      <h2>レスポンス:</h2>
-      <pre>{{ response }}</pre>
+      <h1>DiaryCarouselテスト画面</h1>
     </div>
   </div>
 </template>

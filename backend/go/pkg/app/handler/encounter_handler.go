@@ -27,7 +27,7 @@ func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request)
 	userID := r.URL.Query().Get("user_id")
 	out, err := h.encounterUseCase.GetEncounters(r.Context(), entity.UserID(userID))
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, out)
@@ -36,7 +36,7 @@ func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request)
 func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req request.Encounter
 	if err := request.Decode(r, &req); err != nil {
-		response.BadRequest(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	if err := h.encounterUseCase.Create(r.Context(), &usecase.CrateEncounterInput{
@@ -46,7 +46,7 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Date:        req.Date,
 		Description: req.Description,
 	}); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.Created(w, nil)
@@ -56,7 +56,7 @@ func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) 
 	id := r.PathValue("id")
 	out, err := h.encounterUseCase.GetEncounter(r.Context(), entity.EncounterID(id))
 	if err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, out)
@@ -65,7 +65,7 @@ func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) 
 func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 	var req request.Encounter
 	if err := request.Decode(r, &req); err != nil {
-		response.BadRequest(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	if err := h.encounterUseCase.Update(r.Context(), &usecase.UpdateEncounterInput{
@@ -75,7 +75,7 @@ func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Date:        req.Date,
 		Description: req.Description,
 	}); err != nil {
-		response.InternalError(w, err)
+		response.HandleError(r.Context(), w, err)
 		return
 	}
 	response.OK(w, nil)

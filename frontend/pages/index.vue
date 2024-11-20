@@ -17,6 +17,13 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="4" class="text-center">
+        <v-btn class="mt-3" color="error" block nuxt to="/fix">
+          緊急用、ローカルに保存してあるものを吹き飛ばす
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

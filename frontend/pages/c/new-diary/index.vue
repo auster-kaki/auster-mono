@@ -1,6 +1,6 @@
 <template>
-  <v-stepper v-model="currentStep" class="mb-16">
-    <v-stepper-header>
+  <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
+    <v-stepper-header style="box-shadow: unset !important;">
       <v-stepper-step :complete="currentStep > 1" step="1" />
       <v-divider />
       <v-stepper-step :complete="currentStep > 2" step="2" />
@@ -23,7 +23,7 @@
           :departure-time="departureForm.departureTime"
           :return-time="departureForm.returnTime"
           :interests="departureForm.interests"
-          @submit="currentStep += 1"
+          @submit="handleDepatureSelectionSubmit"
         />
       </v-stepper-content>
 
@@ -32,7 +32,7 @@
           @destination-selected="handleDestinationSelected"
         />
         <v-btn text @click="currentStep -= 1">
-          Back
+          戻る
         </v-btn>
       </v-stepper-content>
 
@@ -42,30 +42,30 @@
           :video-title="experienceForm.videoTitle"
           :video-description="experienceForm.videoDescription"
           :experiences="experienceForm.experiences"
-          @select-experience="handleSelectExperience"
+          @click="handleSelectExperience"
         />
-        <v-btn text @click="currentStep -= 1">
-          Back
-        </v-btn>
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+          </v-row>
+        </v-container>
       </v-stepper-content>
-      <v-stepper-content step="4">
-        <v-btn text @click="currentStep += 1">体験詳細</v-btn>
+      <v-stepper-content style="padding: 8px" step="4">
+        <diary-carousel :diary="createdDiary" @select="handleSelectDiary" />
         <v-btn text @click="currentStep -= 1">
-          Back
+          戻る
         </v-btn>
       </v-stepper-content>
       <v-stepper-content step="5">
         <NewDiaryItinerary
+          :bring="bring"
           :itinerary="itinerary"
         />
         <v-container>
           <v-row class="mt-4 pb-4">
-            <v-col cols="6">
-              <v-btn block @click="currentStep += 1">戻る</v-btn>
-            </v-col>
-            <v-col cols="6">
-              <v-btn block color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
-            </v-col>
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="onGoToConfirm">確認画面へ</v-btn>
           </v-row>
         </v-container>
       </v-stepper-content>
@@ -74,9 +74,13 @@
           :booking-info="bookingInfo"
           @confirm="handleConfirm"
         />
-        <v-btn text @click="currentStep -= 1">
-          Back
-        </v-btn>
+        <v-container>
+          <v-row class="mt-4 pb-4">
+            <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            <v-spacer />
+            <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
+          </v-row>
+        </v-container>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -88,9 +92,18 @@ import DestinationSelection from '~/components/c/new-diary/destination-selection
 import ExperienceSelection from '~/components/c/new-diary/experience-selection.vue'
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
 import NewDiaryConfirm from '~/components/c/new-diary/confirm.vue'
+import { useUserStore } from '~/store/user'
+import DiaryCarousel from '~/components/c/diary/DiaryCarousel.vue'
 
 export default {
-  components: { NewDiaryConfirm, NewDiaryItinerary, ExperienceSelection, DestinationSelection, DepartureSelection },
+  components: {
+    DiaryCarousel,
+    NewDiaryConfirm,
+    NewDiaryItinerary,
+    ExperienceSelection,
+    DestinationSelection,
+    DepartureSelection
+  },
   layout: 'mobile',
   data() {
     return {
@@ -118,59 +131,127 @@ export default {
           experiences: []
         }
       },
+      createdDiary: {
+        id: 1,
+        date: '2024/11/23',
+        image: 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
+        title: 'ダミーデータ！！！',
+        content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
+      },
+      bring: [],
       itinerary: [],
       bookingInfo: {
         expressTickets: [],
         experience: {}
+      },
+      userInfo: {
+        id: ''
       }
     }
   },
+  mounted() {
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
+  },
   methods: {
-    submitForm() {
-      // Handle form submission
-      console.log('Form submitted')
-    },
-    handleDestinationSelected(id) {
-      this.destinationForm.id = id
-      this.experienceForm = {
-        video: 'https://example.com/video1.mp4',
-        videoTitle: '美しい山々を体験しよう',
-        videoDescription: '雄大な山々の素晴らしさを発見してください',
-        experiences: [
-          {
-            id: 1,
-            image: 'https://placehold.jp/300x200.png',
-            title: '山登り',
-            description: '山道からの息をのむような景色をお楽しみください',
-            hasFurusatoNozei: true
-          },
-          {
-            id: 2,
-            image: 'https://example.com/mountain2.jpg',
-            title: '高原ハイキング',
-            description: '爽やかな高原の空気を感じながら散策しましょう',
-            hasFurusatoNozei: false
-          },
-          {
-            id: 3,
-            image: 'https://example.com/beach1.jpg',
-            title: 'ビーチヨガ',
-            description: '波の音を聞きながら心身をリフレッシュ',
-            hasFurusatoNozei: true
-          },
-          {
-            id: 4,
-            image: 'https://example.com/diving1.jpg',
-            title: 'スキューバダイビング',
-            description: '色とりどりの魚たちと泳ぐ underwater adventure',
-            hasFurusatoNozei: false
-          }
-
-        ]
-      }
+    handleDepatureSelectionSubmit(model) {
+      this.departureForm = model
       this.currentStep += 1
     },
-    handleSelectExperience(id) {
+    async handleDestinationSelected(id) {
+      this.destinationForm.id = id
+      const params = new URLSearchParams({
+        user_id: this.userInfo.id,
+        hobby_id: this.departureForm.interests
+      })
+
+      try {
+        const response = await fetch(`http://localhost:8080/travel_spots?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+
+        let experiences = []
+        if (data.TravelSpots && data.TravelSpots.length >= 5) {
+          // ランダムに4つ選んでexperiencesに値を入れる
+          const shuffled = data.TravelSpots.sort(() => 0.5 - Math.random())
+          experiences = shuffled.slice(0, 4).map((spot, _i) => ({
+            id: spot.ID,
+            image: spot.image || 'https://placehold.jp/300x200.png',
+            title: spot.Name,
+            description: spot.Description,
+            hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
+          }))
+        } else {
+          // そのまま入れる
+          experiences = data.TravelSpots.map((spot, _i) => ({
+            id: spot.ID,
+            image: spot.image || 'https://placehold.jp/300x200.png',
+            title: spot.Name,
+            description: spot.Description,
+            hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
+          }))
+        }
+        console.log(this.experienceForm.experiences)
+
+        this.experienceForm = {
+          video: 'https://example.com/video1.mp4',
+          videoTitle: '美しい山々を体験しよう',
+          videoDescription: '雄大な山々の素晴らしさを発見してください',
+          experiences
+        }
+        this.currentStep += 1
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      }
+    },
+    async handleSelectExperience(id) {
+      try {
+        const response = await fetch('http://localhost:8080/diaries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: this.userInfo.id,
+            hobby_id: this.departureForm.interests,
+            travel_spot_id: id,
+            date: this.departureForm.departureDate + 'T00:00:00Z'
+          })
+        })
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        const photoPath = data.PhotoPath && data.PhotoPath.startsWith('http')
+          ? data.PhotoPath
+          : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg'
+        const formattedDate = data.Date.split('T')[0]
+        this.createdDiary = {
+          id: data.ID,
+          date: formattedDate,
+          image: photoPath,
+          title: data.Title,
+          content: data.Body
+        }
+        this.currentStep += 1
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      }
+    },
+    handleSelectDiary(_id) {
+      this.bring = [
+        '軍手', '手袋', 'ジャケット', 'ハンカチ'
+      ]
       this.itinerary = [
         { type: '移動', duration: 30, description: '目安: 30分' },
         { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
@@ -206,8 +287,8 @@ export default {
     handleConfirm() {
       // 予約処理を実装
       console.log('予約が確認されました')
-      this.$router.push('/c/home')
+      this.$router.push({ path: '/c/home', query: { reservation: 'success' } })
     }
-  },
+  }
 }
 </script>
