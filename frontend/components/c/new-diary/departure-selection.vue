@@ -13,7 +13,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="departureDate"
             label="行きの日付"
@@ -22,18 +22,7 @@
             type="date"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            v-model="returnDate"
-            label="帰りの日付"
-            outlined
-            dense
-            type="date"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="departureTime"
             label="出発時間"
@@ -42,7 +31,18 @@
             type="time"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
+      </v-row>
+      <v-row>
+        <v-col cols="6" md="6">
+          <v-text-field
+            v-model="returnDate"
+            label="帰りの日付"
+            outlined
+            dense
+            type="date"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="returnTime"
             label="到着時間"
@@ -79,7 +79,7 @@ export default {
   props: {
     initialDeparturePlace: {
       type: String,
-      default: null
+      default: ''
     },
     initialDepartureDate: {
       type: String,

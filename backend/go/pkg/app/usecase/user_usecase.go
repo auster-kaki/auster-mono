@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"path/filepath"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
 	"github.com/auster-kaki/auster-mono/pkg/entity"
@@ -80,18 +81,18 @@ type UserPhoto struct {
 	ContentType string
 }
 
-func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
+func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.UserID, error) {
+	userID := austerid.Generate[entity.UserID]()
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		input.Photo.Filename,
+		filepath.Join(string(userID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	var (
-		userID      = austerid.Generate[entity.UserID]()
 		newHobbies  = make(entity.Hobbies, 0, len(input.Hobbies))
 		userHobbies = make(entity.UserHobbies, len(input.Hobbies))
 	)
@@ -107,27 +108,31 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 	}
 
 	if err := u.repository.UserHobby().Create(ctx, userHobbies...); err != nil {
-		return err
+		return "", err
 	}
 	if len(newHobbies) > 0 {
 		if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
-			return err
+			return "", err
 		}
 	}
 
-	return u.repository.User().Create(ctx, &entity.User{
+	if err := u.repository.User().Create(ctx, &entity.User{
 		ID:          userID,
 		Name:        input.Name,
 		Gender:      input.Gender,
 		Age:         input.Age,
 		ProfilePath: path,
-	})
+	}); err != nil {
+		return "", err
+	}
+
+	return userID, nil
 }
 
 func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		input.Photo.Filename,
+		filepath.Join(string(input.ID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
@@ -145,6 +150,12 @@ func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
 		userHobbies[i] = &entity.UserHobby{
 			UserID:  input.ID,
 			HobbyID: hobby.ID,
+		}
+	}
+
+	if len(newHobbies) > 0 {
+		if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
+			return err
 		}
 	}
 

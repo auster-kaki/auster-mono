@@ -23,7 +23,7 @@ export default defineComponent({
   },
   methods: {
     selectExperience(id: string) {
-      this.$emit('select-experience', id)
+      this.$emit('click', id)
     }
   }
 })
@@ -60,6 +60,10 @@ export default defineComponent({
               <v-card-text>
                 <p>{{ experience.description }}</p>
               </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn class="primary" @click="selectExperience(experience.id)">この体験の日記を見る</v-btn>
+              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>

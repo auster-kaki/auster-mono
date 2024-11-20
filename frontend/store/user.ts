@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
         this.userInfo = JSON.parse(storedUserInfo)
       } else {
         const testData = {
-          id: '1',
+          id: 'csuk4ob6mh8s73e2f2ug',
         }
         this.userInfo = testData
 
@@ -21,7 +21,7 @@ export const useUserStore = defineStore('user', {
         console.log('初期データを sessionStorage に設定しました:', testData)
       }
     },
-    updateUserInfo(newInfo: { id: string, name: string }) {
+    updateUserInfo(newInfo: { id: string }) {
       if (!this.userInfo) {
         console.warn('ユーザー情報が初期化されていません')
         return

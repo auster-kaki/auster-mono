@@ -15,18 +15,17 @@ const (
 )
 
 // Save はローカルにデータを保存しパスを返す
-func Save(content ContentType, filename string, data []byte) (string, error) {
+func Save(content ContentType, path string, data []byte) (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
-	var path string
 	switch content {
 	case JPEG:
-		path = filepath.Join(pwd, "assets", "images", filename)
+		path = filepath.Join(pwd, "assets", "images", path)
 	case PNG:
-		path = filepath.Join(pwd, "assets", "images", filename)
+		path = filepath.Join(pwd, "assets", "images", path)
 	default:
 		return "", fmt.Errorf("invalid content type: %s", content)
 	}

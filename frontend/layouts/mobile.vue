@@ -1,9 +1,5 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-spacer></v-spacer>
-      <v-toolbar-title>SUNT</v-toolbar-title>
-    </v-app-bar>
     <v-main>
       <Nuxt />
     </v-main>

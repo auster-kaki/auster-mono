@@ -1,6 +1,6 @@
 <template>
   <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
-    <v-stepper-header>
+    <v-stepper-header style="box-shadow: unset !important;">
       <v-stepper-step :complete="currentStep > 1" step="1" />
       <v-divider />
       <v-stepper-step :complete="currentStep > 2" step="2" />
@@ -23,7 +23,7 @@
           :departure-time="departureForm.departureTime"
           :return-time="departureForm.returnTime"
           :interests="departureForm.interests"
-          @submit="currentStep += 1"
+          @submit="handleDepatureSelectionSubmit"
         />
       </v-stepper-content>
 
@@ -42,23 +42,23 @@
           :video-title="experienceForm.videoTitle"
           :video-description="experienceForm.videoDescription"
           :experiences="experienceForm.experiences"
+          @click="handleSelectExperience"
         />
         <v-container>
           <v-row class="mt-4 pb-4">
             <v-btn text @click="currentStep -= 1">戻る</v-btn>
-            <v-spacer />
-            <v-btn color="primary" @click="handleSelectExperience">この地域にする！</v-btn>
           </v-row>
         </v-container>
       </v-stepper-content>
       <v-stepper-content style="padding: 8px" step="4">
-        <diary-carousel :diaries="diaries" @select="handleSelectDiary" />
+        <diary-carousel :diary="createdDiary" @select="handleSelectDiary" />
         <v-btn text @click="currentStep -= 1">
           戻る
         </v-btn>
       </v-stepper-content>
       <v-stepper-content step="5">
         <NewDiaryItinerary
+          :bring="bring"
           :itinerary="itinerary"
         />
         <v-container>
@@ -131,7 +131,14 @@ export default {
           experiences: []
         }
       },
-      diaries: [],
+      createdDiary: {
+        id: 1,
+        date: '2024/11/23',
+        image: 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
+        title: 'ダミーデータ！！！',
+        content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
+      },
+      bring: [],
       itinerary: [],
       bookingInfo: {
         expressTickets: [],
@@ -148,76 +155,103 @@ export default {
     this.userInfo = userStore.userInfo
   },
   methods: {
-    submitForm() {
-      // Handle form submission
-      console.log('Form submitted')
+    handleDepatureSelectionSubmit(model) {
+      this.departureForm = model
+      this.currentStep += 1
     },
-    handleDestinationSelected(id) {
+    async handleDestinationSelected(id) {
       this.destinationForm.id = id
-      this.experienceForm = {
-        video: 'https://example.com/video1.mp4',
-        videoTitle: '美しい山々を体験しよう',
-        videoDescription: '雄大な山々の素晴らしさを発見してください',
-        experiences: [
-          {
-            id: 1,
-            image: 'https://placehold.jp/300x200.png',
-            title: '山登り',
-            description: '山道からの息をのむような景色をお楽しみください',
-            hasFurusatoNozei: true
-          },
-          {
-            id: 2,
-            image: 'https://example.com/mountain2.jpg',
-            title: '高原ハイキング',
-            description: '爽やかな高原の空気を感じながら散策しましょう',
-            hasFurusatoNozei: false
-          },
-          {
-            id: 3,
-            image: 'https://example.com/beach1.jpg',
-            title: 'ビーチヨガ',
-            description: '波の音を聞きながら心身をリフレッシュ',
-            hasFurusatoNozei: true
-          },
-          {
-            id: 4,
-            image: 'https://example.com/diving1.jpg',
-            title: 'スキューバダイビング',
-            description: '色とりどりの魚たちと泳ぐ underwater adventure',
-            hasFurusatoNozei: false
+      const params = new URLSearchParams({
+        user_id: this.userInfo.id,
+        hobby_id: this.departureForm.interests
+      })
+
+      try {
+        const response = await fetch(`http://localhost:8080/travel_spots?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
           }
-        ]
+        })
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+
+        let experiences = []
+        if (data.TravelSpots && data.TravelSpots.length >= 5) {
+          // ランダムに4つ選んでexperiencesに値を入れる
+          const shuffled = data.TravelSpots.sort(() => 0.5 - Math.random())
+          experiences = shuffled.slice(0, 4).map((spot, _i) => ({
+            id: spot.ID,
+            image: spot.image || 'https://placehold.jp/300x200.png',
+            title: spot.Name,
+            description: spot.Description,
+            hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
+          }))
+        } else {
+          // そのまま入れる
+          experiences = data.TravelSpots.map((spot, _i) => ({
+            id: spot.ID,
+            image: spot.image || 'https://placehold.jp/300x200.png',
+            title: spot.Name,
+            description: spot.Description,
+            hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
+          }))
+        }
+        console.log(this.experienceForm.experiences)
+
+        this.experienceForm = {
+          video: 'https://example.com/video1.mp4',
+          videoTitle: '美しい山々を体験しよう',
+          videoDescription: '雄大な山々の素晴らしさを発見してください',
+          experiences
+        }
+        this.currentStep += 1
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
       }
-      this.currentStep += 1
     },
-    handleSelectExperience() {
-      // TODO 地域情報からこれらの情報取ってくる
-      this.diaries = [
-        {
-          id: 1,
-          date: '2024/11/23',
-          image: 'choshi.jpg',
-          title: '大物ヒラマサとの出会い',
-          content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
-        },
-        {
-          id: 2,
-          date: '2024/11/24',
-          image: 'choshi.jpg',
-          title: '穏やかな朝の散歩',
-          content: '今朝は日の出とともに目覚め、近所の公園を散歩しました。紅葉が見頃で、朝日に照らされた葉が美しく輝いていました。静かな朝の時間を過ごすことで、一日を穏やかな気持ちで始められそうです。'
-        },
-        {
-          id: 3,
-          date: '2024/11/25',
-          image: 'choshi.jpg',
-          title: '新しいカフェでの発見',
-          content: '街中にオープンしたという評判のカフェに行ってきました。インテリアがとてもおしゃれで、窓から差し込む光が心地よい空間でした。注文したラテアートが素晴らしく、バリスタの技術に感動。また訪れたい場所が増えました。'
-        }]
-      this.currentStep += 1
+    async handleSelectExperience(id) {
+      try {
+        const response = await fetch('http://localhost:8080/diaries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: this.userInfo.id,
+            hobby_id: this.departureForm.interests,
+            travel_spot_id: id,
+            date: this.departureForm.departureDate + 'T00:00:00Z'
+          })
+        })
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        const photoPath = data.PhotoPath && data.PhotoPath.startsWith('http')
+          ? data.PhotoPath
+          : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg'
+        const formattedDate = data.Date.split('T')[0]
+        this.createdDiary = {
+          id: data.ID,
+          date: formattedDate,
+          image: photoPath,
+          title: data.Title,
+          content: data.Body
+        }
+        this.currentStep += 1
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      }
     },
-    handleSelectDiary(id) {
+    handleSelectDiary(_id) {
+      this.bring = [
+        '軍手', '手袋', 'ジャケット', 'ハンカチ'
+      ]
       this.itinerary = [
         { type: '移動', duration: 30, description: '目安: 30分' },
         { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },

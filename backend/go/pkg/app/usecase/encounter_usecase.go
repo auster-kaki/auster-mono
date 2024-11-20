@@ -29,17 +29,21 @@ type CrateEncounterInput struct {
 	UserID      entity.UserID
 	Name        string
 	Place       string
-	Date        time.Time
+	Date        string
 	Description string
 }
 
 func (u *EncounterUseCase) Create(ctx context.Context, input *CrateEncounterInput) error {
+	d, err := time.ParseInLocation(time.DateOnly, input.Date, time.Local)
+	if err != nil {
+		return err
+	}
 	return u.repository.Encounter().Create(ctx, entity.Encounter{
 		ID:          austerid.Generate[entity.EncounterID](),
 		Name:        input.Name,
 		Place:       input.Place,
 		UserID:      input.UserID,
-		Date:        input.Date,
+		Date:        d,
 		Description: input.Description,
 	})
 }
@@ -49,17 +53,21 @@ type UpdateEncounterInput struct {
 	Name        string
 	Place       string
 	UserID      entity.UserID
-	Date        time.Time
+	Date        string
 	Description string
 }
 
 func (u *EncounterUseCase) Update(ctx context.Context, input *UpdateEncounterInput) error {
+	d, err := time.ParseInLocation(time.DateOnly, input.Date, time.Local)
+	if err != nil {
+		return err
+	}
 	return u.repository.Encounter().Update(ctx, &entity.Encounter{
 		ID:          input.ID,
 		Name:        input.Name,
 		Place:       input.Place,
 		UserID:      input.UserID,
-		Date:        input.Date,
+		Date:        d,
 		Description: input.Description,
 	})
 }
