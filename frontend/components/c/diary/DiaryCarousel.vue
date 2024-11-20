@@ -13,7 +13,7 @@
         </v-row>
         <v-row class="px-2">
           <v-img
-            :src="require(`@/static/destination/${diary.image}`)"
+            :src="diary.image"
             style="border-radius: 4px"
             :alt="diary.title"
             cover

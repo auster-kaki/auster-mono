@@ -2,10 +2,8 @@ package handler
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
-	"github.com/auster-kaki/auster-mono/pkg/app/presenter/request"
 	"github.com/auster-kaki/auster-mono/pkg/app/presenter/response"
 	"github.com/auster-kaki/auster-mono/pkg/app/usecase"
 	"github.com/auster-kaki/auster-mono/pkg/entity"
@@ -25,13 +23,10 @@ func NewTravelSpotHandler(u *usecase.TravelSpotUseCase) []Input {
 func (h *TravelSpotHandler) GetTravelSpots(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
-	var req request.TravelSpot
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
+	userID := r.URL.Query().Get("user_id")
+	hobbyID := r.URL.Query().Get("hobby_id")
 
-	out, err := h.travelSpotUseCase.GetTravelSpots(ctx, entity.UserID(req.UserID), entity.HobbyID(req.HobbyID))
+	out, err := h.travelSpotUseCase.GetTravelSpots(ctx, entity.UserID(userID), entity.HobbyID(hobbyID))
 	if err != nil {
 		response.HandleError(ctx, w, err)
 		return

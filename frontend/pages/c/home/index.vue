@@ -65,21 +65,21 @@
       </v-col>
     </v-row>
     <v-snackbar
-      v-model="showReservationSnackbar"
-      timeout="3000"
-      color="success"
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
       dense
-      close-text="閉じる"
-      close-icon="mdi-close"
+      :close-text="snackbar.closeText"
+      :close-icon="snackbar.closeIcon"
     >
-      予約が完了しました！
+      {{ snackbar.text }}
       <template #action="{ attrs }">
         <v-btn
           text
           v-bind="attrs"
-          @click="showReservationSnackbar = false"
+          @click="snackbar.show = false"
         >
-          <v-icon>mdi-close</v-icon>
+          <v-icon>{{ snackbar.closeIcon }}</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
@@ -100,7 +100,14 @@ export default {
       newDiaries: [],
       showNewDiary: false,
       currentDiary: null,
-      showReservationSnackbar: false
+      snackbar: {
+        show: false,
+        text: '',
+        timeout: 3000,
+        color: 'success',
+        closeText: '閉じる',
+        closeIcon: 'mdi-close'
+      }
     }
   },
   mounted() {
@@ -109,7 +116,10 @@ export default {
     this.fetchNewDiary()
     this.checkNewDiary()
     if (this.$route.query.reservation === 'success') {
-      this.showReservationSnackbar = true
+      this.showSnackbar('予約が完了しました！')
+    }
+    if (this.$route.query.createUser === 'success') {
+      this.showSnackbar('ユーザー作成が完了しました！')
     }
   },
   methods: {
@@ -171,7 +181,11 @@ export default {
     },
     reserveDiary() {
       // 予約処理のロジックをここに実装
-      alert('予約が完了しました！')
+      this.showSnackbar('予約が完了しました！')
+    },
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
     }
   }
 }
