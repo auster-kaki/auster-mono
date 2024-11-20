@@ -69,7 +69,7 @@ func (c *Client) CreateImage(ctx context.Context, input appRPC.CreateImageInput)
 	}
 	defer targetFile.Close()
 
-	targetPart, err := writer.CreateFormFile("target_path", filepath.Base(input.TargetPath))
+	targetPart, err := writer.CreateFormFile("target_path", filepath.Base(swapBeforePath))
 	if err != nil {
 		return appRPC.CreateImageOutput{}, err
 	}

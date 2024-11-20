@@ -8,7 +8,7 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG PYTHON_VERSION=3.10.15
-FROM python:${PYTHON_VERSION}-bullseye as base
+FROM python:${PYTHON_VERSION}-slim-bullseye as base
 
 # Pythonがpycファイルを書き込むのを防ぎます。
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -33,7 +33,7 @@ RUN adduser \
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y gcc patch g++
+RUN apt-get update && apt-get install -y gcc patch g++ wget python3-tk
 
 
 RUN python -m pip install --upgrade pip
