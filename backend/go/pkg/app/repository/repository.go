@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/auster-kaki/auster-mono/pkg/entity"
 )
 
@@ -68,6 +69,7 @@ type TravelSpotRepository interface {
 type TravelSpotPhotoRepository interface {
 	Create(ctx context.Context, travelSpotPhotos ...entity.TravelSpotPhoto) error
 	GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotPhotos, error)
+	GetByTravelSpotIDs(ctx context.Context, travelSpotIDs []entity.TravelSpotID) (entity.TravelSpotPhotos, error)
 }
 
 type TravelSpotItemRepository interface {

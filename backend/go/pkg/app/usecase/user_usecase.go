@@ -109,9 +109,10 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) error {
 	if err := u.repository.UserHobby().Create(ctx, userHobbies...); err != nil {
 		return err
 	}
-
-	if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
-		return err
+	if len(newHobbies) > 0 {
+		if err := u.repository.Hobby().Create(ctx, newHobbies...); err != nil {
+			return err
+		}
 	}
 
 	return u.repository.User().Create(ctx, &entity.User{

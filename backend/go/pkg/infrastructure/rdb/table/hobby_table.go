@@ -31,7 +31,7 @@ func (t *Hobby) GetAll(ctx context.Context) (entity.Hobbies, error) {
 
 func (t *Hobby) GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobbies, error) {
 	res := entity.Hobbies{}
-	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", ids).Scan(ctx); err != nil {
+	if err := t.db.NewSelect().Model(&res).Where("id IN (?)", bun.In(ids)).Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
