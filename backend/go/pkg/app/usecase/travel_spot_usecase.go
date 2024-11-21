@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"path/filepath"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -74,7 +75,17 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 
 	gOut, err := u.generateDiary(ctx, user, travelSpot)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate diary: %w", err)
+		fmt.Println("failed to generate diary: %w", err)
+		// 画像生成に失敗した場合は元の体験画像をそのまま返す
+		photo, err := austerstorage.Get(travelSpot.PhotoPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get photo: %w", err)
+		}
+		paths := strings.Split(travelSpot.PhotoPath, "/")
+		gOut = &rpc.GetImagePathOutput{
+			GeneratedImage: photo,
+			Filename:       paths[len(paths)-1],
+		}
 	}
 	id := austerid.Generate[entity.TravelSpotDiaryID]()
 	// goサーバにも画像を保存
