@@ -85,7 +85,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.
 	userID := austerid.Generate[entity.UserID]()
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		filepath.Join(string(userID), input.Photo.Filename),
+		filepath.Join("users", string(userID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
@@ -132,7 +132,7 @@ func (u *UserUseCase) CreateUser(ctx context.Context, input *UserInput) (entity.
 func (u *UserUseCase) UpdateUser(ctx context.Context, input *UserInput) error {
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(input.Photo.ContentType),
-		filepath.Join(string(input.ID), input.Photo.Filename),
+		filepath.Join("users", string(input.ID), input.Photo.Filename),
 		input.Photo.Body,
 	)
 	if err != nil {
