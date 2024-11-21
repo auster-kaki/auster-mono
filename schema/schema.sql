@@ -226,34 +226,34 @@ INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, nam
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti2', 'カメラ', 1);
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti2', '日傘・帽子', 1);
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti2', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti17', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti17', '日傘・帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti17', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti32', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti32', '日傘・帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti32', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti47', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti47', '日傘・帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti47', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_4', 'iti17', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_5', 'iti17', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_6', 'iti17', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_7', 'iti32', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_8', 'iti32', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_9', 'iti32', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_10', 'iti47', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_11', 'iti47', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_12', 'iti47', '歩きやすい靴', 1);
 
 -- 地球の丸く見える丘展望館の持ち物
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti7', 'カメラ', 1);
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti7', '双眼鏡', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti22', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti22', '双眼鏡', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti37', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti37', '双眼鏡', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_3', 'iti22', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_4', 'iti22', '双眼鏡', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_5', 'iti37', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_6', 'iti37', '双眼鏡', 1);
 
 -- 圓福寺見学の持ち物
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti12', '歩きやすい靴', 1);
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti12', '写真撮影許可が必要なカメラ', 1);
 INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti12', 'お賽銭', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti27', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti27', '写真撮影許可が必要なカメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti27', 'お賽銭', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti42', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti42', '写真撮影許可が必要なカメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti42', 'お賽銭', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_4', 'iti27', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_5', 'iti27', '写真撮影許可が必要なカメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_6', 'iti27', 'お賽銭', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_7', 'iti42', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_8', 'iti42', '写真撮影許可が必要なカメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_9', 'iti42', 'お賽銭', 1);
 
 CREATE TABLE `travel_spot_diary`
 (
