@@ -218,44 +218,20 @@ export default {
           throw new Error('Network response was not ok')
         }
         this.currentStep += 1
+        // JSONレスポンスを直接パース
+        const data = await response.json()
 
-        // ゴニョゴニョして、responseを本文と画像に分けてそれぞれ格納する
-        const contentType = response.headers.get('Content-Type')
-        const boundary = contentType.match(/boundary=(.*)/)[1]
-        const rawData = await response.text()
-        const parts = rawData.split(`--${boundary}`)
-        let responseJson = {}
-        let imageUrl = ''
-        for (const part of parts) {
-          if (part.includes('Content-Type: application/json')) {
-            // JSON部分を解析
-            const jsonBody = part.split('\r\n\r\n')[1].trim()
-            responseJson = JSON.parse(jsonBody)
-          } else if (part.includes('Content-Type: image/jpeg')) {
-            // 画像データ部分を解析
-            const binaryData = part.split('\r\n\r\n')[1].trim()
-            const binaryArray = new Uint8Array(binaryData.length)
+        // 画像パスを使用して画像URLを構築
+        const imageUrl = data.PhotoPath
+          ? `${process.env.BASE_URL}/images/${data.PhotoPath}`
+          : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg'
 
-            // バイナリデータを生成
-            for (let i = 0; i < binaryData.length; i++) {
-              binaryArray[i] = binaryData.charCodeAt(i)
-            }
-
-            // Blob URLを生成して設定
-            const blob = new Blob([binaryArray], { type: 'image/jpeg' })
-            imageUrl = URL.createObjectURL(blob)
-          }
-        }
-
-        // 解析した内容を元に画像等を格納する
         this.createdDiary = {
-          id: responseJson.ID,
+          id: data.ID,
           date: this.departureForm.departureDate,
-          image: imageUrl && imageUrl.startsWith('http')
-            ? imageUrl
-            : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
-          title: responseJson.Title,
-          content: responseJson.Body
+          image: imageUrl,
+          title: data.Title,
+          content: data.Body
         }
 
       } catch (error) {

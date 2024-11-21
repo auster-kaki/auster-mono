@@ -37,10 +37,10 @@ func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.Us
 }
 
 type CreateDiaryOutput struct {
-	ID    entity.TravelSpotDiaryID
-	Title string
-	Photo []byte
-	Body  string
+	ID          entity.TravelSpotDiaryID
+	Title       string
+	PhotoPath   string
+	Description string
 }
 
 // CreateDiary TODO: 画像・本文・タイトルの生成周りが未完成
@@ -60,15 +60,15 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", err)
 	}
 	if travelSpotDiary != nil {
-		photo, err := austerstorage.Get(travelSpotDiary.PhotoPath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get photo: %w", err)
-		}
+		// photo, err := austerstorage.Get(travelSpotDiary.PhotoPath)
+		// if err != nil {
+		// 	return nil, fmt.Errorf("failed to get photo: %w", err)
+		// }
 		return &CreateDiaryOutput{
-			ID:    travelSpotDiary.ID,
-			Title: travelSpotDiary.Title,
-			Photo: photo,
-			Body:  travelSpotDiary.Description,
+			ID:          travelSpotDiary.ID,
+			Title:       travelSpotDiary.Title,
+			PhotoPath:   travelSpot.PhotoPath,
+			Description: travelSpotDiary.Description,
 		}, nil
 	}
 
@@ -119,10 +119,10 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	}
 
 	return &CreateDiaryOutput{
-		ID:    id,
-		Title: title,
-		Photo: gOut.GeneratedImage,
-		Body:  description,
+		ID:          id,
+		Title:       title,
+		PhotoPath:   path,
+		Description: description,
 	}, nil
 }
 
