@@ -17,8 +17,10 @@ const (
 
 type TravelSpotItinerary struct {
 	ID           TravelSpotItineraryID
-	Kind         TravelSpotItineraryKind
 	TravelSpotID TravelSpotID
+	Title        string
+	Description  string
+	Kind         TravelSpotItineraryKind
 	TakeTime     int
 	Price        int
 	Order        int

@@ -75,10 +75,194 @@ INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, ad
 INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地');
 INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
 -- 観光スポット
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('14', 'gyo3', '犬吠埼灯台', 60, '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。', '千葉県銚子市犬吠埼957612');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('15', 'gyo3', '地球の丸く見える丘展望館', 90, '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました5。', '千葉県銚子市天王台1421-13');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('16', 'gyo3', '圓福寺（飯沼観音）', 45, '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています3。', '千葉県銚子市馬場町2934');
+# INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('14', 'gyo3', '犬吠埼灯台', 60, '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。', '千葉県銚子市犬吠埼957612');
+# INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('15', 'gyo3', '地球の丸く見える丘展望館', 90, '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました5。', '千葉県銚子市天王台1421-13');
+# INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('16', 'gyo3', '圓福寺（飯沼観音）', 45, '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています3。', '千葉県銚子市馬場町2934');
 
+CREATE TABLE `travel_spot_itinerary`
+(
+    `id`             varchar(20) COLLATE utf8mb4_bin   NOT NULL,
+    `travel_spot_id` varchar(20) COLLATE utf8mb4_bin   NOT NULL,
+    `title`          varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `description`    text COLLATE utf8mb4_bin         NOT NULL,
+    `kind`           enum ('experience','spot','move') NOT NULL COMMENT 'experience: 体験場所, spot: 観光地, move: 移動',
+    `take_time`      int(11)                           NOT NULL COMMENT '所要時間（分）',
+    `price`          int(11)                           NOT NULL,
+    `order`          int(11)                           NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットと旅程の関連';
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti1','移動','', 'move', '1', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti2','観光', '犬吠埼灯台','spot', '1', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti3','移動', '','move', '1', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti4','アクティビティ', '釣り体験 ヒラマサ','experience', '1', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti5','移動', '','move', '1', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti6','移動','', 'move', '2', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti7','観光', '地球の丸く見える丘展望館','spot', '2', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti8','移動', '','move', '2', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti9','アクティビティ', '釣り体験 シイラ','experience', '2', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti10','移動', '','move', '2', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti11','移動','', 'move', '23', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti12','観光', '圓福寺（飯沼観音）','spot', '3', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti13','移動', '','move', '3', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti14','アクティビティ','釣り体験 ヒラメ', 'experience', '3', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti15','移動', '','move', '3', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti16','移動','', 'move', '4', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti17','観光', '犬吠埼灯台','spot', '4', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti18','移動', '','move', '4', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti19','アクティビティ','漁業体験 競りの見学', 'experience', '4', 120, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti20','移動', '','move', '4', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti21','移動','', 'move', '5', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti22','観光', '地球の丸く見える丘展望館','spot', '5', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti23','移動', '','move', '5', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti24','アクティビティ','漁業体験 定置網漁', 'experience', '5', 180, 12000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti25','移動', '','move', '5', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti26','移動','', 'move', '6', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti27','観光', '圓福寺（飯沼観音）','spot', '6', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti28','移動', '','move', '6', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti29','アクティビティ','社会貢献活動 浜辺のゴミ拾い', 'experience', '6', 120, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti30','移動', '','move', '6', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti31','移動','', 'move', '10', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti32','観光', '犬吠埼灯台','spot', '10', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti33','移動', '','move', '10', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti34','アクティビティ','キャンプ場運営体験 イベントのスタッフ', 'experience', '10', 300, 8000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti35','移動', '','move', '10', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti36','移動','', 'move', '11', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti37','観光', '地球の丸く見える丘展望館','spot', '11', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti38','移動', '','move', '11', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti39','アクティビティ','キャンプ中級者体験 ブッシュクラフト火おこし', 'experience', '11', 60, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti40','移動', '','move', '11', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti41','移動','', 'move', '12', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti42','観光', '圓福寺（飯沼観音）','spot', '12', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti43','移動', '','move', '12', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti44','アクティビティ','トレインランニング', 'experience', '12', 300, 3000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti45','移動', '','move', '12', 60, 200, 5);
+
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti46','移動','', 'move', '13', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti47','観光', '犬吠埼灯台','spot', '13', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti48','移動', '','move', '13', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti49','アクティビティ','スペシャルオファー<複業> ショップの企画担当', 'experience', '13', 0, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti50','移動', '','move', '13', 60, 200, 5);
+
+
+CREATE TABLE `travel_spot_itinerary_item`
+(
+    `id`                       varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `travel_spot_itinerary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `name`                     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `number`                   int(11)                          NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットで必要な持ち物';
+
+-- 釣り体験（ヒラマサ）の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_1', 'iti4', '帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_2', 'iti4', '日焼け止め', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_3', 'iti4', 'タオル', 2);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_4', 'iti4', '酔い止め薬', 1);
+
+-- 釣り体験（シイラ）の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_1', 'iti9', '帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_2', 'iti9', '日焼け止め', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_3', 'iti9', 'タオル', 2);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_4', 'iti9', '酔い止め薬', 1);
+
+-- 釣り体験（ヒラメ）の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_1', 'iti14', '帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_2', 'iti14', '日焼け止め', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_3', 'iti14', 'タオル', 2);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_4', 'iti14', '酔い止め薬', 1);
+
+-- 競りの見学の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_1', 'iti19', '長靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_2', 'iti19', '防寒着', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_3', 'iti19', 'メモ帳', 1);
+
+-- 定置網漁体験の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_1', 'iti24', '長靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_2', 'iti24', '作業用手袋', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_3', 'iti24', '防寒着', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_4', 'iti24', 'タオル', 2);
+
+-- 浜辺のゴミ拾いの持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_1', 'iti29', '軍手', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_2', 'iti29', '帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_3', 'iti29', '飲み物', 1);
+
+-- キャンプ場運営体験の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_1', 'iti34', '作業用手袋', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_2', 'iti34', '動きやすい服装', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_3', 'iti34', '長靴', 1);
+
+-- キャンプ中級者体験の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_1', 'iti39', '軍手', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_2', 'iti39', '防虫スプレー', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_3', 'iti39', '長袖の服', 1);
+
+-- トレインランニングの持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_1', 'iti44', 'ランニングシューズ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_2', 'iti44', '水筒', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_3', 'iti44', 'タオル', 2);
+
+-- 複業オファーの持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_1', 'iti49', '筆記用具', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_2', 'iti49', '履歴書', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_3', 'iti49', 'ポートフォリオ', 1);
+
+-- 犬吠埼灯台見学の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti2', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti2', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti2', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti17', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti17', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti17', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti32', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti32', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti32', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti47', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti47', '日傘・帽子', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti47', '歩きやすい靴', 1);
+
+-- 地球の丸く見える丘展望館の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti7', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti7', '双眼鏡', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti22', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti22', '双眼鏡', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti37', 'カメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti37', '双眼鏡', 1);
+
+-- 圓福寺見学の持ち物
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti12', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti12', '写真撮影許可が必要なカメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti12', 'お賽銭', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti27', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti27', '写真撮影許可が必要なカメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti27', 'お賽銭', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti42', '歩きやすい靴', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti42', '写真撮影許可が必要なカメラ', 1);
+INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti42', 'お賽銭', 1);
+
+CREATE TABLE `travel_spot_diary`
+(
+    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `title`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `date`        date                             NOT NULL,
+    `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `description` text COLLATE utf8mb4_bin         NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT ='日記';
 
 CREATE TABLE `travel_spot_hobby`
 (
@@ -99,129 +283,6 @@ INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('10', 'c
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('11', 'cstkdiat6c3011a83sog');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('12', 'cstkdiat6c3011a83sog');
 INSERT INTO auster.travel_spot_hobby (travel_spot_id, hobby_id) VALUES ('13', 'cstkdiat6c3011a83sog');
-
-CREATE TABLE `travel_spot_itinerary`
-(
-    `id`             varchar(20) COLLATE utf8mb4_bin NOT NULL,
-    `kind`           enum ('experience','spot','move')            NOT NULL COMMENT 'experience: 体験場所, spot: 観光地, move: 移動',
-    `travel_spot_id` varchar(20) COLLATE utf8mb4_bin NOT NULL COMMENT 'kindがspotの場合のみ',
-    `take_time`      int(11)                         NOT NULL COMMENT '所要時間（分）',
-    `price`          int(11)                         NOT NULL,
-    `order`          int(11)                         NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットと旅程の関連';
-
--- 旅程: 体験場所
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti1', 'experience', '1', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti2', 'experience', '2', 240, 20000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti3', 'experience', '3', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti4', 'experience', '4', 120, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti5', 'experience', '5', 180, 12000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti6', 'experience', '6', 120, 0, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti10', 'experience', '10', 300, 8000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti11', 'experience', '11', 60, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti12', 'experience', '12', 300, 3000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti13', 'experience', '13', 0, 0, 4);
--- 旅程: 観光スポット
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti14', 'spot', '14', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti15', 'spot', '15', 90, 800, 2);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti16', 'spot', '16', 45, 300, 2);
--- 旅程: 移動時間(使い回し)
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti17', 'move', '', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti18', 'move', '', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti19', 'move', '', 60, 200, 5);
-
-CREATE TABLE `travel_spot_itinerary_item`
-(
-    `id`                       varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `travel_spot_itinerary_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `name`                     varchar(255) COLLATE utf8mb4_bin NOT NULL,
-    `number`                   int(11)                          NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットで必要な持ち物';
-
--- 釣り体験（ヒラマサ）の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_1', 'iti1', '帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_2', 'iti1', '日焼け止め', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_3', 'iti1', 'タオル', 2);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item1_4', 'iti1', '酔い止め薬', 1);
-
--- 釣り体験（クロカジキ）の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_1', 'iti2', '帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_2', 'iti2', '日焼け止め', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_3', 'iti2', 'タオル', 2);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item2_4', 'iti2', '酔い止め薬', 1);
-
--- 釣り体験（ヒラメ）の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_1', 'iti3', '帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_2', 'iti3', '日焼け止め', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_3', 'iti3', 'タオル', 2);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item3_4', 'iti3', '酔い止め薬', 1);
-
--- 競りの見学の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_1', 'iti4', '長靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_2', 'iti4', '防寒着', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item4_3', 'iti4', 'メモ帳', 1);
-
--- 定置網漁体験の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_1', 'iti5', '長靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_2', 'iti5', '作業用手袋', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_3', 'iti5', '防寒着', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item5_4', 'iti5', 'タオル', 2);
-
--- 浜辺のゴミ拾いの持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_1', 'iti6', '軍手', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_2', 'iti6', '帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item6_3', 'iti6', '飲み物', 1);
-
--- キャンプ場運営体験の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_1', 'iti10', '作業用手袋', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_2', 'iti10', '動きやすい服装', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item10_3', 'iti10', '長靴', 1);
-
--- キャンプ中級者体験の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_1', 'iti11', '軍手', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_2', 'iti11', '防虫スプレー', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item11_3', 'iti11', '長袖の服', 1);
-
--- トレインランニングの持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_1', 'iti12', 'ランニングシューズ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_2', 'iti12', '水筒', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item12_3', 'iti12', 'タオル', 2);
-
--- 複業オファーの持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_1', 'iti13', '筆記用具', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_2', 'iti13', '履歴書', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item13_3', 'iti13', 'ポートフォリオ', 1);
-
--- 犬吠埼灯台見学の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_1', 'iti14', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_2', 'iti14', '日傘・帽子', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item14_3', 'iti14', '歩きやすい靴', 1);
-
--- 地球の丸く見える丘展望館の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_1', 'iti15', 'カメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item15_2', 'iti15', '双眼鏡', 1);
-
--- 圓福寺見学の持ち物
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_1', 'iti16', '歩きやすい靴', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_2', 'iti16', '写真撮影許可が必要なカメラ', 1);
-INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, name, number) VALUES ('item16_3', 'iti16', 'お賽銭', 1);
-
-CREATE TABLE `travel_spot_diary`
-(
-    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `title`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
-    `date`        date                             NOT NULL,
-    `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
-    `description` text COLLATE utf8mb4_bin         NOT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT ='日記';
 
 CREATE TABLE `reservation`
 (
