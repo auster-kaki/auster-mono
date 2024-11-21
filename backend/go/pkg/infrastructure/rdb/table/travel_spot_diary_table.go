@@ -32,7 +32,7 @@ func (t *TravelSpotDiary) Update(ctx context.Context, ent *entity.TravelSpotDiar
 
 func (t *TravelSpotDiary) FindByID(ctx context.Context, id entity.TravelSpotDiaryID) (*entity.TravelSpotDiary, error) {
 	res := &entity.TravelSpotDiary{}
-	if err := t.db.NewSelect().Model(&res).Where("id = ?", id).Scan(ctx); err != nil {
+	if err := t.db.NewSelect().Model(res).Where("id = ?", id).Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil

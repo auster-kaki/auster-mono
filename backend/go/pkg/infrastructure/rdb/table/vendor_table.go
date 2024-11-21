@@ -25,7 +25,7 @@ func (t *Vendor) Create(ctx context.Context, ents ...entity.Vendor) error {
 
 func (t *Vendor) GetAll(ctx context.Context) (entity.Vendors, error) {
 	res := entity.Vendors{}
-	if err := t.db.NewSelect().Model(&entity.Vendor{}).Scan(ctx, &res); err != nil {
+	if err := t.db.NewSelect().Model(&res).Scan(ctx, &res); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
