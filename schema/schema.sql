@@ -58,27 +58,28 @@ CREATE TABLE `travel_spot`
     `take_time`   int(11)                          NOT NULL COMMENT '所要時間（分）',
     `description` text COLLATE utf8mb4_bin        NOT NULL COMMENT '説明',
     `address`     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポット';
 
 -- 体験スポット
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('1', 'gyo1', '釣り体験 ヒラマサ', 180, '船釣りでヒラマサを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('10', 'can2', 'キャンプ場運営体験 イベントのスタッフ', 300, '周辺地域のショップ様と共同開催するイベントのスタッフ業務をお任せします', '千葉県大網白里市四天木2761-40');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('11', 'can1', 'キャンプ中級者体験 ブッシュクラフト火おこし', 60, 'キャンパーが一度は憧れるブッシュクラフト、火おこし体験ができます', '千葉県長生郡一宮町東浪見1611');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('12', 'can3', 'トレインランニング', 300, '銚子電鉄の駅を自分の足で巡りながら大自然を駆け抜けるトレインランニングを体験できます', '千葉県銚子市新生町2丁目297番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('13', 'can2', 'スペシャルオファー<複業> ショップの企画担当', 0, 'キャンプ場周辺のショップで企画担当を募集します', '千葉県大網白里市四天木2761-40');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('2', 'gyo1', '釣り体験 シイラ', 240, '船釣りでクロカジキを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('3', 'gyo1', '釣り体験 ヒラメ', 180, '船釣りでヒラメを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('4', 'gyo1', '漁業体験 競りの見学', 120, '競りの市場を見学できます', '千葉県銚子市川口町 2丁目6528番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）');
--- 観光スポット
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('14', 'gyo3', '犬吠埼灯台', 60, '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。', '千葉県銚子市犬吠埼957612');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('15', 'gyo3', '地球の丸く見える丘展望館', 90, '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました5。', '千葉県銚子市天王台1421-13');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address) VALUES ('16', 'gyo3', '圓福寺（飯沼観音）', 45, '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています3。', '千葉県銚子市馬場町2934');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('1', 'gyo1', '釣り体験 ヒラマサ', 180, '船釣りでヒラマサを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/1/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('10', 'can2', 'キャンプ場運営体験 イベントのスタッフ', 300, '周辺地域のショップ様と共同開催するイベントのスタッフ業務をお任せします', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/10/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('11', 'can1', 'キャンプ中級者体験 ブッシュクラフト火おこし', 60, 'キャンパーが一度は憧れるブッシュクラフト、火おこし体験ができます', '千葉県長生郡一宮町東浪見1611', '/assets/images/travel_spots/11/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('12', 'can3', 'トレインランニング', 300, '銚子電鉄の駅を自分の足で巡りながら大自然を駆け抜けるトレインランニングを体験できます', '千葉県銚子市新生町2丁目297番地', '/assets/images/travel_spots/12/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('13', 'can2', 'スペシャルオファー<複業> ショップの企画担当', 0, 'キャンプ場周辺のショップで企画担当を募集します', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/13/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('2', 'gyo1', '釣り体験 シイラ', 240, '船釣りでクロカジキを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/2/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('3', 'gyo1', '釣り体験 ヒラメ', 180, '船釣りでヒラメを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/3/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('4', 'gyo1', '漁業体験 競りの見学', 120, '競りの市場を見学できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/4/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/5/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）', '/assets/images/travel_spots/6/');
 
+-- 観光スポット
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('14', 'gyo3', '犬吠埼灯台', 60, '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。', '千葉県銚子市犬吠埼957612', '');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('15', 'gyo3', '地球の丸く見える丘展望館', 90, '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました5。', '千葉県銚子市天王台1421-13', '');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('16', 'gyo3', '圓福寺（飯沼観音）', 45, '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています3。', '千葉県銚子市馬場町2934', '');
 
 CREATE TABLE `travel_spot_hobby`
 (
