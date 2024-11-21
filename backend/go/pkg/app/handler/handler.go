@@ -18,46 +18,23 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 	var (
 		alreadyPath = make(map[string]struct{})
 		handlerMap  = make(map[string]http.HandlerFunc)
+		handlers    = [][]Input{
+			NewUserHandler(usecase.NewUserUseCase(r)),
+			NewVendorHandler(usecase.NewVendorUseCase(r)),
+			NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)),
+			NewReservationHandler(usecase.NewReservationUseCase(r)),
+			NewEncounterHandler(usecase.NewEncounterUseCase(r)),
+		}
 	)
-	for _, h := range NewUserHandler(usecase.NewUserUseCase(r)) {
-		path := fmt.Sprintf("%s %s", h.method, h.path)
-		if _, ok := alreadyPath[path]; ok {
-			panic(fmt.Sprintf("duplicate path: %s", path))
+	for _, hs := range handlers {
+		for _, h := range hs {
+			path := fmt.Sprintf("%s %s", h.method, h.path)
+			if _, ok := alreadyPath[path]; ok {
+				panic(fmt.Sprintf("duplicate path: %s", path))
+			}
+			alreadyPath[path] = struct{}{}
+			handlerMap[path] = h.handler
 		}
-		alreadyPath[path] = struct{}{}
-		handlerMap[path] = h.handler
-	}
-	for _, h := range NewVendorHandler(usecase.NewVendorUseCase(r)) {
-		path := fmt.Sprintf("%s %s", h.method, h.path)
-		if _, ok := alreadyPath[path]; ok {
-			panic(fmt.Sprintf("duplicate path: %s", path))
-		}
-		alreadyPath[path] = struct{}{}
-		handlerMap[path] = h.handler
-	}
-	for _, h := range NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)) {
-		path := fmt.Sprintf("%s %s", h.method, h.path)
-		if _, ok := alreadyPath[path]; ok {
-			panic(fmt.Sprintf("duplicate path: %s", path))
-		}
-		alreadyPath[path] = struct{}{}
-		handlerMap[path] = h.handler
-	}
-	for _, h := range NewReservationHandler(usecase.NewReservationUseCase(r)) {
-		path := fmt.Sprintf("%s %s", h.method, h.path)
-		if _, ok := alreadyPath[path]; ok {
-			panic(fmt.Sprintf("duplicate path: %s", path))
-		}
-		alreadyPath[path] = struct{}{}
-		handlerMap[path] = h.handler
-	}
-	for _, h := range NewEncounterHandler(usecase.NewEncounterUseCase(r)) {
-		path := fmt.Sprintf("%s %s", h.method, h.path)
-		if _, ok := alreadyPath[path]; ok {
-			panic(fmt.Sprintf("duplicate path: %s", path))
-		}
-		alreadyPath[path] = struct{}{}
-		handlerMap[path] = h.handler
 	}
 	return handlerMap
 }
