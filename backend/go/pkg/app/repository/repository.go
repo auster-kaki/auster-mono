@@ -54,6 +54,7 @@ type TravelSpotHobbyRepository interface {
 type TravelSpotItineraryRepository interface {
 	Create(ctx context.Context, travelSpotItineraries ...entity.TravelSpotItinerary) error
 	GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotItineraries, error)
+	GetByTravelSpotIDs(ctx context.Context, travelSpotIDs []entity.TravelSpotID) (entity.TravelSpotItineraries, error)
 	GetByKinds(ctx context.Context, kinds []string) (entity.TravelSpotItineraries, error)
 }
 

@@ -3,9 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"path/filepath"
-	"slices"
 	"strings"
 	"time"
 
@@ -220,36 +218,11 @@ func (u *TravelSpotUseCase) GetItineraries(ctx context.Context, userID entity.Us
 	if err != nil {
 		return nil, err
 	}
-	// 旅程の中から観光地と移動のみを取得
-	subTravelSpotItineraries, err := u.repository.TravelSpotItinerary().GetByKinds(ctx, []string{"spot", "move"})
-	if err != nil {
-		return nil, err
-	}
-
-	spotItineraries := make([]*entity.TravelSpotItinerary, 0)
-	for _, subTravelSpotItinerary := range subTravelSpotItineraries {
-		if subTravelSpotItinerary.Kind == "spot" {
-			spotItineraries = append(spotItineraries, subTravelSpotItinerary)
-			continue
-		}
-		travelSpotItineraries = append(travelSpotItineraries, subTravelSpotItinerary)
-	}
-
-	// spotが1つ以上ある場合、ランダムに1つ選択
-	if len(spotItineraries) > 0 {
-		randomIndex := rand.Intn(len(spotItineraries))
-		travelSpotItineraries = append(travelSpotItineraries, spotItineraries[randomIndex])
-	}
-
-	slices.SortFunc(travelSpotItineraries, func(a, b *entity.TravelSpotItinerary) int {
-		return a.Order - b.Order
-	})
 
 	travelSpotItineraryItems, err := u.repository.TravelSpotItineraryItem().GetByTravelSpotItineraryIDs(ctx, travelSpotItineraries.IDs())
 	if err != nil {
 		return nil, err
 	}
-
 	return &GetItinerariesOutput{
 		TravelSpotItineraries: travelSpotItineraries,
 		Items:                 travelSpotItineraryItems,
