@@ -45,3 +45,14 @@ func (t *TravelSpotDiary) GetByIDs(ctx context.Context, ids []entity.TravelSpotD
 	}
 	return res, nil
 }
+
+func (t *TravelSpotDiary) FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.TravelSpotDiary, error) {
+	res := &entity.TravelSpotDiary{}
+	if err := t.db.NewSelect().Model(res).
+		Where("user_id = ?", userID).
+		Where("travel_spot_id = ?", travelSpotID).
+		Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}

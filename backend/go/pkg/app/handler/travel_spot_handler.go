@@ -46,16 +46,22 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 		req          request.Diary
 	)
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "failed to decode request body", http.StatusBadRequest)
-		return
-	}
-
-	out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(req.UserID), travelSpotID)
-	if err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to decode request body: %w", err))
+			return
+		}
+	
+		date, err := time.Parse(time.DateOnly, req.Date)
+		if err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to parse date: %w", err))
+			return
+		}
+		out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(req.UserID), travelSpotID, date)
+		if err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to create diary: %w", err))
+			return
+		}
+	
 	// 画像ファイルとjsonを返す処理
 	w.Header().Set("Content-Type", "multipart/mixed; boundary=boundary")
 

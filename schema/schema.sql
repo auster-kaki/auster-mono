@@ -215,11 +215,14 @@ INSERT INTO auster.travel_spot_itinerary_item (id, travel_spot_itinerary_id, nam
 
 CREATE TABLE `travel_spot_diary`
 (
-    `id`          varchar(20) COLLATE utf8mb4_bin  NOT NULL,
-    `title`       varchar(255) COLLATE utf8mb4_bin NOT NULL,
-    `date`        date                             NOT NULL,
-    `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
-    `description` text COLLATE utf8mb4_bin         NOT NULL
+    `id`             varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `user_id`        varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `travel_spot_id` varchar(20) COLLATE utf8mb4_bin  NOT NULL,
+    `title`          varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `date`           date                             NOT NULL,
+    `photo_path`     varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `description`    text COLLATE utf8mb4_bin         NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='日記';

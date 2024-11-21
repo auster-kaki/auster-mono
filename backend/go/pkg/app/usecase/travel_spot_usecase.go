@@ -44,7 +44,7 @@ type CreateDiaryOutput struct {
 }
 
 // CreateDiary TODO: 画像・本文・タイトルの生成周りが未完成
-func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*CreateDiaryOutput, error) {
+func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID, date time.Time) (*CreateDiaryOutput, error) {
 	user, err := u.repository.User().FindByID(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find user: %w", err)
@@ -54,11 +54,29 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		return nil, fmt.Errorf("failed to find travel spot: %w", err)
 	}
 
-	id := austerid.Generate[entity.TravelSpotDiaryID]()
+	// 同じユーザで同じ体験が既に生成されたいた場合は再生成しないで即時返す
+	travelSpotDiary, err := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if err != nil && err != repository.ErrNotFound {
+		return nil, fmt.Errorf("failed to find travel spot diary: %w", err)
+	}
+	if travelSpotDiary != nil {
+		photo, err := austerstorage.Get(travelSpotDiary.PhotoPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get photo: %w", err)
+		}
+		return &CreateDiaryOutput{
+			ID:    travelSpotDiary.ID,
+			Title: travelSpotDiary.Title,
+			Photo: photo,
+			Body:  travelSpotDiary.Description,
+		}, nil
+	}
+
 	gOut, err := u.generateDiary(ctx, user, travelSpot)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate diary: %w", err)
 	}
+	id := austerid.Generate[entity.TravelSpotDiaryID]()
 	// goサーバにも画像を保存
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(austerstorage.PNG),
@@ -79,11 +97,13 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		description = d.Description
 	}
 	if err := u.repository.TravelSpotDiary().Create(ctx, entity.TravelSpotDiary{
-		ID:          id,
-		Title:       title,
-		Date:        time.Time{},
-		PhotoPath:   path,
-		Description: description,
+		ID:           id,
+		UserID:       userID,
+		TravelSpotID: travelSpotID,
+		Title:        title,
+		Date:         date,
+		PhotoPath:    path,
+		Description:  description,
 	}); err != nil {
 		return nil, fmt.Errorf("failed to create travel spot diary: %w", err)
 	}
@@ -98,8 +118,8 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 
 func (u *TravelSpotUseCase) generateDiary(ctx context.Context, user *entity.User, travelSpot *entity.TravelSpot) (*rpc.GetImagePathOutput, error) {
 	cOut, err := u.rpc.Diary().CreateImage(ctx, rpc.CreateImageInput{
-		SourcePath: user.ProfilePath,
-		TargetPath: travelSpot.PhotoPath,
+		SourcePath: travelSpot.PhotoPath,
+		TargetPath: user.ProfilePath,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create image: %w", err)
@@ -120,7 +140,7 @@ func (u *TravelSpotUseCase) generateDiary(ctx context.Context, user *entity.User
 		}
 		if gOut.Status == "ok" {
 			// 処理完了
-			fmt.Println("image generation completed")
+			fmt.Println("image generation completed. job id: ", cOut.JobID)
 			break
 		} else if gOut.Status == "error" {
 			return nil, fmt.Errorf("image generation failed: %s", gOut.Status)
