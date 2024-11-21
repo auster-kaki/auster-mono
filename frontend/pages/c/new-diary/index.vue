@@ -218,7 +218,7 @@ export default {
     },
     async handleSelectExperience(id) {
       try {
-        const response = await fetch(`${process.env.BASE_URL}/diaries`, {
+        const response = await fetch(`${process.env.BASE_URL}/travel_spots/${id}/diary`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
