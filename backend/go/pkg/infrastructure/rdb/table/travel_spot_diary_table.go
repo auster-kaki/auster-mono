@@ -24,7 +24,7 @@ func (t *TravelSpotDiary) Create(ctx context.Context, ents ...entity.TravelSpotD
 }
 
 func (t *TravelSpotDiary) Update(ctx context.Context, ent *entity.TravelSpotDiary) error {
-	if _, err := t.db.NewUpdate().Model(ent).Exec(ctx); err != nil {
+	if _, err := t.db.NewUpdate().Model(ent).Where("id = ?", ent.ID).Exec(ctx); err != nil {
 		return handleError(err)
 	}
 	return nil
