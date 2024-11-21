@@ -59,6 +59,7 @@ func NewDB() (*rdb, error) {
 		travelSpotItinerary:     table.NewTravelSpotItinerary(db),
 		travelSpotItineraryItem: table.NewTravelSpotItineraryItem(db),
 		travelSpotDiary:         table.NewTravelSpotDiary(db),
+		reservation:             table.NewReservation(db),
 		encounter:               table.NewEncounter(db),
 	}, nil
 }
