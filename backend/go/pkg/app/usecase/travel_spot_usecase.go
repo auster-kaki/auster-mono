@@ -45,26 +45,28 @@ type CreateDiaryOutput struct {
 
 // CreateDiary TODO: 画像・本文・タイトルの生成周りが未完成
 func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*CreateDiaryOutput, error) {
-	// 画像生成の仕組みが整ったら使用する
-	//travelSpot, err := u.repository.TravelSpot().FindByID(ctx, travelSpotID)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//diary, err := u.rpc.Diary().CreateImage(ctx, rpc.CreateImageInput{
-	//	SourcePath: travelSpot.Title,
-	//	TargetPath: travelSpot.Description,
-	//})
-	//if err != nil {
-	//	return nil, err
-	//}
-	diary := rpc.CreateImageOutput{}
+	user, err := u.repository.User().FindByID(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find user: %w", err)
+	}
+	travelSpot, err := u.repository.TravelSpot().FindByID(ctx, travelSpotID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find travel spot: %w", err)
+	}
 
-	path, err := austerstorage.Save(austerstorage.JPEG,
-		filepath.Join(string(userID), fmt.Sprintf("%s.jpg", diary.JobID)),
-		[]byte("test"),
+	id := austerid.Generate[entity.TravelSpotDiaryID]()
+	gOut, err := u.generateDiary(ctx, user, travelSpot)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate diary: %w", err)
+	}
+	// goサーバにも画像を保存
+	path, err := austerstorage.Save(
+		austerstorage.ContentType(austerstorage.PNG),
+		filepath.Join("diaries", string(id), gOut.Filename),
+		gOut.GeneratedImage,
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to save image: %w", err)
 	}
 
 	var (
@@ -76,8 +78,6 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		title = d.Title
 		description = d.Description
 	}
-
-	id := austerid.Generate[entity.TravelSpotDiaryID]()
 	if err := u.repository.TravelSpotDiary().Create(ctx, entity.TravelSpotDiary{
 		ID:          id,
 		Title:       title,
@@ -85,14 +85,63 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		PhotoPath:   path,
 		Description: description,
 	}); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create travel spot diary: %w", err)
 	}
+
 	return &CreateDiaryOutput{
 		ID:    id,
 		Title: title,
-		Photo: []byte("test"),
+		Photo: gOut.GeneratedImage,
 		Body:  description,
 	}, nil
+}
+
+func (u *TravelSpotUseCase) generateDiary(ctx context.Context, user *entity.User, travelSpot *entity.TravelSpot) (*rpc.GetImagePathOutput, error) {
+	cOut, err := u.rpc.Diary().CreateImage(ctx, rpc.CreateImageInput{
+		SourcePath: user.ProfilePath,
+		TargetPath: travelSpot.PhotoPath,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to create image: %w", err)
+	}
+
+	// ポーリング処理の設定
+	var (
+		maxRetries   = 90              // 最大リトライ回数
+		pollInterval = time.Second * 2 // ポーリング間隔
+	)
+	// ジョブの完了を待つポーリング処理
+	for i := 0; i < maxRetries; i++ {
+		gOut, err := u.rpc.Diary().GetStatus(ctx, rpc.GetStatusInput{
+			JobID: cOut.JobID,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("failed to get job status: %w", err)
+		}
+		if gOut.Status == "ok" {
+			// 処理完了
+			fmt.Println("image generation completed")
+			break
+		} else if gOut.Status == "error" {
+			return nil, fmt.Errorf("image generation failed: %s", gOut.Status)
+		}
+
+		// 最大リトライ回数に達した場合
+		if i == maxRetries-1 {
+			return nil, fmt.Errorf("timeout: image generation did not complete within %d attempts", maxRetries)
+		}
+
+		// 次のポーリングまで待機
+		time.Sleep(pollInterval)
+	}
+
+	gOut, err := u.rpc.Diary().GetImagePath(ctx, rpc.GetImagePathInput{
+		JobID: cOut.JobID,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("u.rpc.Diary(). failed to get image path: %w", err)
+	}
+	return &gOut, nil
 }
 
 // TODO: CreateDiary で何かを一時的に返す場合は↓を参考を元に CreateDiaryOutput に変換して返す
