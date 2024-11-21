@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -52,7 +51,7 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	date, err := time.ParseInLocation(time.DateOnly, req.Date, time.Local)
+	date, err := time.Parse(time.DateOnly, req.Date)
 	if err != nil {
 		response.HandleError(ctx, w, fmt.Errorf("failed to parse date: %w", err))
 		return
@@ -63,54 +62,23 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// 画像ファイルとjsonを返す処理
-	w.Header().Set("Content-Type", "multipart/mixed; boundary=boundary")
+	// Content-Typeをapplication/jsonに設定
+	w.Header().Set("Content-Type", "application/json")
 
-	// マルチパートレスポンスを生成
-	mw := multipart.NewWriter(w)
-	defer mw.Close()
+	// レスポンスデータの構造を修正
+	res := map[string]any{
+		"ID":        out.ID,
+		"Title":     out.Title,
+		"Body":      out.Description,
+		"PhotoPath": out.PhotoPath,
+	}
 
-	// ユーザー情報をjsonで返す
-	j, err := json.Marshal(map[string]any{
-		"ID":    out.ID,
-		"Title": out.Title,
-		"Body":  out.Body,
-	})
-	if err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
-	}
-	// ユーザー情報をマルチパートレスポンスに書き込む
-	p, err := mw.CreatePart(map[string][]string{
-		"Content-Type": {"application/json"},
-	})
-	if err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
-	}
-	if _, err := p.Write(j); err != nil {
-		response.HandleError(r.Context(), w, err)
+	// JSONエンコード
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		response.HandleError(ctx, w, err)
 		return
 	}
 
-	// 画像をマルチパートレスポンスに書き込む
-	imagePart, err := mw.CreatePart(map[string][]string{
-		"Content-Type": {"image/png"},
-	})
-	if err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
-	}
-	if _, err := imagePart.Write(out.Photo); err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
-	}
-
-	// マルチパートレスポンスを閉じる
-	if err := mw.Close(); err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
-	}
 }
 
 func (h *TravelSpotHandler) GetItineraries(w http.ResponseWriter, r *http.Request) {
