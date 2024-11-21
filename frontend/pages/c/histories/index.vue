@@ -28,18 +28,16 @@
       <v-tab-item>
         <v-list>
           <v-list-item
-            v-for="(person, index) in people"
+            v-for="(encounter, index) in encounters"
             :key="index"
-            @click="openPersonModal(person)"
+            @click="openEncounterModal(encounter)"
           >
             <v-list-item-avatar>
-              <v-img :src="person.avatar"></v-img>
+              <v-img :src="encounter.avatar"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ person.name }}</v-list-item-title>
-              <v-list-item-subtitle
-                >{{ person.location }}
-              </v-list-item-subtitle>
+              <v-list-item-title>{{ encounter.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ encounter.place }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -48,107 +46,132 @@
     <v-dialog v-model="diaryModalOpen" max-width="600">
       <diary-component :diary="selectedDiary" />
     </v-dialog>
-    <v-dialog v-model="personModalOpen" max-width="600">
-      <v-card v-if="selectedPerson">
-        <v-card-title>{{ selectedPerson.name }}</v-card-title>
-        <v-card-subtitle>{{ selectedPerson.location }}</v-card-subtitle>
+    <v-dialog v-model="encounterModalOpen" max-width="600">
+      <v-card v-if="selectedEncounter">
+        <v-card-title>{{ selectedEncounter.name }}
+          <v-spacer />
+          <v-btn color="primary" outlined @click="openChat(selectedEncounter)">チャットを開く</v-btn>
+        </v-card-title>
+        <v-card-subtitle>{{ selectedEncounter.place }}</v-card-subtitle>
         <v-card-text>
-          <p>{{ selectedPerson.experience }}</p>
-          <v-btn @click="openChat(selectedPerson)">チャットを開く</v-btn>
+          <v-list>
+            <v-list-item v-for="(detail, index) in selectedEncounter.details" :key="index">
+              <v-list-item-content>
+                <v-list-item-subtitle class="text-subtitle-2">{{ detail.date }}</v-list-item-subtitle>
+                <v-list-item-title class="text-h6">{{ detail.description }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar" color="accent" :timeout="3000">
+      チャットが開始できる想定です
+      <template #action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="snackbar = false">
+          閉じる
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import DiaryCard from '@/components/c/diary/DiaryCard.vue'
 import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
+import { useUserStore } from '~/store/user'
 
 export default {
   components: {
     DiaryCard,
-    DiaryComponent,
+    DiaryComponent
   },
   layout: 'mobile',
   data() {
     return {
+      userInfo: {},
       activeTab: null,
       diaries: [],
-      people: [],
+      encounters: [],
       diaryModalOpen: false,
-      personModalOpen: false,
+      encounterModalOpen: false,
+      snackbar: false,
       selectedDiary: null,
-      selectedPerson: null,
+      selectedEncounter: null
     }
   },
-  mounted() {
-    this.fetchDiaries()
-    this.fetchPeople()
+  async mounted() {
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
+    await this.fetchHistories()
   },
   methods: {
-    fetchDiaries() {
-      // API通信のコメントアウト
-      // const response = await axios.get('/api/trips')
-      // this.trips = response.data
+    async fetchHistories() {
+      try {
+        const params = new URLSearchParams({
+          user_id: this.userInfo.id,
+          filter: 'yet'
+        })
+        const response = await fetch(`${process.env.BASE_URL}/reservations?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response.json())
+        this.diaries = response.json()
+      } catch (error) {
+        console.error('履歴の取得に失敗しました', error)
+      }
 
-      // ダミーデータ
-      this.diaries = [
-        {
-          id: 1,
-          title: '美しい富士山',
-          date: '2023-05-01',
-          location: '山梨県',
-          content:
-            '富士山の麓でキャンプを楽しみました。澄んだ空気と雄大な景色に感動しました。',
-          image: 'https://example.com/fuji.jpg',
-        },
-        {
-          id: 2,
-          title: '古都京都の旅',
-          date: '2023-06-15',
-          location: '京都府',
-          content:
-            '金閣寺や清水寺など、歴史ある寺社を巡りました。日本の伝統文化に触れる素晴らしい経験でした。',
-          image: 'https://example.com/kyoto.jpg',
-        },
-      ]
-    },
-    fetchPeople() {
-      // API通信のコメントアウト
-      // const response = await axios.get('/api/people')
-      // this.people = response.data
+      try {
+        const params = new URLSearchParams({
+          user_id: this.userInfo.id
+        })
+        const response = await fetch(`${process.env.BASE_URL}/encounters?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await response.json()
 
-      // ダミーデータ
-      this.people = [
-        {
-          id: 1,
-          name: '山田太郎',
-          location: '北海道',
-          avatar: 'https://example.com/yamada.jpg',
-          experience:
-            '北海道の大自然の中でのサバイバル体験を教えてくれました。',
-        },
-        {
-          id: 2,
-          name: '佐藤花子',
-          location: '沖縄県',
-          avatar: 'https://example.com/sato.jpg',
-          experience: '沖縄の伝統的な織物技術を教えてくれました。',
-        },
-      ]
+        // nameでグループ化し、date,descriptionを配列にする
+        const groupedEncounters = data.reduce((acc, curr) => {
+          if (!acc[curr.Name]) {
+            acc[curr.Name] = {
+              name: curr.Name,
+              place: curr.Place,
+              details: []
+            }
+          }
+          acc[curr.Name].details.push({
+            date: this.formatDate(curr.Date),
+            description: curr.Description
+          })
+          return acc
+        }, {})
+
+        this.encounters = Object.values(groupedEncounters)
+      } catch (error) {
+        console.error('関係事業者の取得に失敗しました', error)
+      }
     },
     openDiaryModal(diary) {
       this.selectedDiary = diary
       this.diaryModalOpen = true
     },
-    openPersonModal(person) {
-      this.selectedPerson = person
-      this.personModalOpen = true
+    openEncounterModal(encounter) {
+      this.selectedEncounter = encounter
+      this.encounterModalOpen = true
     },
-    openChat(person) {
-      // チャットを開く処理
+    openChat() {
+      this.snackbar = true
     },
-  },
+    formatDate(dateString) {
+      return dateString.split('T')[0]
+    }
+  }
 }
 </script>

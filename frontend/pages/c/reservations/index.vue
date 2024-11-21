@@ -63,11 +63,14 @@
 </template>
 
 <script>
+import { useUserStore } from '~/store/user'
+
 export default {
   name: 'IndexPage',
   layout: 'mobile',
   data() {
     return {
+      userInfo: {},
       reservations: [],
       snackbar: {
         show: false,
@@ -79,13 +82,14 @@ export default {
       }
     }
   },
-  async created() {
-    await this.fetchReservations()
-  },
-  mounted() {
+  async mounted() {
     if (this.$route.query.reservation === 'success') {
       this.showSnackbar('予約が完了しました！')
     }
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
+    await this.fetchReservations()
   },
   methods: {
     formatDate(date) {
@@ -95,39 +99,53 @@ export default {
       this.$router.push(`/c/reservations/${id}/itinerary`)
     },
     async fetchReservations() {
+      const params = new URLSearchParams({
+        user_id: this.userInfo.id,
+        filter: 'yet'
+      })
       try {
+        const response = await fetch(`${process.env.BASE_URL}/reservations?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
         // API呼び出しのコメントアウト
         // const response = await this.$axios.get('/api/reservations_filter=yet')
         // this.reservations = response.data
 
+        this.reservations = response
         // ダミーデータを返す
-        this.reservations = [
-          {
-            id: 1,
-            title: '東京旅行',
-            departureDate: '2023-07-01',
-            departureCity: '大阪',
-            image: 'https://example.com/tokyo.jpg'
-          },
-          {
-            id: 2,
-            title: '京都観光',
-            departureDate: '2023-08-15',
-            departureCity: '名古屋',
-            image: 'https://example.com/kyoto.jpg'
-          },
-          {
-            id: 3,
-            title: '北海道ツアー',
-            departureDate: '2023-09-20',
-            departureCity: '東京',
-            image: 'https://example.com/hokkaido.jpg'
-          }
-        ]
-      } catch (error) {
+        // this.reservations = [
+        //   {
+        //     id: 1,
+        //     title: '東京旅行',
+        //     departureDate: '2023-07-01',
+        //     departureCity: '大阪',
+        //     image: 'https://example.com/tokyo.jpg'
+        //   },
+        //   {
+        //     id: 2,
+        //     title: '京都観光',
+        //     departureDate: '2023-08-15',
+        //     departureCity: '名古屋',
+        //     image: 'https://example.com/kyoto.jpg'
+        //   },
+        //   {
+        //     id: 3,
+        //     title: '北海道ツアー',
+        //     departureDate: '2023-09-20',
+        //     departureCity: '東京',
+        //     image: 'https://example.com/hokkaido.jpg'
+        //   }
+        // ]
+      } catch
+        (error) {
         console.error('予約の取得に失敗しました', error)
       }
-    },
+    }
+    ,
     showSnackbar(text) {
       this.snackbar.text = text
       this.snackbar.show = true
