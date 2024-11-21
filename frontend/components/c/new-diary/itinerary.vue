@@ -11,8 +11,7 @@ export default {
       required: true
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
@@ -47,9 +46,10 @@ export default {
             {{ item.kind === 'move' ? '移動' : '体験' }} <p>{{ item.description }}</p>
           </v-card-title>
           <v-card-text>
-            <p>所要時間: {{ item.takeTime }}</p>
-            <p v-if="item.kind !== 'move'">費用: {{ item.price }}円</p>
-            <p>順番: {{ item.Order }}</p>
+            <div class="d-flex justify-space-between align-center">
+              <div>所要時間: {{ item.takeTime }}分</div>
+              <div v-if="item.kind !== 'move'">{{ item.price }}円</div>
+            </div>
           </v-card-text>
         </v-card>
       </v-timeline-item>
