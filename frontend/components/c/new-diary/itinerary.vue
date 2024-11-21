@@ -11,14 +11,7 @@ export default {
       required: true
     }
   },
-  emits: ['goBack', 'goToConfirm'],
   methods: {
-    onGoBack() {
-      this.$emit('goBack')
-    },
-    onGoToConfirm() {
-      this.$emit('goToConfirm')
-    }
   }
 }
 </script>
@@ -44,17 +37,19 @@ export default {
         </v-card>
       </v-timeline-item>
       <v-timeline-item
-        v-for="(item, index) in itinerary"
-        :key="index"
-        :color="item.type === '移動' ? 'grey' : 'primary'"
+        v-for="item in itinerary"
+        :key="item.id"
+        :color="item.kind === 'move' ? 'grey' : 'primary'"
         small
       >
         <v-card>
           <v-card-title class="text-h6">
-            {{ item.type }}
+            {{ item.kind === 'move' ? '移動' : '体験' }} <p>{{ item.description }}</p>
           </v-card-title>
           <v-card-text>
-            {{ item.description }}
+            <p>所要時間: {{ item.takeTime }}</p>
+            <p v-if="item.kind !== 'move'">費用: {{ item.price }}円</p>
+            <p>順番: {{ item.Order }}</p>
           </v-card-text>
         </v-card>
       </v-timeline-item>

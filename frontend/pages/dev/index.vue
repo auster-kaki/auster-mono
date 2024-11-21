@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
 import DiaryCarousel from '@/components/c/diary/DiaryCarousel.vue'
 
 const baseUrl = ref('https://api.example.com')

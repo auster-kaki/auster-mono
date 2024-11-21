@@ -32,7 +32,7 @@ export default {
         formData.append('age', this.newUser.age)
         formData.append('hobbies', JSON.stringify(this.newUser.hobbies))
         formData.append('photo', this.newUser.photo)
-        fetch('http://localhost:8080/users', {
+        fetch(`${process.env.BASE_URL}/users`, {
           method: 'POST',
           body: formData
         })
@@ -44,7 +44,7 @@ export default {
           })
           .then(data => {
             useUserStore().updateUserInfo({ id: data.id })
-            this.$router.push({ path: '/c/home', query: { createUser: 'success' } })
+            this.$router.push({ path: '/c/settings', query: { createUser: 'success' } })
           })
           .catch(error => {
             console.error('Error:', error)

@@ -28,6 +28,25 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      dense
+      :close-text="snackbar.closeText"
+      :close-icon="snackbar.closeIcon"
+    >
+      {{ snackbar.text }}
+      <template #action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          <v-icon>{{ snackbar.closeIcon }}</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -42,9 +61,20 @@ export default {
       valid: false,
       selectedUser: 'csuk4ob6mh8s73e2f2ug',
       users: [],
+      snackbar: {
+        show: false,
+        text: '',
+        timeout: 3000,
+        color: 'success',
+        closeText: '閉じる',
+        closeIcon: 'mdi-close'
+      }
     }
   },
   async mounted() {
+    if (this.$route.query.createUser === 'success') {
+      this.showSnackbar('ユーザー作成が完了しました！')
+    }
     // await this.loadUserSettings()
     const userStore = useUserStore()
     userStore.initializeUser()
@@ -84,6 +114,10 @@ export default {
     changeUser(_id) {
       const userStore = useUserStore()
       userStore.updateUserInfo({ id: this.selectedUser })
+    },
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
     }
   }
 }

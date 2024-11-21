@@ -59,9 +59,10 @@
             :items="interestOptions"
             item-text="name"
             item-value="id"
-            label="興味関心"
+            label="趣味"
             outlined
             dense
+            :error-messages="interestError"
           ></v-select>
         </v-col>
       </v-row>
@@ -108,7 +109,7 @@ export default {
     tomorrow.setDate(tomorrow.getDate() + 1)
 
     return {
-      departurePlace: this.initialDeparturePlace,
+      departurePlace: this.initialDeparturePlace || '東京',
       departureDate: this.initialDepartureDate || today.toISOString().substr(0, 10),
       departureTime: this.initialDepartureTime || '12:00',
       returnDate: this.initialReturnDate || tomorrow.toISOString().substr(0, 10),
@@ -118,19 +119,36 @@ export default {
       interestOptions: [
         { id: 'cstkdiat6c3011a83so0', name: '釣り' },
         { id: 'cstkdiat6c3011a83sog', name: 'キャンプ' },
-      ]
+      ],
+      interestError: ''
     }
   },
   methods: {
     onSubmit() {
-      this.$emit('submit', {
-        departurePlace: this.departurePlace,
-        departureDate: this.departureDate,
-        departureTime: this.departureTime,
-        returnDate: this.returnDate,
-        returnTime: this.returnTime,
-        interests: this.interests
-      })
+      if (this.validateInterests()) {
+        this.$emit('submit', {
+          departurePlace: this.departurePlace,
+          departureDate: this.departureDate,
+          departureTime: this.departureTime,
+          returnDate: this.returnDate,
+          returnTime: this.returnTime,
+          interests: this.interests
+        })
+      }
+    },
+    validateInterests() {
+      if (this.interests.length === 0 || this.interests.includes('cstkdiat6c3011a83so0')) {
+        this.interestError = ''
+        return true
+      } else {
+        this.interestError = 'デモ版では「釣り」のみ選択できます'
+        return false
+      }
+    }
+  },
+  watch: {
+    interests() {
+      this.validateInterests()
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-tabs v-model="activeTab">
-      <v-tab>過去の旅</v-tab>
+      <v-tab>日記</v-tab>
       <v-tab>出会った人々</v-tab>
     </v-tabs>
 
