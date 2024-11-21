@@ -8,6 +8,7 @@ interface Diary {
   date: string
   location: string
   content: string
+  isOffer?: boolean
 }
 
 const props = defineProps<{
@@ -19,15 +20,40 @@ const emit = defineEmits(['click'])
 const openDiaryModal = () => {
   emit('click', props.value)
 }
+
 </script>
 
 <template>
   <v-card @click="openDiaryModal">
-    <v-img :src="value.image" height="200"></v-img>
+    <v-img :src="value.image" height="200" style="position:relative">
+      <v-chip
+        v-if="value.isOffer"
+        style="position:absolute; top: 15px; right: 10px;"
+        class="elevation-4"
+        color="accent"
+        :class="['animate-bounce']"
+      >
+        <v-icon size="24">mdi-email</v-icon>
+        <strong>スペシャルオファー！</strong>
+      </v-chip>
+    </v-img>
     <v-card-title>{{ value.title }}</v-card-title>
     <v-card-subtitle>{{ value.date }} - {{ value.location }}</v-card-subtitle>
-    <v-card-text>{{ value.content.substring(0, 100) }}...</v-card-text>
+    <v-card-text>{{ value.content ? value.content.substring(0, 100) + '...' : '' }}</v-card-text>
   </v-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+</style>

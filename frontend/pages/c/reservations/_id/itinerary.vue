@@ -1,11 +1,10 @@
 <script>
-import DiaryCarousel from '~/components/c/diary/DiaryCarousel.vue'
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
-import HistoryDiary from '~/components/c/diary/HistoryDiary.vue'
+import ReservationDiary from '~/components/c/diary/ReservationDiary.vue'
 
 export default {
   name: 'Itinerary',
-  components: { HistoryDiary, NewDiaryItinerary, DiaryCarousel },
+  components: { ReservationDiary, NewDiaryItinerary },
   layout: 'mobile',
   data() {
     return {
@@ -16,6 +15,7 @@ export default {
         title: '',
         content: ''
       },
+      diaryContent: '',
       bring: [],
       itinerary: []
     }
@@ -36,16 +36,19 @@ export default {
     this.diary = {
       id: 1,
       date: '2024/11/23',
-      image: 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
+      image: 'http://localhost:3000/auster-mono/destination/choshi.jpg',
       title: 'ダミーデータ！！！',
       content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
     }
+    this.diaryContent = '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
   },
   methods: {
     async fetchItinerary() {
       try {
-        const response = await fetch(`/api/reservations/${this.$route.params.id}`)
+        const response = await fetch(`${process.env.BASE_URL}/reservations/${this.$route.params.id}`)
         const data = await response.json()
+        // TODO diaryに入れる
+        // TODO diaryContentにも入れる
         // TODO: レスポンスを適切に格納する処理を実装する
         console.log(data)
       } catch (error) {
@@ -82,8 +85,8 @@ export default {
         console.error('Error uploading image:', error)
       }
     },
-    async updateDiary(updatedDiary) {
-      console.log('updateDiary', updatedDiary)
+    async updateDiary(updatedDescription) {
+      console.log('updateDiary', updatedDescription)
       try {
         const response = await fetch(`${process.env.BASE_URL}/reservations/${this.$route.params.id}/diary_description`, {
           method: 'PATCH',
@@ -91,13 +94,14 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            Description: updatedDiary.content
+            Description: updatedDescription
           })
         })
 
         if (response.ok) {
           console.log('Diary updated successfully')
-          this.diary = updatedDiary
+          this.diary.content = updatedDescription
+          this.diaryContent = updatedDescription
         } else {
           console.error('Failed to update diary')
         }
@@ -112,13 +116,15 @@ export default {
 <template>
   <v-container class="mb-8">
     <h2 class="text-center mb-4">日記</h2>
-    <HistoryDiary
-      v-model="diary"
+    <ReservationDiary
+      v-model="diaryContent"
+      :diary="diary"
       class="mb-8"
       :is-history="true"
       @camera-click="onDiaryClick"
       @update-diary="updateDiary"
     />
+    {{ diaryContent }}
     <h2 class="text-center">旅程</h2>
     <NewDiaryItinerary
       :bring="bring"
