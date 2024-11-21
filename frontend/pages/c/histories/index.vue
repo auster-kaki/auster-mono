@@ -43,8 +43,8 @@
         </v-list>
       </v-tab-item>
     </v-tabs-items>
-    <v-dialog v-model="diaryModalOpen" max-width="600">
-      <diary-component :diary="selectedDiary" />
+    <v-dialog v-model="diaryModalOpen">
+      <history-diary :diary="selectedDiary" :is-offer="selectedDiary?.isOffer" />
     </v-dialog>
     <v-dialog v-model="encounterModalOpen" max-width="600">
       <v-card v-if="selectedEncounter">
@@ -78,13 +78,13 @@
 
 <script>
 import DiaryCard from '@/components/c/diary/DiaryCard.vue'
-import DiaryComponent from '@/components/c/diary/DiaryComponent.vue'
 import { useUserStore } from '~/store/user'
+import HistoryDiary from '~/components/c/diary/HistoryDiary.vue'
 
 export default {
   components: {
-    DiaryCard,
-    DiaryComponent
+    HistoryDiary,
+    DiaryCard
   },
   layout: 'mobile',
   data() {
@@ -119,8 +119,16 @@ export default {
             'Content-Type': 'application/json'
           }
         })
-        console.log(response.json())
-        this.diaries = response.json()
+        const res = await response.json()
+        this.diaries = res.map(item => ({
+          image: 'todo',
+          title: item.ID,
+          date: item.FromDate.split('T')[0],
+          location: item.TravelSpotID,
+          content: item.TravelSpotDairyID,
+          isOffer: item.IsOffer
+        }))
+
       } catch (error) {
         console.error('履歴の取得に失敗しました', error)
       }
@@ -137,7 +145,6 @@ export default {
         })
         const data = await response.json()
 
-        // nameでグループ化し、date,descriptionを配列にする
         const groupedEncounters = data.reduce((acc, curr) => {
           if (!acc[curr.Name]) {
             acc[curr.Name] = {
@@ -159,6 +166,7 @@ export default {
       }
     },
     openDiaryModal(diary) {
+      console.log(diary, this.diaries)
       this.selectedDiary = diary
       this.diaryModalOpen = true
     },
@@ -170,6 +178,10 @@ export default {
       this.snackbar = true
     },
     formatDate(dateString) {
+      if (!dateString) {
+        console.log('formatDate target not found', dateString)
+        return dateString
+      }
       return dateString.split('T')[0]
     }
   }

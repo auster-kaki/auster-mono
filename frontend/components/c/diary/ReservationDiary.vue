@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card style="position: relative;" flat>
+  <v-container class="pa-2">
+    <v-card style="position: relative;" elevation-4>
       <v-container>
         <v-row class="pa-2 align-center">
           <div class="custom-button mr-2">
@@ -14,77 +14,73 @@
         <v-row class="px-2">
           <v-img
             :src="diary.image"
-            style="border-radius: 4px;position:relative"
+            style="border-radius: 4px; position:relative"
             :alt="diary.title"
             cover
             height="270"
             width="100%"
           >
             <v-chip
-              v-if="isOffer"
-              style="position:absolute; top: 15px; right: 10px;"
+              style="position:absolute; bottom: 10px; right: 10px; background: #fafafa !important;"
               class="elevation-4"
-              color="accent"
-              :class="['animate-bounce']"
+              text-color="accent"
+              @click="handleChipClick"
             >
-              <v-icon size="24">mdi-email</v-icon>
-              <strong>スペシャルオファー！</strong>
+              <v-icon size="24" color="accent">mdi-camera</v-icon>
+              画像更新
             </v-chip>
           </v-img>
         </v-row>
       </v-container>
 
       <v-card-text class="text-body-1" style="overflow-y: auto;">
-        <div>{{ diary.content }}</div>
+        <v-textarea
+          :value="value"
+          label="日記本文"
+          auto-grow
+          rows="7"
+          outlined
+          dense
+          @input="updateContent"
+        />
       </v-card-text>
       <v-card-actions>
-        <v-btn
-          color="primary"
-          class="px-4 py-2 mb-2"
-          @click="acceptTheOffer"
-        >
-          <span class="text-white font-weight-bold">オファーを受ける</span>
-        </v-btn>
         <v-spacer />
-        <v-btn icon @click="showShareMessage">
-          <v-icon size="x-large">mdi-share-variant</v-icon>
-        </v-btn>
-        <v-btn icon class="mr-4" @click="showDownloadMessage">
-          <v-icon size="x-large">mdi-download</v-icon>
-        </v-btn>
+        <v-btn dense class="primary" @click="updateDiary">日記更新</v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar v-model="snackbar" :timeout="2000" color="accent" class="text-center">
       {{ snackbarMessage }}
     </v-snackbar>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 export default {
   props: {
-    diary: {
-      type: [Object],
+    value: {
+      type: String,
       required: true
     },
-    isOffer: {
-      type: [Boolean],
+    diary: {
+      type: Object,
+      required: true
+    },
+    isHistory: {
+      type: Boolean,
       default: false
     }
   },
+  emits: ['input', 'camera-click', 'update-diary'],
   setup(props, { emit }) {
     const snackbar = ref(false)
     const snackbarMessage = ref('')
     const localContent = ref(props.diary.content)
 
-    watch(() => props.diary.content, (newContent) => {
-      localContent.value = newContent
-    })
-
     const updateContent = (value) => {
-      emit('update:content', value)
+      emit('input', value)
     }
 
     const showMessage = (message) => {
@@ -100,20 +96,17 @@ export default {
       showMessage('ブックマークして後から見返せるようになる予定です')
     }
 
-    const showShareMessage = () => {
-      showMessage('SNSでシェアできるようになる予定です')
-    }
-
-    const acceptTheOffer = () => {
-      showMessage('オファーを受けて、旅程が組まれる予定です')
-    }
-
     const handleSelect = () => {
-      emit('select', props.diary.id)
+      emit('select', props.value.id)
     }
 
     const updateDiary = () => {
+      emit('update-diary', props.value)
       showMessage('日記が更新されました')
+    }
+
+    const handleChipClick = () => {
+      emit('camera-click')
     }
 
     return {
@@ -123,10 +116,9 @@ export default {
       updateContent,
       showDownloadMessage,
       showBookmarkMessage,
-      showShareMessage,
-      acceptTheOffer,
       handleSelect,
-      updateDiary
+      updateDiary,
+      handleChipClick
     }
   }
 }
@@ -154,18 +146,5 @@ export default {
   border-radius: 2px;
   font-size: 16px;
   font-weight: bold;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-bounce {
-  animation: bounce 2s infinite;
 }
 </style>

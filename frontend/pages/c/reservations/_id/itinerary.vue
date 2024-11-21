@@ -1,10 +1,10 @@
 <script>
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
-import HistoryDiary from '~/components/c/diary/HistoryDiary.vue'
+import ReservationDiary from '~/components/c/diary/ReservationDiary.vue'
 
 export default {
   name: 'Itinerary',
-  components: { HistoryDiary, NewDiaryItinerary },
+  components: { ReservationDiary, NewDiaryItinerary },
   layout: 'mobile',
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
 <template>
   <v-container class="mb-8">
     <h2 class="text-center mb-4">日記</h2>
-    <HistoryDiary
+    <ReservationDiary
       v-model="diaryContent"
       :diary="diary"
       class="mb-8"
