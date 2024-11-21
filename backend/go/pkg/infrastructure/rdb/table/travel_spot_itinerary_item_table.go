@@ -25,7 +25,7 @@ func (t *TravelSpotItineraryItem) Create(ctx context.Context, ents ...entity.Tra
 
 func (t *TravelSpotItineraryItem) GetByTravelSpotItineraryIDs(ctx context.Context, travelSpotItineraryIDs []entity.TravelSpotItineraryID) (entity.TravelSpotItineraryItems, error) {
 	res := entity.TravelSpotItineraryItems{}
-	if err := t.db.NewSelect().Model(&res).Where("travel_spot_id IN (?)", bun.In(travelSpotItineraryIDs)).Scan(ctx); err != nil {
+	if err := t.db.NewSelect().Model(&res).Where("travel_spot_itinerary_id IN (?)", bun.In(travelSpotItineraryIDs)).Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
