@@ -2,9 +2,10 @@ package usecase
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"math/rand"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 
@@ -55,19 +56,15 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	}
 
 	// 同じユーザで同じ体験が既に生成されたいた場合は再生成しないで即時返す
-	travelSpotDiary, err := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
-	if err != nil && !errors.Is(err, repository.ErrNotFound) {
-		return nil, fmt.Errorf("failed to find travel spot diary: %w", err)
+	travelSpotDiary, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if dErr != nil && dErr != repository.ErrNotFound {
+		return nil, fmt.Errorf("failed to find travel spot diary: %w", dErr)
 	}
 	if travelSpotDiary != nil {
-		// photo, err := austerstorage.Get(travelSpotDiary.PhotoPath)
-		// if err != nil {
-		// 	return nil, fmt.Errorf("failed to get photo: %w", err)
-		// }
 		return &CreateDiaryOutput{
 			ID:          travelSpotDiary.ID,
 			Title:       travelSpotDiary.Title,
-			PhotoPath:   travelSpot.PhotoPath,
+			PhotoPath:   travelSpotDiary.PhotoPath,
 			Description: travelSpotDiary.Description,
 		}, nil
 	}
@@ -219,11 +216,36 @@ func (u *TravelSpotUseCase) GetItineraries(ctx context.Context, userID entity.Us
 	if err != nil {
 		return nil, err
 	}
+	// 旅程の中から観光地と移動のみを取得
+	subTravelSpotItineraries, err := u.repository.TravelSpotItinerary().GetByKinds(ctx, []string{"spot", "move"})
+	if err != nil {
+		return nil, err
+	}
+
+	spotItineraries := make([]*entity.TravelSpotItinerary, 0)
+	for _, subTravelSpotItinerary := range subTravelSpotItineraries {
+		if subTravelSpotItinerary.Kind == "spot" {
+			spotItineraries = append(spotItineraries, subTravelSpotItinerary)
+			continue
+		}
+		travelSpotItineraries = append(travelSpotItineraries, subTravelSpotItinerary)
+	}
+
+	// spotが1つ以上ある場合、ランダムに1つ選択
+	if len(spotItineraries) > 0 {
+		randomIndex := rand.Intn(len(spotItineraries))
+		travelSpotItineraries = append(travelSpotItineraries, spotItineraries[randomIndex])
+	}
+
+	slices.SortFunc(travelSpotItineraries, func(a, b *entity.TravelSpotItinerary) int {
+		return a.Order - b.Order
+	})
 
 	travelSpotItineraryItems, err := u.repository.TravelSpotItineraryItem().GetByTravelSpotItineraryIDs(ctx, travelSpotItineraries.IDs())
 	if err != nil {
 		return nil, err
 	}
+
 	return &GetItinerariesOutput{
 		TravelSpotItineraries: travelSpotItineraries,
 		Items:                 travelSpotItineraryItems,
