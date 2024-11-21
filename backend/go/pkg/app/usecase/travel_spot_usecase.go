@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -55,7 +56,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 
 	// 同じユーザで同じ体験が既に生成されたいた場合は再生成しないで即時返す
 	travelSpotDiary, err := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
-	if err != nil && err != repository.ErrNotFound {
+	if err != nil && !errors.Is(err, repository.ErrNotFound) {
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", err)
 	}
 	if travelSpotDiary != nil {
