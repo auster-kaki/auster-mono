@@ -150,6 +150,7 @@ func (u *TravelSpotUseCase) GetItineraries(ctx context.Context, userID entity.Us
 	for _, subTravelSpotItinerary := range subTravelSpotItineraries {
 		if subTravelSpotItinerary.Kind == "spot" {
 			spotItineraries = append(spotItineraries, subTravelSpotItinerary)
+			continue
 		}
 		travelSpotItineraries = append(travelSpotItineraries, subTravelSpotItinerary)
 	}
