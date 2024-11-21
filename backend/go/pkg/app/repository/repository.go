@@ -68,6 +68,7 @@ type TravelSpotDiaryRepository interface {
 	Update(ctx context.Context, travelSpotDiary *entity.TravelSpotDiary) error
 	FindByID(ctx context.Context, id entity.TravelSpotDiaryID) (*entity.TravelSpotDiary, error)
 	GetByIDs(ctx context.Context, ids []entity.TravelSpotDiaryID) (entity.TravelSpotDiaries, error)
+	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.TravelSpotDiary, error)
 }
 
 type ReservationRepository interface {

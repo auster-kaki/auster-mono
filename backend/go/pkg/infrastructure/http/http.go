@@ -15,8 +15,6 @@ import (
 	appRPC "github.com/auster-kaki/auster-mono/pkg/app/rpc"
 )
 
-const imageRoot = "/assets"
-
 type Client struct {
 	client *http.Client
 	host   string
@@ -27,7 +25,8 @@ func NewClient() *Client {
 	return &Client{
 		client: &http.Client{},
 		host:   cmp.Or(os.Getenv("DIARY_HOST"), "localhost"),
-		port:   cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
+		//NOTE: ローカル環境で利用する場合は80にする
+		port: cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
 	}
 }
 
@@ -77,7 +76,6 @@ func (c *Client) CreateImage(ctx context.Context, input appRPC.CreateImageInput)
 	if err != nil {
 		return appRPC.CreateImageOutput{}, err
 	}
-
 	writer.Close()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.URL()+"/process", &buf)
@@ -138,34 +136,28 @@ func (c *Client) GetStatus(ctx context.Context, input appRPC.GetStatusInput) (ap
 
 // ファイル書き込みの設定をしてないので、未検証
 func (c *Client) GetImagePath(ctx context.Context, input appRPC.GetImagePathInput) (appRPC.GetImagePathOutput, error) {
-
-	filename := fmt.Sprintf("%s.png", input.JobID)
-	url := fmt.Sprintf(c.URL() + "/generated/" + filename)
-
-	response, err := http.Get(url)
+	var (
+		filename = fmt.Sprintf("%s.png", input.JobID)
+		url      = fmt.Sprintf(c.URL() + "/generated/" + filename)
+	)
+	res, err := http.Get(url)
 	if err != nil {
 		return appRPC.GetImagePathOutput{}, fmt.Errorf("failed to get image: %w", err)
 	}
-	defer response.Body.Close()
+	defer res.Body.Close()
 
 	// ステータスコードを確認
-	if response.StatusCode != http.StatusOK {
-		return appRPC.GetImagePathOutput{}, fmt.Errorf("server error: status code %d", response.StatusCode)
+	if res.StatusCode != http.StatusOK {
+		return appRPC.GetImagePathOutput{}, fmt.Errorf("server error: status code %d", res.StatusCode)
 	}
 
-	outFile, err := os.Create(filepath.Join(imageRoot, filename))
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return appRPC.GetImagePathOutput{}, fmt.Errorf("failed to create file: %w", err)
-	}
-	defer outFile.Close()
-
-	// レスポンスボディをファイルに書き込む
-	_, err = io.Copy(outFile, response.Body)
-	if err != nil {
-		return appRPC.GetImagePathOutput{}, fmt.Errorf("failed to write file: %w", err)
+		return appRPC.GetImagePathOutput{}, fmt.Errorf("failed to read body: %w", err)
 	}
 
 	return appRPC.GetImagePathOutput{
-		ImageURL: filepath.Join(imageRoot, filename),
+		GeneratedImage: body,
+		Filename:       filename,
 	}, nil
 }

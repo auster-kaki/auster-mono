@@ -13,6 +13,7 @@ type TravelSpot struct {
 	TakeTime    int
 	Description string
 	Address     string
+	PhotoPath   string
 
 	// これで設定したtableタグでbunがテーブル名を解決する
 	bun.BaseModel `bun:"table:travel_spot,alias:ts"`

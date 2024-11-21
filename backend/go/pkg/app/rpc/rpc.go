@@ -31,7 +31,8 @@ type GetImagePathInput struct {
 }
 
 type GetImagePathOutput struct {
-	ImageURL string
+	GeneratedImage []byte
+	Filename       string
 }
 
 type Diary interface {

@@ -41,20 +41,27 @@ func (h *TravelSpotHandler) GetTravelSpots(w http.ResponseWriter, r *http.Reques
 
 func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) {
 	var (
-		ctx = context.Background()
-		req request.Diary
+		ctx          = context.Background()
+		travelSpotID = entity.TravelSpotID(r.PathValue("travel_spot_id"))
+		req          request.Diary
 	)
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "failed to decode request body", http.StatusBadRequest)
-		return
-	}
-
-	out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(req.UserID), entity.TravelSpotID(req.TravelSpotID))
-	if err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to decode request body: %w", err))
+			return
+		}
+	
+		date, err := time.Parse(time.DateOnly, req.Date)
+		if err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to parse date: %w", err))
+			return
+		}
+		out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(req.UserID), travelSpotID, date)
+		if err != nil {
+			response.HandleError(ctx, w, fmt.Errorf("failed to create diary: %w", err))
+			return
+		}
+	
 	// 画像ファイルとjsonを返す処理
 	w.Header().Set("Content-Type", "multipart/mixed; boundary=boundary")
 
@@ -87,7 +94,7 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 
 	// 画像をマルチパートレスポンスに書き込む
 	imagePart, err := mw.CreatePart(map[string][]string{
-		"Content-Type": {"image/jpeg"},
+		"Content-Type": {"image/png"},
 	})
 	if err != nil {
 		response.HandleError(r.Context(), w, err)
