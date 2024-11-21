@@ -52,7 +52,7 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	date, err := time.Parse(time.DateOnly, req.Date)
+	date, err := time.ParseInLocation(time.DateOnly, req.Date, time.Local)
 	if err != nil {
 		response.HandleError(ctx, w, fmt.Errorf("failed to parse date: %w", err))
 		return
