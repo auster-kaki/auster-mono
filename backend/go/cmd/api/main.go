@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/handler"
+	infraHTTP "github.com/auster-kaki/auster-mono/pkg/infrastructure/http"
 	"github.com/auster-kaki/auster-mono/pkg/infrastructure/rdb"
 	"github.com/auster-kaki/auster-mono/pkg/logging"
 
@@ -37,7 +38,7 @@ func _main() error {
 	}
 
 	mux := http.NewServeMux()
-	for path, h := range handler.NewHandlerMap(d) {
+	for path, h := range handler.NewHandlerMap(d, infraHTTP.NewClient()) {
 		mux.HandleFunc(path, h)
 	}
 
