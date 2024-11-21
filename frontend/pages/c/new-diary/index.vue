@@ -218,7 +218,7 @@ export default {
     },
     async handleSelectExperience(id) {
       try {
-        const response = await fetch(`${process.env.BASE_URL}/diaries`, {
+        const response = await fetch(`${process.env.BASE_URL}/travel_spots/${id}/diary`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -226,7 +226,6 @@ export default {
           body: JSON.stringify({
             user_id: this.userInfo.id,
             hobby_id: this.departureForm.interests,
-            travel_spot_id: id,
             date: this.departureForm.departureDate
           })
         })
