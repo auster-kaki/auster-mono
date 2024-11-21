@@ -20,8 +20,8 @@ type TravelSpotUseCase struct {
 	rpc        rpc.RPC
 }
 
-func NewTravelSpotUseCase(r repository.Repository) *TravelSpotUseCase {
-	return &TravelSpotUseCase{repository: r}
+func NewTravelSpotUseCase(r repository.Repository, rpc rpc.RPC) *TravelSpotUseCase {
+	return &TravelSpotUseCase{repository: r, rpc: rpc}
 }
 
 func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.UserID, hobbyID entity.HobbyID) (entity.TravelSpots, error) {
@@ -45,19 +45,19 @@ type CreateDiaryOutput struct {
 
 // CreateDiary TODO: 画像・本文・タイトルの生成周りが未完成
 func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*CreateDiaryOutput, error) {
-	travelSpot, err := u.repository.TravelSpot().FindByID(ctx, travelSpotID)
-	if err != nil {
-		return nil, err
-	}
-
-	// travelSpot を使用するため適当に追加
-	diary, err := u.rpc.Diary().CreateImage(ctx, rpc.CreateImageInput{
-		SourcePath: travelSpot.Title,
-		TargetPath: travelSpot.Description,
-	})
-	if err != nil {
-		return nil, err
-	}
+	// 画像生成の仕組みが整ったら使用する
+	//travelSpot, err := u.repository.TravelSpot().FindByID(ctx, travelSpotID)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//diary, err := u.rpc.Diary().CreateImage(ctx, rpc.CreateImageInput{
+	//	SourcePath: travelSpot.Title,
+	//	TargetPath: travelSpot.Description,
+	//})
+	//if err != nil {
+	//	return nil, err
+	//}
+	diary := rpc.CreateImageOutput{}
 
 	path, err := austerstorage.Save(austerstorage.JPEG,
 		filepath.Join(string(userID), fmt.Sprintf("%s.jpg", diary.JobID)),

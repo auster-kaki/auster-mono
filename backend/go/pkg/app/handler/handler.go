@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
+	"github.com/auster-kaki/auster-mono/pkg/app/rpc"
 	"github.com/auster-kaki/auster-mono/pkg/app/usecase"
 )
 
@@ -14,14 +15,14 @@ type Input struct {
 	handler http.HandlerFunc
 }
 
-func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
+func NewHandlerMap(r repository.Repository, rpc rpc.RPC) map[string]http.HandlerFunc {
 	var (
 		alreadyPath = make(map[string]struct{})
 		handlerMap  = make(map[string]http.HandlerFunc)
 		handlers    = [][]Input{
 			NewUserHandler(usecase.NewUserUseCase(r)),
 			NewVendorHandler(usecase.NewVendorUseCase(r)),
-			NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)),
+			NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r, rpc)),
 			NewReservationHandler(usecase.NewReservationUseCase(r)),
 			NewEncounterHandler(usecase.NewEncounterUseCase(r)),
 		}
