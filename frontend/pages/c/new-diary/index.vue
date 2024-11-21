@@ -38,9 +38,6 @@
 
       <v-stepper-content step="3">
         <experience-selection
-          :video="experienceForm.video"
-          :video-title="experienceForm.videoTitle"
-          :video-description="experienceForm.videoDescription"
           :experiences="experienceForm.experiences"
           @click="handleSelectExperience"
         />
@@ -72,7 +69,7 @@
       </v-stepper-content>
       <v-stepper-content step="6">
         <NewDiaryConfirm
-          :booking-info="bookingInfo"
+          :itinerary="itinerary"
           @confirm="handleConfirm"
         />
         <v-container>
@@ -121,16 +118,7 @@ export default {
         id: ''
       },
       experienceForm: {
-        video: '',
-        videoTitle: '',
-        videoDescription: '',
-        experiences: [],
-        videoData: {
-          video: '',
-          videoTitle: '',
-          videoDescription: '',
-          experiences: []
-        }
+        experiences: []
       },
       selectedTravelSpotId: '',
       createdDiary: {
@@ -142,10 +130,6 @@ export default {
       },
       bring: [],
       itinerary: [],
-      bookingInfo: {
-        expressTickets: [],
-        experience: {}
-      },
       userInfo: {
         id: ''
       }
@@ -226,28 +210,54 @@ export default {
           body: JSON.stringify({
             user_id: this.userInfo.id,
             hobby_id: this.departureForm.interests,
-            travel_spot_id: id,
             date: this.departureForm.departureDate
           })
         })
         this.selectedTravelSpotId = id
-
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
-        const data = await response.json()
-        const photoPath = data.PhotoPath && data.PhotoPath.startsWith('http')
-          ? data.PhotoPath
-          : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg'
-        const formattedDate = data.Date.split('T')[0]
-        this.createdDiary = {
-          id: data.ID,
-          date: formattedDate,
-          image: photoPath,
-          title: data.Title,
-          content: data.Body
-        }
         this.currentStep += 1
+
+        // ゴニョゴニョして、responseを本文と画像に分けてそれぞれ格納する
+        const contentType = response.headers.get('Content-Type')
+        const boundary = contentType.match(/boundary=(.*)/)[1]
+        const rawData = await response.text()
+        const parts = rawData.split(`--${boundary}`)
+        let responseJson = {}
+        let imageUrl = ''
+        for (const part of parts) {
+          if (part.includes('Content-Type: application/json')) {
+            // JSON部分を解析
+            const jsonBody = part.split('\r\n\r\n')[1].trim()
+            responseJson = JSON.parse(jsonBody)
+          } else if (part.includes('Content-Type: image/jpeg')) {
+            // 画像データ部分を解析
+            const binaryData = part.split('\r\n\r\n')[1].trim()
+            const binaryArray = new Uint8Array(binaryData.length)
+
+            // バイナリデータを生成
+            for (let i = 0; i < binaryData.length; i++) {
+              binaryArray[i] = binaryData.charCodeAt(i)
+            }
+
+            // Blob URLを生成して設定
+            const blob = new Blob([binaryArray], { type: 'image/jpeg' })
+            imageUrl = URL.createObjectURL(blob)
+          }
+        }
+
+        // 解析した内容を元に画像等を格納する
+        this.createdDiary = {
+          id: responseJson.ID,
+          date: this.departureForm.departureDate,
+          image: imageUrl && imageUrl.startsWith('http')
+            ? imageUrl
+            : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
+          title: responseJson.Title,
+          content: responseJson.Body
+        }
+
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error)
       }
@@ -264,51 +274,20 @@ export default {
           }
         })
         const data = await response.json()
-        this.bring = data.items.map((item) => item.name)
-        this.itinerary = data.travelSpotItineraries.map((itinerary) => ({
-          id: itinerary.id,
-          kind: itinerary.itinerary,
-          takeTime: itinerary.duration,
-          price: itinerary.description,
-          order: itinerary.order,
+        this.bring = data.Items.map((item) => item.Name)
+        this.itinerary = data.TravelSpotItineraries.map((itinerary) => ({
+          id: itinerary.ID,
+          kind: itinerary.Kind,
+          takeTime: itinerary.TakeTime,
+          price: itinerary.Price,
+          order: itinerary.Order
         }))
         this.currentStep += 1
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error)
       }
-      // this.bring = [
-      //   '軍手', '手袋', 'ジャケット', 'ハンカチ'
-      // ]
-      // this.itinerary = [
-      //   { type: '移動', duration: 30, description: '目安: 30分' },
-      //   { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
-      //   { type: '移動', duration: 45, description: '目安：45分' },
-      //   { type: 'アクティビティ', duration: 180, description: '14:00~ 一本釣り体験( 3時間 )' },
-      //   { type: '移動', duration: 120, description: '目安: 2時間' }
-      // ]
-      this.currentStep += 1
     },
     onGoToConfirm() {
-      this.bookingInfo = {
-        expressTickets: [
-          {
-            date: '2024/11/09',
-            time: '11:00~',
-            trainName: 'しおさい３号',
-            price: 1500
-          },
-          {
-            date: '2024/11/10',
-            time: '11:00~',
-            trainName: 'しおさい14号',
-            price: 1500
-          }
-        ],
-        experience: {
-          name: '一本釣り体験',
-          price: 3000
-        }
-      }
       this.currentStep += 1
     },
     handleConfirm() {

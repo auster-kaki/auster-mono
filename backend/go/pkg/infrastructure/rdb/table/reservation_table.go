@@ -33,7 +33,7 @@ func (t *Reservation) GetEndedReservations(ctx context.Context, userID entity.Us
 	res := entity.Reservations{}
 	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
-		Where("date < NOW()").Scan(ctx); err != nil {
+		Where("to_date < NOW()").Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
@@ -43,7 +43,7 @@ func (t *Reservation) GetUpcomingReservations(ctx context.Context, userID entity
 	res := entity.Reservations{}
 	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
-		Where("date >= NOW()").Scan(ctx); err != nil {
+		Where("from_date >= NOW()").Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
