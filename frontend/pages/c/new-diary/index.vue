@@ -132,6 +132,7 @@ export default {
           experiences: []
         }
       },
+      selectedTravelSpotId: '',
       createdDiary: {
         id: 1,
         date: '2024/11/23',
@@ -181,9 +182,9 @@ export default {
         const data = await response.json()
 
         let experiences = []
-        if (data.TravelSpots && data.TravelSpots.length >= 5) {
+        if (data.length >= 5) {
           // ランダムに4つ選んでexperiencesに値を入れる
-          const shuffled = data.TravelSpots.sort(() => 0.5 - Math.random())
+          const shuffled = data.sort(() => 0.5 - Math.random())
           experiences = shuffled.slice(0, 4).map((spot, _i) => ({
             id: spot.ID,
             image: spot.image || 'https://placehold.jp/300x200.png',
@@ -193,7 +194,7 @@ export default {
           }))
         } else {
           // そのまま入れる
-          experiences = data.TravelSpots.map((spot, _i) => ({
+          experiences = data.map((spot, _i) => ({
             id: spot.ID,
             image: spot.image || 'https://placehold.jp/300x200.png',
             title: spot.Name,
@@ -203,6 +204,7 @@ export default {
         }
         console.log(this.experienceForm.experiences)
 
+        // TODO マスターデータ差し替える
         this.experienceForm = {
           video: 'https://example.com/video1.mp4',
           videoTitle: '美しい山々を体験しよう',
@@ -228,6 +230,7 @@ export default {
             date: this.departureForm.departureDate
           })
         })
+        this.selectedTravelSpotId = id
 
         if (!response.ok) {
           throw new Error('Network response was not ok')
@@ -249,17 +252,40 @@ export default {
         console.error('There was a problem with the fetch operation:', error)
       }
     },
-    handleSelectDiary(_id) {
-      this.bring = [
-        '軍手', '手袋', 'ジャケット', 'ハンカチ'
-      ]
-      this.itinerary = [
-        { type: '移動', duration: 30, description: '目安: 30分' },
-        { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
-        { type: '移動', duration: 45, description: '目安：45分' },
-        { type: 'アクティビティ', duration: 180, description: '14:00~ 一本釣り体験( 3時間 )' },
-        { type: '移動', duration: 120, description: '目安: 2時間' }
-      ]
+    async handleSelectDiary(_id) {
+      const params = new URLSearchParams({
+        user_id: this.userInfo.id
+      })
+      try {
+        const response = await fetch(`${process.env.BASE_URL}/travel_spots/${this.selectedTravelSpotId}/itineraries?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await response.json()
+        this.bring = data.items.map((item) => item.name)
+        this.itinerary = data.travelSpotItineraries.map((itinerary) => ({
+          id: itinerary.id,
+          kind: itinerary.itinerary,
+          takeTime: itinerary.duration,
+          price: itinerary.description,
+          order: itinerary.order,
+        }))
+        this.currentStep += 1
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      }
+      // this.bring = [
+      //   '軍手', '手袋', 'ジャケット', 'ハンカチ'
+      // ]
+      // this.itinerary = [
+      //   { type: '移動', duration: 30, description: '目安: 30分' },
+      //   { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
+      //   { type: '移動', duration: 45, description: '目安：45分' },
+      //   { type: 'アクティビティ', duration: 180, description: '14:00~ 一本釣り体験( 3時間 )' },
+      //   { type: '移動', duration: 120, description: '目安: 2時間' }
+      // ]
       this.currentStep += 1
     },
     onGoToConfirm() {

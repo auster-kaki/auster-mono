@@ -114,24 +114,24 @@ CREATE TABLE `travel_spot_itinerary`
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットと旅程の関連';
 
 -- 旅程: 体験場所
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti1', 'experience', '1', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti2', 'experience', '2', 240, 20000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti3', 'experience', '3', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti4', 'experience', '4', 120, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti5', 'experience', '5', 180, 12000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti6', 'experience', '6', 120, 0, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti10', 'experience', '10', 300, 8000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti11', 'experience', '11', 60, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti12', 'experience', '12', 300, 3000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti13', 'experience', '13', 0, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti1', 'experience', '1', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti2', 'experience', '2', 240, 20000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti3', 'experience', '3', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti4', 'experience', '4', 120, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti5', 'experience', '5', 180, 12000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti6', 'experience', '6', 120, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti10', 'experience', '10', 300, 8000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti11', 'experience', '11', 60, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti12', 'experience', '12', 300, 3000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti13', 'experience', '13', 0, 0, 4);
 -- 旅程: 観光スポット
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti14', 'spot', '14', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti15', 'spot', '15', 90, 800, 2);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti16', 'spot', '16', 45, 300, 2);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti14', 'spot', '14', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti15', 'spot', '15', 90, 800, 2);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti16', 'spot', '16', 45, 300, 2);
 -- 旅程: 移動時間(使い回し)
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti17', 'move', '', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti18', 'move', '', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, order) VALUES ('iti19', 'move', '', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti17', 'move', '', 30, 400, 1);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti18', 'move', '', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti19', 'move', '', 60, 200, 5);
 
 CREATE TABLE `travel_spot_itinerary_item`
 (
