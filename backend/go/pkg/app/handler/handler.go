@@ -35,7 +35,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 		alreadyPath[path] = struct{}{}
 		handlerMap[path] = h.handler
 	}
-	for _, h := range NewDiaryHandler(usecase.NewDiaryUseCase(r)) {
+	for _, h := range NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
 		if _, ok := alreadyPath[path]; ok {
 			panic(fmt.Sprintf("duplicate path: %s", path))
@@ -43,7 +43,7 @@ func NewHandlerMap(r repository.Repository) map[string]http.HandlerFunc {
 		alreadyPath[path] = struct{}{}
 		handlerMap[path] = h.handler
 	}
-	for _, h := range NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r)) {
+	for _, h := range NewReservationHandler(usecase.NewReservationUseCase(r)) {
 		path := fmt.Sprintf("%s %s", h.method, h.path)
 		if _, ok := alreadyPath[path]; ok {
 			panic(fmt.Sprintf("duplicate path: %s", path))

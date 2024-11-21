@@ -15,6 +15,14 @@ func New() *Client {
 
 func (c *Client) Diary() appRPC.Diary { return c }
 
-func (c *Client) Create(ctx context.Context) error {
-	return nil
+func (c *Client) CreateImage(ctx context.Context, input appRPC.CreateImageInput) (appRPC.CreateImageOutput, error) {
+	return appRPC.CreateImageOutput{}, nil
+}
+
+func (c *Client) GetStatus(ctx context.Context, input appRPC.GetStatusInput) (appRPC.GetStatusOutput, error) {
+	return appRPC.GetStatusOutput{}, nil
+}
+
+func (c *Client) GetImagePath(ctx context.Context, input appRPC.GetImagePathInput) (appRPC.GetImagePathOutput, error) {
+	return appRPC.GetImagePathOutput{}, nil
 }
