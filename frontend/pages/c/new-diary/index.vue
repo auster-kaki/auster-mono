@@ -38,9 +38,6 @@
 
       <v-stepper-content step="3">
         <experience-selection
-          :video="experienceForm.video"
-          :video-title="experienceForm.videoTitle"
-          :video-description="experienceForm.videoDescription"
           :experiences="experienceForm.experiences"
           @click="handleSelectExperience"
         />
@@ -121,16 +118,7 @@ export default {
         id: ''
       },
       experienceForm: {
-        video: '',
-        videoTitle: '',
-        videoDescription: '',
         experiences: [],
-        videoData: {
-          video: '',
-          videoTitle: '',
-          videoDescription: '',
-          experiences: []
-        }
       },
       selectedTravelSpotId: '',
       createdDiary: {
