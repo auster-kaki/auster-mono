@@ -2,6 +2,7 @@
   <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-6 text-center">体験一覧</h1>
     <v-btn small  class="add-experience-button" color="info" nuxt to="/b/experiences">体験を追加する</v-btn>
+    <v-btn small  class="add-experience-button" color="info" nuxt to="/b/suggest">提案を行う</v-btn>
     <div class="overflow-x-auto">
       <table class="custom-table">
         <thead>
