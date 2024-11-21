@@ -290,9 +290,20 @@ export default {
     onGoToConfirm() {
       this.currentStep += 1
     },
-    handleConfirm() {
-      // 予約処理を実装
-      console.log('予約が確認されました')
+    async handleConfirm() {
+      await fetch(`${process.env.BASE_URL}/reservations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: this.userInfo.id,
+          travel_spot_id: this.selectedTravelSpotId,
+          travel_spot_diary_id: this.createdDiary.id.toString(),
+          from_date: this.departureForm.departureDate,
+          to_date: this.departureForm.returnDate,
+        })
+      })
       this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
     }
   }
