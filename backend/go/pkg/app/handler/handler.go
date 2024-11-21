@@ -20,6 +20,8 @@ func NewHandlerMap(r repository.Repository, rpc rpc.RPC) map[string]http.Handler
 		alreadyPath = make(map[string]struct{})
 		handlerMap  = make(map[string]http.HandlerFunc)
 		handlers    = [][]Input{
+			NewHealthHandler(),
+			NewImageHandler(),
 			NewUserHandler(usecase.NewUserUseCase(r)),
 			NewVendorHandler(usecase.NewVendorUseCase(r)),
 			NewTravelSpotHandler(usecase.NewTravelSpotUseCase(r, rpc)),
@@ -38,4 +40,16 @@ func NewHandlerMap(r repository.Repository, rpc rpc.RPC) map[string]http.Handler
 		}
 	}
 	return handlerMap
+}
+
+func NewHealthHandler() []Input {
+	return []Input{
+		{method: http.MethodGet, path: "/", handler: healthCheck},
+	}
+}
+
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("health check ok")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }
