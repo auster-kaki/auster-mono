@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"net/http"
 
+	"github.com/auster-kaki/auster-mono/pkg/app/presenter/request"
 	"github.com/auster-kaki/auster-mono/pkg/app/presenter/response"
 	"github.com/auster-kaki/auster-mono/pkg/app/usecase"
 	"github.com/auster-kaki/auster-mono/pkg/entity"
@@ -40,11 +41,15 @@ func (h *TravelSpotHandler) GetTravelSpots(w http.ResponseWriter, r *http.Reques
 
 func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) {
 	var (
-		ctx          = context.Background()
-		userID       = r.URL.Query().Get("user_id")
-		travelSpotID = r.PathValue("travel_spot_id")
+		ctx = context.Background()
+		req request.Diary
 	)
-	out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(userID), entity.TravelSpotID(travelSpotID))
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "failed to decode request body", http.StatusBadRequest)
+		return
+	}
+
+	out, err := h.travelSpotUseCase.CreateDiary(ctx, entity.UserID(req.UserID), entity.TravelSpotID(req.TravelSpotID))
 	if err != nil {
 		response.HandleError(ctx, w, err)
 		return
