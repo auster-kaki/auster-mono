@@ -23,7 +23,7 @@
       </v-col>
     </v-row>
     <v-snackbar v-model="showSnackbar" :timeout="3000" color="error">
-      銚子市しか選択できません
+      デモでは銚子市のみ対応しています
     </v-snackbar>
   </v-container>
 </template>

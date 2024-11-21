@@ -24,7 +24,7 @@ export default {
       >
         <v-card>
           <v-card-title class="text-h6">
-            持ち物リスト
+            持ち物
           </v-card-title>
           <v-card-text>
             <ul>

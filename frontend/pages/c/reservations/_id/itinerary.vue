@@ -1,11 +1,11 @@
 <script>
-
 import DiaryCarousel from '~/components/c/diary/DiaryCarousel.vue'
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
+import HistoryDiary from '~/components/c/diary/HistoryDiary.vue'
 
 export default {
   name: 'Itinerary',
-  components: { NewDiaryItinerary, DiaryCarousel },
+  components: { HistoryDiary, NewDiaryItinerary, DiaryCarousel },
   layout: 'mobile',
   data() {
     return {
@@ -22,38 +22,88 @@ export default {
   },
   mounted() {
     this.fetchItinerary()
+    // API通信の代わりにダミーデータを返す
+    this.bring = [
+      '軍手', '手袋', 'ジャケット', 'ハンカチ'
+    ]
+    this.itinerary = [
+      { type: '移動', duration: 30, description: '目安: 30分' },
+      { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
+      { type: '移動', duration: 45, description: '目安：45分' },
+      { type: 'アクティビティ', duration: 180, description: '14:00~ 一本釣り体験( 3時間 )' },
+      { type: '移動', duration: 120, description: '目安: 2時間' }
+    ]
+    this.diary = {
+      id: 1,
+      date: '2024/11/23',
+      image: 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
+      title: 'ダミーデータ！！！',
+      content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
+    }
   },
   methods: {
-    fetchItinerary() {
-      // API通信の代わりにダミーデータを返す
-      this.bring = [
-        '軍手', '手袋', 'ジャケット', 'ハンカチ'
-      ]
-      this.itinerary = [
-        { type: '移動', duration: 30, description: '目安: 30分' },
-        { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
-        { type: '移動', duration: 45, description: '目安：45分' },
-        { type: 'アクティビティ', duration: 180, description: '14:00~ 一本釣り体験( 3時間 )' },
-        { type: '移動', duration: 120, description: '目安: 2時間' }
-      ]
-      this.diary = {
-        id: 1,
-        date: '2024/11/23',
-        image: 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg',
-        title: 'ダミーデータ！！！',
-        content: '今日は早朝から漁船に乗り、期待に胸を膨らませて出航しました。風は少し冷たかったけれど、海の静けさが心地よかったです。そして、ついに大物のヒラマサがヒット！かなりの引きで、腕がパンパンになりましたが、無事に釣り上げることができました。この魚の力強さと美しさには感動しました。次回もこのサイズを狙いたいと思います！'
-      }
-
-      // 実際のAPI通信処理（コメントアウト）
-      /*
+    async fetchItinerary() {
       try {
-        const response = await fetch('/api/reservations')
+        const response = await fetch(`/api/reservations/${this.$route.params.id}`)
         const data = await response.json()
-        this.itinerary = data
+        // TODO: レスポンスを適切に格納する処理を実装する
+        console.log(data)
       } catch (error) {
         console.error('Failed to fetch itinerary:', error)
       }
-      */
+    },
+    async onDiaryClick() {
+      try {
+        const fileInput = document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = 'image/*'
+        fileInput.onchange = async (event) => {
+          const file = event.target.files[0]
+          if (file) {
+            const formData = new FormData()
+            formData.append('photo', file)
+
+            const response = await fetch(`${process.env.BASE_URL}/reservations/${this.$route.params.id}/diary_photo`, {
+              method: 'PATCH',
+              body: formData
+            })
+
+            if (response.ok) {
+              // 画面のリロード
+              this.$router.go()
+              console.log('Image uploaded successfully')
+            } else {
+              console.error('Failed to upload image')
+            }
+          }
+        }
+        await fileInput.click()
+      } catch (error) {
+        console.error('Error uploading image:', error)
+      }
+    },
+    async updateDiary(updatedDiary) {
+      console.log('updateDiary', updatedDiary)
+      try {
+        const response = await fetch(`${process.env.BASE_URL}/reservations/${this.$route.params.id}/diary_description`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            Description: updatedDiary.content
+          })
+        })
+
+        if (response.ok) {
+          console.log('Diary updated successfully')
+          this.diary = updatedDiary
+        } else {
+          console.error('Failed to update diary')
+        }
+      } catch (error) {
+        console.error('Error updating diary:', error)
+      }
     }
   }
 }
@@ -62,7 +112,13 @@ export default {
 <template>
   <v-container class="mb-8">
     <h2 class="text-center mb-4">日記</h2>
-    <DiaryCarousel class="mb-8" :diary="diary" :is-history="true" />
+    <HistoryDiary
+      v-model="diary"
+      class="mb-8"
+      :is-history="true"
+      @camera-click="onDiaryClick"
+      @update-diary="updateDiary"
+    />
     <h2 class="text-center">旅程</h2>
     <NewDiaryItinerary
       :bring="bring"

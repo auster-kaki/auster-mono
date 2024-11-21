@@ -43,8 +43,6 @@ export default defineComponent({
               <v-row class="d-flex justify-center">
                 <video
                   controls
-                  autoplay
-                  muted
                   class="responsive-video" :src="videoSrc" />
               </v-row>
               <v-row>

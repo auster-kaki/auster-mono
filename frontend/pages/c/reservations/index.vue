@@ -22,19 +22,24 @@
             </v-col>
             <v-col cols="8">
               <v-card-title>{{ reservation.title }}</v-card-title>
-              <v-card-subtitle>
-                {{ formatDate(reservation.departureDate) }} - {{ reservation.departureCity }}
-              </v-card-subtitle>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="primary"
-                  text
-                  @click="goToItinerary(reservation.id)"
-                >
-                  旅程確認・日記更新
-                </v-btn>
-              </v-card-actions>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    {{ formatDate(reservation.fromDate) }} - {{ reservation.fromDate }}
+                  </v-row>
+                  <v-row>
+                    <div>{{ reservation.city }}</div>
+                    <v-spacer />
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="goToItinerary(reservation.id)"
+                    >
+                      旅程確認・日記更新
+                    </v-btn>
+                  </v-row>
+                </v-container>
+              </v-card-text>
             </v-col>
           </v-row>
         </v-card>
@@ -110,42 +115,22 @@ export default {
             'Content-Type': 'application/json'
           }
         })
-        console.log(response)
-        // API呼び出しのコメントアウト
-        // const response = await this.$axios.get('/api/reservations_filter=yet')
-        // this.reservations = response.data
+        const data = await response.json()
 
-        this.reservations = response
-        // ダミーデータを返す
-        // this.reservations = [
-        //   {
-        //     id: 1,
-        //     title: '東京旅行',
-        //     departureDate: '2023-07-01',
-        //     departureCity: '大阪',
-        //     image: 'https://example.com/tokyo.jpg'
-        //   },
-        //   {
-        //     id: 2,
-        //     title: '京都観光',
-        //     departureDate: '2023-08-15',
-        //     departureCity: '名古屋',
-        //     image: 'https://example.com/kyoto.jpg'
-        //   },
-        //   {
-        //     id: 3,
-        //     title: '北海道ツアー',
-        //     departureDate: '2023-09-20',
-        //     departureCity: '東京',
-        //     image: 'https://example.com/hokkaido.jpg'
-        //   }
-        // ]
-      } catch
-        (error) {
+        // APIレスポンスを変換
+        this.reservations = data.map(item => ({
+          id: item.ID,
+          title: `旅行 ${item.TravelSpotID}`, // 仮のタイトル
+          fromDate: item.FromDate.split('T')[0],
+          toDate: item.ToDate.split('T')[0],
+          city: '仮の旅行先',
+          image: 'https://example.com/default.jpg', // 仮の画像URL
+          isOffer: item.IsOffer
+        }))
+      } catch (error) {
         console.error('予約の取得に失敗しました', error)
       }
-    }
-    ,
+    },
     showSnackbar(text) {
       this.snackbar.text = text
       this.snackbar.show = true
