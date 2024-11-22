@@ -16,7 +16,7 @@
       </v-stepper-header>
 
       <v-stepper-items>
-        <v-stepper-content step="1">
+        <v-stepper-content  style="padding: 8px" step="1">
           <departure-selection
             :departure-place="departureForm.departurePlace"
             :departure-date="departureForm.departureDate"
@@ -28,7 +28,7 @@
           />
         </v-stepper-content>
 
-        <v-stepper-content step="2">
+        <v-stepper-content style="padding: 8px" step="2">
           <destination-selection
             @destination-selected="handleDestinationSelected"
           />
@@ -37,7 +37,7 @@
           </v-btn>
         </v-stepper-content>
 
-        <v-stepper-content step="3">
+        <v-stepper-content style="padding: 8px" step="3">
           <experience-selection
             :experiences="experienceForm.experiences"
             @click="handleSelectExperience"
@@ -54,8 +54,8 @@
             戻る
           </v-btn>
         </v-stepper-content>
-        <v-stepper-content step="5">
-          <h2 class="text-center mb-4">旅程</h2>
+        <v-stepper-content style="padding: 8px" step="5">
+          <h2 class="text-center">旅程</h2>
           <NewDiaryItinerary
             :bring="bring"
             :itinerary="itinerary"
@@ -68,7 +68,7 @@
             </v-row>
           </v-container>
         </v-stepper-content>
-        <v-stepper-content step="6">
+        <v-stepper-content  style="padding: 8px" step="6">
           <NewDiaryConfirm
             :itinerary="itinerary"
             @confirm="handleConfirm"

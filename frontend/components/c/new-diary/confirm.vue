@@ -46,41 +46,39 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-container>
-    <v-card elevation="0">
-      <v-card-title>以下で申し込みますか</v-card-title>
-      <v-card-text>
-        <h3>特急券</h3>
-        <v-list>
-          <v-list-item v-for="(ticket, index) in expressTickets" :key="index">
-            <v-list-item-content>
-              <v-list-item-title>{{ ticket.date }} {{ ticket.time }} {{ ticket.trainName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ ticket.price }}円</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+  <v-card elevation="0">
+    <v-card-title>以下で予約しますか</v-card-title>
+    <v-card-text>
+      <h3>特急券</h3>
+      <v-list>
+        <v-list-item v-for="(ticket, index) in expressTickets" :key="index">
+          <v-list-item-content>
+            <v-list-item-title>{{ ticket.date }} {{ ticket.time }} {{ ticket.trainName }}</v-list-item-title>
+            <v-list-item-subtitle>{{ ticket.price }}円</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
 
-        <h3>体験</h3>
-        <v-list>
-          <v-list-item v-for="(item, index) in itinerary.filter(i => i.kind === 'spot')" :key="index">
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{ item.price }}円</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-divider />
-        <h3 class="mt-8">合計</h3>
-        <v-list>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>{{ totalAmount }}円</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-    </v-card>
-  </v-container>
+      <h3>体験</h3>
+      <v-list>
+        <v-list-item v-for="(item, index) in itinerary.filter(i => i.kind === 'spot')" :key="index">
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.price }}円</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-divider />
+      <h3 class="mt-8">合計</h3>
+      <v-list>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ totalAmount }}円</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+  </v-card>
 </template>
 
 <style scoped>

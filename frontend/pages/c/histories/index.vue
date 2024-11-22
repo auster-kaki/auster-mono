@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mb-8">
+  <v-container class="mb-16">
     <v-tabs v-model="activeTab">
       <v-tab>日記</v-tab>
       <v-tab>出会った人々</v-tab>
@@ -48,10 +48,7 @@
     </v-dialog>
     <v-dialog v-model="encounterModalOpen" max-width="600">
       <v-card v-if="selectedEncounter">
-        <v-card-title>{{ selectedEncounter.name }}
-          <v-spacer />
-          <v-btn color="primary" outlined @click="openChat(selectedEncounter)">チャットを開く</v-btn>
-        </v-card-title>
+        <v-card-title>{{ selectedEncounter.name }}</v-card-title>
         <v-card-subtitle>{{ selectedEncounter.place }}</v-card-subtitle>
         <v-card-text>
           <v-list>
@@ -63,6 +60,10 @@
             </v-list-item>
           </v-list>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" outlined @click="openChat(selectedEncounter)">チャットを開く</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-snackbar v-model="snackbar" color="accent" :timeout="3000">
@@ -97,7 +98,15 @@ export default {
       encounterModalOpen: false,
       snackbar: false,
       selectedDiary: null,
-      selectedEncounter: null
+      selectedEncounter: null,
+      diaryDetail: {
+        id: '',
+        date: '',
+        image: '',
+        title: '',
+        content: '',
+        isOffer: false,
+      }
     }
   },
   async mounted() {
@@ -130,10 +139,10 @@ export default {
           isOffer: item.is_offer
         })).sort((a, b) => {
           if (b.isOffer !== a.isOffer) {
-            return b.isOffer - a.isOffer;
+            return b.isOffer - a.isOffer
           }
-          return new Date(b.date) - new Date(a.date);
-        });
+          return new Date(b.date) - new Date(a.date)
+        })
 
       } catch (error) {
         console.error('履歴の取得に失敗しました', error)
@@ -171,9 +180,26 @@ export default {
         console.error('関係事業者の取得に失敗しました', error)
       }
     },
-    openDiaryModal(diary) {
+    async fetchHistoryDetail(id) {
+      try {
+        const response = await fetch(`${process.env.BASE_URL}/reservations/${id}`)
+        const data = await response.json()
+        this.diaryDetail = {
+          id: data.id,
+          date: data.from_date.split('T')[0],
+          image: `${process.env.BASE_URL}/images${data.diary_photo_path}`,
+          title: data.diary_title,
+          content: data.diary_description,
+          isOffer: data.is_offer
+        }
+      } catch (error) {
+        console.error('Failed to fetch itinerary:', error)
+      }
+    },
+    async openDiaryModal(diary) {
+      await this.fetchHistoryDetail(diary.id)
       console.log(diary, this.diaries)
-      this.selectedDiary = diary
+      this.selectedDiary = this.diaryDetail
       this.diaryModalOpen = true
     },
     openEncounterModal(encounter) {

@@ -46,7 +46,7 @@
           class="px-4 py-2 mb-2"
           @click="handleSelect"
         >
-          <span class="text-white font-weight-bold">この日記で旅程を組む</span>
+          <span class="text-white font-weight-bold">この日記にする</span>
         </v-btn>
         <v-sheet style="position: absolute; top: 0; right: 0;">
           <v-btn icon @click="showShareMessage">

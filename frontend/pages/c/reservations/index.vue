@@ -22,26 +22,27 @@
                 cover
               />
             </v-col>
-            <v-col cols="8">
-              <v-card-title><strong>{{ reservation.title }}</strong></v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    {{ formatDate(reservation.fromDate) }} - {{ reservation.toDate }}
-                  </v-row>
-                  <v-row>
-                    <div>{{ reservation.city }}</div>
-                    <v-spacer />
-                    <v-btn
-                      color="primary"
-                      outlined
-                      @click="goToItinerary(reservation.id)"
-                    >
-                      旅程確認・日記更新
-                    </v-btn>
-                  </v-row>
-                </v-container>
-              </v-card-text>
+            <v-col cols="8" class="px-2">
+              <v-container>
+                <v-row>
+                  <strong>{{ reservation.title }}</strong>
+                </v-row>
+                <v-row>
+                  {{ formatDate(reservation.fromDate) }} - {{ reservation.toDate }}
+                </v-row>
+                <v-row>
+                  <div>{{ reservation.city }}</div>
+                  <v-spacer />
+                  <v-btn
+                    class="mt-4"
+                    color="primary"
+                    outlined
+                    @click="goToItinerary(reservation.id)"
+                  >
+                    旅程確認・日記更新
+                  </v-btn>
+                </v-row>
+              </v-container>
             </v-col>
           </v-row>
         </v-card>
