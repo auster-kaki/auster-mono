@@ -43,8 +43,11 @@ export default {
       >
         <v-card>
           <v-card-title class="text-h6">
-            {{ item.kind === 'move' ? '移動' : '体験' }} <p>{{ item.description }}</p>
+            {{ item.title }}
           </v-card-title>
+          <v-card-subtitle>
+            {{ item.description }}
+          </v-card-subtitle>
           <v-card-text>
             <div class="d-flex justify-space-between align-center">
               <div>所要時間: {{ item.takeTime }}分</div>

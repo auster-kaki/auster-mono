@@ -171,28 +171,26 @@ export default {
           const shuffled = data.sort(() => 0.5 - Math.random())
           experiences = shuffled.slice(0, 4).map((spot, _i) => ({
             id: spot.ID,
-            image: spot.image || 'https://placehold.jp/300x200.png',
+            image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
+            address: spot.Address,
             hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
           }))
         } else {
           // そのまま入れる
           experiences = data.map((spot, _i) => ({
             id: spot.ID,
-            image: spot.image || 'https://placehold.jp/300x200.png',
+            image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
+            address: spot.Address,
             hasFurusatoNozei: Math.random() < 0.5 // ランダムにtrueかfalseを設定
           }))
         }
         console.log(this.experienceForm.experiences)
 
-        // TODO マスターデータ差し替える
         this.experienceForm = {
-          video: 'https://example.com/video1.mp4',
-          videoTitle: '美しい山々を体験しよう',
-          videoDescription: '雄大な山々の素晴らしさを発見してください',
           experiences
         }
         this.currentStep += 1
@@ -224,7 +222,7 @@ export default {
         // 画像パスを使用して画像URLを構築
         const imageUrl = data.PhotoPath
           ? `${process.env.BASE_URL}/images/${data.PhotoPath}`
-          : 'http://localhost:3000/auster-mono/_nuxt/static/destination/choshi.jpg'
+          : 'https://placehold.jp/300x200.png'
 
         this.createdDiary = {
           id: data.ID,
@@ -253,7 +251,10 @@ export default {
         this.bring = data.Items.map((item) => item.Name)
         this.itinerary = data.TravelSpotItineraries.map((itinerary) => ({
           id: itinerary.ID,
+          travelSpotId: itinerary.TravelSpotID,
           kind: itinerary.Kind,
+          title: itinerary.Title,
+          description: itinerary.Description,
           takeTime: itinerary.TakeTime,
           price: itinerary.Price,
           order: itinerary.Order
@@ -277,7 +278,7 @@ export default {
           travel_spot_id: this.selectedTravelSpotId,
           travel_spot_diary_id: this.createdDiary.id.toString(),
           from_date: this.departureForm.departureDate,
-          to_date: this.departureForm.returnDate,
+          to_date: this.departureForm.returnDate
         })
       })
       this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
