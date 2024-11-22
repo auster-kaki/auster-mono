@@ -145,7 +145,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 		title = d.Title
 		description = d.Description
 	}
-	if err := u.repository.TravelSpotDiary().Create(ctx, entity.TravelSpotDiary{
+	if err := u.repository.TravelSpotDiary().Create(ctx, &entity.TravelSpotDiary{
 		ID:           id,
 		UserID:       userID,
 		TravelSpotID: travelSpotID,
