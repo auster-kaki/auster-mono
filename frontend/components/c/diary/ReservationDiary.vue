@@ -134,9 +134,9 @@ export default {
 
       const formData = new FormData()
       formData.append('photo', file)
-      formData.append('user_id', userInfo.id)
+      // formData.append('user_id', userInfo.id)
       try {
-        await fetch(`${process.env.BASE_URL}/reservations/${props.diary.id}/diary_photo`, {
+        await fetch(`${process.env.BASE_URL}/reservations/${props.diary.id}/diary_photo/users/${userInfo.id}`, {
           method: 'PATCH',
           body: formData
         })
