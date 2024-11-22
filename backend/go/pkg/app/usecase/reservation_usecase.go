@@ -114,28 +114,36 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 		return nil, err
 	}
 
-	travelSpot, err := u.repository.TravelSpot().FindByID(ctx, reservation.TravelSpotID)
-	if err != nil {
-		return nil, err
+	var (
+		travelSpot                                      = &entity.TravelSpot{}
+		travelSpotItineraries                           = entity.TravelSpotItineraries{}
+		travelSpotItineraryItems                        = entity.TravelSpotItineraryItems{}
+		travelSpotItineraryItemsByTravelSpotItineraryID = make(map[entity.TravelSpotItineraryID]entity.TravelSpotItineraryItems, len(travelSpotItineraries))
+	)
+	if !reservation.IsOffer {
+		travelSpot, err = u.repository.TravelSpot().FindByID(ctx, reservation.TravelSpotID)
+		if err != nil {
+			return nil, err
+		}
+
+		travelSpotItineraries, err = u.repository.TravelSpotItinerary().GetByTravelSpotID(ctx, reservation.TravelSpotID)
+		if err != nil {
+			return nil, err
+		}
+
+		travelSpotItineraryItems, err = u.repository.TravelSpotItineraryItem().GetByTravelSpotItineraryIDs(ctx, travelSpotItineraries.IDs())
+		if err != nil {
+			return nil, err
+		}
+
+		for _, item := range travelSpotItineraryItems {
+			travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID] = append(travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID], item)
+		}
 	}
 
-	travelSpotItineraries, err := u.repository.TravelSpotItinerary().GetByTravelSpotID(ctx, reservation.TravelSpotID)
-	if err != nil {
-		return nil, err
-	}
 	travelSpotDiary, err := u.repository.TravelSpotDiary().FindByID(ctx, reservation.TravelSpotDiaryID)
 	if err != nil {
 		return nil, err
-	}
-
-	travelSpotItineraryItems, err := u.repository.TravelSpotItineraryItem().GetByTravelSpotItineraryIDs(ctx, travelSpotItineraries.IDs())
-	if err != nil {
-		return nil, err
-	}
-
-	travelSpotItineraryItemsByTravelSpotItineraryID := make(map[entity.TravelSpotItineraryID]entity.TravelSpotItineraryItems, len(travelSpotItineraries))
-	for _, item := range travelSpotItineraryItems {
-		travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID] = append(travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID], item)
 	}
 
 	return &GetReservationOutput{
