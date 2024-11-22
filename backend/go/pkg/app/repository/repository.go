@@ -75,7 +75,7 @@ type ReservationRepository interface {
 	Create(ctx context.Context, reservations ...*entity.Reservation) error
 	FindByID(ctx context.Context, id entity.ReservationID) (*entity.Reservation, error)
 	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.Reservations, error)
-	FindSpecialOfferByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.Reservation, error)
+	FindSpecialOfferByUserID(ctx context.Context, userID entity.UserID) (*entity.Reservation, error)
 	GetEndedReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
 	GetUpcomingReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
 }

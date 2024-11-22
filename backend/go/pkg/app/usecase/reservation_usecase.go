@@ -184,7 +184,7 @@ func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, input UpdateD
 		return "", err
 	}
 
-	if err := u.createSpecialOffer(ctx, input.UserID, reservation.TravelSpotID); err != nil {
+	if err := u.createSpecialOffer(ctx, input.UserID); err != nil {
 		return "", err
 	}
 
@@ -213,15 +213,15 @@ func (u *ReservationUseCase) UpdateDiaryDescription(ctx context.Context, input U
 		return err
 	}
 
-	if err := u.createSpecialOffer(ctx, input.UserID, reservation.TravelSpotID); err != nil {
+	if err := u.createSpecialOffer(ctx, input.UserID); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *ReservationUseCase) createSpecialOffer(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) error {
+func (u *ReservationUseCase) createSpecialOffer(ctx context.Context, userID entity.UserID) error {
 	// スペシャルオファーが存在すれば何もしない
-	offer, err := u.repository.Reservation().FindSpecialOfferByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	offer, err := u.repository.Reservation().FindSpecialOfferByUserID(ctx, userID)
 	if err != nil && !errors.Is(err, repository.ErrNotFound) {
 		return err
 	}

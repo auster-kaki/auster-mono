@@ -40,11 +40,10 @@ func (t *Reservation) FindByUserIDAndTravelSpotID(ctx context.Context, userID en
 	return res, nil
 }
 
-func (t *Reservation) FindSpecialOfferByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.Reservation, error) {
+func (t *Reservation) FindSpecialOfferByUserID(ctx context.Context, userID entity.UserID) (*entity.Reservation, error) {
 	res := &entity.Reservation{}
 	if err := t.db.NewSelect().Model(res).
 		Where("user_id = ?", userID).
-		Where("travel_spot_id = ?", travelSpotID).
 		Where("is_offer = 1").
 		Scan(ctx); err != nil {
 		return nil, handleError(err)
