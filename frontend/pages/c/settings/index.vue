@@ -21,8 +21,7 @@
               block
               to="/c/settings/create"
             >
-              <v-icon left>mdi-account-plus</v-icon>
-              ユーザー作成画面へ
+              新規ユーザー作成
             </v-btn>
           </v-col>
         </v-row>
