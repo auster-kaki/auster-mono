@@ -74,8 +74,8 @@ export default {
         console.error('Failed to fetch itinerary:', error)
       }
     },
-    async onDiaryClick() {
-      // this.$router.go()
+    onDiaryClick() {
+      this.$router.go()
     },
     async updateDiary(updatedDescription) {
       console.log('updateDiary', updatedDescription)
