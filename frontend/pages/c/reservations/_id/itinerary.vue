@@ -56,7 +56,7 @@ export default {
         this.diary = {
           id: data.id,
           date: data.from_date.split('T')[0],
-          image: `${process.env.BASE_URL}/images/${data.diary_photo_path}`,
+          image: `${process.env.BASE_URL}/images${data.diary_photo_path}`,
           title: data.diary_title,
           content: data.diary_description
         }
