@@ -206,9 +206,7 @@ export default {
 
         let experiences = []
         if (data.length >= 5) {
-          // ランダムに4つ選んでexperiencesに値を入れる
-          const shuffled = data.sort(() => 0.5 - Math.random())
-          experiences = shuffled.slice(0, 4).map((spot, _i) => ({
+          experiences = data.slice(0, 4).map((spot, _i) => ({
             id: spot.ID,
             vendorId: spot.VendorID,
             image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
