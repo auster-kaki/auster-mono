@@ -11,11 +11,11 @@ export default defineComponent({
   },
   setup() {
     const selectedLanguage = ref('ja')
-    const videoSrc = ref('/new-diary/choshi.mp4')
+    const videoSrc = ref('/auster-mono/new-diary/choshi.mp4')
 
     const changeLanguage = (lang: string) => {
       selectedLanguage.value = lang
-      videoSrc.value = lang === 'ja' ? '/new-diary/choshi.mp4' : '/new-diary/choshi-en.mp4'
+      videoSrc.value = lang === 'ja' ? '/auster-mono/new-diary/choshi.mp4' : '/auster-mono/new-diary/choshi-en.mp4'
     }
 
     return {

@@ -1,6 +1,7 @@
 <script>
 import NewDiaryItinerary from '~/components/c/new-diary/itinerary.vue'
 import ReservationDiary from '~/components/c/diary/ReservationDiary.vue'
+import { useUserStore } from '~/store/user'
 
 export default {
   name: 'Itinerary',
@@ -17,15 +18,20 @@ export default {
       },
       diaryContent: '',
       bring: [],
-      itinerary: []
+      itinerary: [],
+      userInfo: {},
     }
   },
   async mounted() {
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
     await this.fetchItinerary()
     // API通信の代わりにダミーデータを返す
-    this.bring = [
-      'ダミー軍手', 'ダミー手袋', 'ダミージャケット', 'ダミーハンカチ'
-    ]
+    // this.bring = [
+    //   'ダミー軍手', 'ダミー手袋', 'ダミージャケット', 'ダミーハンカチ'
+    // ]
+
     // this.itinerary = [
     //   { type: '移動', duration: 30, description: '目安: 30分' },
     //   { type: '観光', duration: 30, description: 'しあわせ三蔵記念撮影(30分)' },
@@ -62,48 +68,14 @@ export default {
           title: item.title,
           description: item.description
         }))
-        // TODO this.bring
-        // {
-        //   "diary_description": "bbbbbbb",
-        //   "diary_photo_path": "/assets/images/travel_spots/6/IMG_5132.jpg",
-        //   "diary_title": "タイトル1",
-        //   "from_date": "2024-11-22T00:00:00Z",
-        //   "id": "csvtnecpng7s73cntutg",
-        //   "is_offer": false,
-        //   "to_date": "2024-11-23T00:00:00Z",
-        //   "travelSpotItineraries": [
-        //   {
-        //     "description": "",
-        //     "id": "iti10",
-        //     "kind": "move",
-        //     "order": 5,
-        //     "price": 1500,
-        //     "take_time": 60,
-        //     "title": "特急 しおさい14号"
-        //   },
-        //   {
-        //     "description": "標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました。(千葉県銚子市天王台1421-13)",
-        //     "id": "iti7",
-        //     "kind": "spot",
-        //     "order": 2,
-        //     "price": 500,
-        //     "take_time": 60,
-        //     "title": "地球の丸く見える丘展望館"
-        //   },
-        // ],
-        //   "travel_spot_description": "船釣りでクロカジキを釣る体験ができます",
-        //   "travel_spot_title": "釣り体験 シイラ"
-        // }
-        // TODO diaryに入れる
-        // TODO diaryContentにも入れる
-        // TODO: レスポンスを適切に格納する処理を実装する
+        data.travelSpotItineraries.map(item => item.items.map(item => this.bring.push(item.name)))
         console.log(data)
       } catch (error) {
         console.error('Failed to fetch itinerary:', error)
       }
     },
     async onDiaryClick() {
-      // this.$router.go() TODO
+      // this.$router.go()
     },
     async updateDiary(updatedDescription) {
       console.log('updateDiary', updatedDescription)
@@ -114,7 +86,8 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            Description: updatedDescription
+            Description: updatedDescription,
+            user_id: this.userInfo.id
           })
         })
 
