@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -90,7 +91,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	}
 
 	travelSpotDiaries, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
-	if dErr != nil && dErr != repository.ErrNotFound {
+	if dErr != nil && !errors.Is(dErr, repository.ErrNotFound) {
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", dErr)
 	}
 	for _, travelSpotDiary := range travelSpotDiaries {
@@ -109,7 +110,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	gOut, err := u.generateDiary(ctx, user, travelSpot)
 	if err != nil {
 		fmt.Println("failed to generate diary: %w", err)
-		// 画像生成に失敗した場合は元の体験画像をそのまま返す
+		//　画像生成に失敗した場合は元の体験画像をそのまま返す
 		photo, err := austerstorage.Get(travelSpot.PhotoPath)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get photo: %w", err)
@@ -123,7 +124,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	id := austerid.Generate[entity.TravelSpotDiaryID]()
 	// goサーバにも画像を保存
 	path, err := austerstorage.Save(
-		austerstorage.ContentType(austerstorage.PNG),
+		austerstorage.PNG,
 		filepath.Join("travel_spot_diaries", string(userID), string(id), gOut.Filename),
 		gOut.GeneratedImage,
 	)
@@ -199,6 +200,8 @@ func (u *TravelSpotUseCase) generateDiary(ctx context.Context, user *entity.User
 		time.Sleep(pollInterval)
 	}
 
+	// 処理が完了してから画像の準備が整うまで待機
+	time.Sleep(time.Second * 10)
 	gOut, err := u.rpc.Diary().GetImagePath(ctx, rpc.GetImagePathInput{
 		JobID: cOut.JobID,
 	})

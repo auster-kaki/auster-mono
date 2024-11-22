@@ -95,10 +95,6 @@ func (c *Client) CreateImage(ctx context.Context, input appRPC.CreateImageInput)
 		Status string `json:"status"`
 	}
 
-	if err != nil {
-		return appRPC.CreateImageOutput{}, err
-	}
-
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return appRPC.CreateImageOutput{}, err
 	}
