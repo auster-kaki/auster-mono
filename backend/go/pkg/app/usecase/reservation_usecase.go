@@ -98,10 +98,11 @@ func (u *ReservationUseCase) List(ctx context.Context, input ListOutputInput) (*
 }
 
 type GetReservationOutput struct {
-	Reservation           *entity.Reservation
-	TravelSpot            *entity.TravelSpot
-	TravelSpotItineraries entity.TravelSpotItineraries
-	TravelSpotDiary       *entity.TravelSpotDiary
+	Reservation                                     *entity.Reservation
+	TravelSpot                                      *entity.TravelSpot
+	TravelSpotItineraries                           entity.TravelSpotItineraries
+	TravelSpotItineraryItemsByTravelSpotItineraryID map[entity.TravelSpotItineraryID]entity.TravelSpotItineraryItems
+	TravelSpotDiary                                 *entity.TravelSpotDiary
 }
 
 func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.ReservationID) (*GetReservationOutput, error) {
@@ -124,11 +125,22 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 		return nil, err
 	}
 
+	travelSpotItineraryItems, err := u.repository.TravelSpotItineraryItem().GetByTravelSpotItineraryIDs(ctx, travelSpotItineraries.IDs())
+	if err != nil {
+		return nil, err
+	}
+
+	travelSpotItineraryItemsByTravelSpotItineraryID := make(map[entity.TravelSpotItineraryID]entity.TravelSpotItineraryItems, len(travelSpotItineraries))
+	for _, item := range travelSpotItineraryItems {
+		travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID] = append(travelSpotItineraryItemsByTravelSpotItineraryID[item.TravelSpotItineraryID], item)
+	}
+
 	return &GetReservationOutput{
 		Reservation:           reservation,
 		TravelSpot:            travelSpot,
 		TravelSpotItineraries: travelSpotItineraries,
-		TravelSpotDiary:       travelSpotDiary,
+		TravelSpotItineraryItemsByTravelSpotItineraryID: travelSpotItineraryItemsByTravelSpotItineraryID,
+		TravelSpotDiary: travelSpotDiary,
 	}, nil
 }
 

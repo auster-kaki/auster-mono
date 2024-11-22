@@ -127,6 +127,17 @@ func (h *ReservationHandler) GetReservation(w http.ResponseWriter, r *http.Reque
 					"take_time":   itinerary.TakeTime,
 					"price":       itinerary.Price,
 					"order":       itinerary.Order,
+					"items": func() []any {
+						items := make([]any, 0, len(out.TravelSpotItineraryItemsByTravelSpotItineraryID[itinerary.ID]))
+						for _, item := range out.TravelSpotItineraryItemsByTravelSpotItineraryID[itinerary.ID] {
+							items = append(items, map[string]any{
+								"id":     item.ID,
+								"name":   item.Name,
+								"number": item.Number,
+							})
+						}
+						return items
+					}(),
 				})
 			}
 			return itineraries
