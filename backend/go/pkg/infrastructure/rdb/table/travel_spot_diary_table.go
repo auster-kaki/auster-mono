@@ -16,7 +16,7 @@ func NewTravelSpotDiary(db *bun.DB) *TravelSpotDiary {
 	return &TravelSpotDiary{db: db}
 }
 
-func (t *TravelSpotDiary) Create(ctx context.Context, ents ...entity.TravelSpotDiary) error {
+func (t *TravelSpotDiary) Create(ctx context.Context, ents ...*entity.TravelSpotDiary) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
 		return handleError(err)
 	}

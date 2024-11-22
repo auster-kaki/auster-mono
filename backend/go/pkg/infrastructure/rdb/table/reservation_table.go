@@ -14,7 +14,7 @@ type Reservation struct {
 
 func NewReservation(db *bun.DB) *Reservation { return &Reservation{db: db} }
 
-func (t *Reservation) Create(ctx context.Context, ents ...entity.Reservation) error {
+func (t *Reservation) Create(ctx context.Context, ents ...*entity.Reservation) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
 		return handleError(err)
 	}
@@ -34,6 +34,18 @@ func (t *Reservation) FindByUserIDAndTravelSpotID(ctx context.Context, userID en
 	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
 		Where("travel_spot_id = ?", travelSpotID).
+		Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}
+
+func (t *Reservation) FindSpecialOfferByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.Reservation, error) {
+	res := &entity.Reservation{}
+	if err := t.db.NewSelect().Model(res).
+		Where("user_id = ?", userID).
+		Where("travel_spot_id = ?", travelSpotID).
+		Where("is_offer = 1").
 		Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}

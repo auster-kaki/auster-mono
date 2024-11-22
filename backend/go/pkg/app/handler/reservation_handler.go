@@ -164,10 +164,21 @@ func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Req
 		response.HandleError(ctx, w, err)
 		return
 	}
-	out, err := h.reservationUseCase.UpdateDiaryPhoto(ctx, id, usecase.Photo{
-		Filename:    handler.Filename,
-		Body:        photo,
-		ContentType: handler.Header.Get("Content-Type"),
+
+	req := map[string]any{}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.HandleError(ctx, w, err)
+		return
+	}
+
+	out, err := h.reservationUseCase.UpdateDiaryPhoto(ctx, usecase.UpdateDiaryPhotoInput{
+		ID:     id,
+		UserID: entity.UserID(req["user_id"].(string)),
+		Photo: usecase.Photo{
+			Filename:    handler.Filename,
+			Body:        photo,
+			ContentType: handler.Header.Get("Content-Type"),
+		},
 	})
 	if err != nil {
 		response.HandleError(ctx, w, err)
@@ -187,7 +198,11 @@ func (h *ReservationHandler) UpdateDescription(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := h.reservationUseCase.UpdateDiaryDescription(ctx, id, req.Description); err != nil {
+	if err := h.reservationUseCase.UpdateDiaryDescription(ctx, usecase.UpdateDiaryDescriptionInput{
+		ID:          id,
+		UserID:      entity.UserID(req.UserID),
+		Description: req.Description,
+	}); err != nil {
 		response.HandleError(ctx, w, err)
 		return
 	}
