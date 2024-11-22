@@ -29,6 +29,17 @@ func (t *Reservation) FindByID(ctx context.Context, id entity.ReservationID) (*e
 	return res, nil
 }
 
+func (t *Reservation) FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.Reservations, error) {
+	res := entity.Reservations{}
+	if err := t.db.NewSelect().Model(&res).
+		Where("user_id = ?", userID).
+		Where("travel_spot_id = ?", travelSpotID).
+		Scan(ctx); err != nil {
+		return nil, handleError(err)
+	}
+	return res, nil
+}
+
 func (t *Reservation) GetEndedReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error) {
 	res := entity.Reservations{}
 	if err := t.db.NewSelect().Model(&res).

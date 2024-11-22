@@ -53,19 +53,34 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	if err != nil {
 		return nil, fmt.Errorf("failed to find travel spot: %w", err)
 	}
+	/*
+		日記を生成する条件
+		1. 初めて体験を選択した場合
+		2. 予約後、もう一度体験を選択した場合
 
-	// 同じユーザで同じ体験が既に生成されたいた場合は再生成しないで即時返す
-	travelSpotDiary, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+		日記を生成しない条件
+		1. 初めて体験を選択した後、一度予約をせずに戻り、もう一度同じ体験を選択した場合
+	*/
+	rs, err := u.repository.Reservation().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find reservation: %w", err)
+	}
+
+	travelSpotDiaries, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
 	if dErr != nil && dErr != repository.ErrNotFound {
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", dErr)
 	}
-	if travelSpotDiary != nil {
-		return &CreateDiaryOutput{
-			ID:          travelSpotDiary.ID,
-			Title:       travelSpotDiary.Title,
-			PhotoPath:   travelSpotDiary.PhotoPath,
-			Description: travelSpotDiary.Description,
-		}, nil
+	for _, travelSpotDiary := range travelSpotDiaries {
+		// 日記を生成しない条件
+		// 1. 初めて体験を選択した後、一度予約をせずに戻り、もう一度同じ体験を選択した場合
+		if !slices.Contains(rs.TravelSpotDiaryIDs(), travelSpotDiary.ID) {
+			return &CreateDiaryOutput{
+				ID:          travelSpotDiary.ID,
+				Title:       travelSpotDiary.Title,
+				PhotoPath:   travelSpotDiary.PhotoPath,
+				Description: travelSpotDiary.Description,
+			}, nil
+		}
 	}
 
 	gOut, err := u.generateDiary(ctx, user, travelSpot)
