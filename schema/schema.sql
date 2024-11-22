@@ -96,65 +96,65 @@ CREATE TABLE `travel_spot_itinerary`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポットと旅程の関連';
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti1','移動','', 'move', '1', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti2','観光', '犬吠埼灯台','spot', '1', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti3','移動', '','move', '1', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti4','アクティビティ', '釣り体験 ヒラマサ','experience', '1', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti5','移動', '','move', '1', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti1','特急 しおさい３号','', 'move', '1', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti2','犬吠埼灯台', '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。(千葉県銚子市犬吠埼957612)','spot', '1', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti3','徒歩', '','move', '1', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti4','釣り体験 ヒラマサ', '','experience', '1', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti5','特急 しおさい14号', '','move', '1', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti6','移動','', 'move', '2', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti7','観光', '地球の丸く見える丘展望館','spot', '2', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti8','移動', '','move', '2', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti9','アクティビティ', '釣り体験 シイラ','experience', '2', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti10','移動', '','move', '2', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti6','特急 しおさい３号','', 'move', '2', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti7','地球の丸く見える丘展望館', '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました。(千葉県銚子市天王台1421-13)','spot', '2', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti8','徒歩', '','move', '2', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti9','釣り体験 シイラ', '','experience', '2', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti10','特急 しおさい14号', '','move', '2', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti11','移動','', 'move', '23', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti12','観光', '圓福寺（飯沼観音）','spot', '3', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti13','移動', '','move', '3', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti14','アクティビティ','釣り体験 ヒラメ', 'experience', '3', 180, 15000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti15','移動', '','move', '3', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti11','特急 しおさい３号','', 'move', '23', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti12','圓福寺（飯沼観音）', '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています。(千葉県銚子市馬場町2934)','spot', '3', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti13','徒歩', '','move', '3', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti14','釣り体験 ヒラメ','', 'experience', '3', 180, 15000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti15','特急 しおさい14号', '','move', '3', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti16','移動','', 'move', '4', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti17','観光', '犬吠埼灯台','spot', '4', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti18','移動', '','move', '4', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti19','アクティビティ','漁業体験 競りの見学', 'experience', '4', 120, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti20','移動', '','move', '4', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti16','特急 しおさい３号','', 'move', '4', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti17','犬吠埼灯台', '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。(千葉県銚子市犬吠埼957612)','spot', '4', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti18','徒歩', '','move', '4', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti19','漁業体験 競りの見学','', 'experience', '4', 120, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti20','特急 しおさい14号', '','move', '4', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti21','移動','', 'move', '5', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti22','観光', '地球の丸く見える丘展望館','spot', '5', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti23','移動', '','move', '5', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti24','アクティビティ','漁業体験 定置網漁', 'experience', '5', 180, 12000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti25','移動', '','move', '5', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti21','特急 しおさい３号','', 'move', '5', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti22','地球の丸く見える丘展望館', '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました。(千葉県銚子市天王台1421-13)','spot', '5', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti23','徒歩', '','move', '5', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti24','漁業体験 定置網漁','', 'experience', '5', 180, 12000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti25','特急 しおさい14号', '','move', '5', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti26','移動','', 'move', '6', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti27','観光', '圓福寺（飯沼観音）','spot', '6', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti28','移動', '','move', '6', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti29','アクティビティ','社会貢献活動 浜辺のゴミ拾い', 'experience', '6', 120, 0, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti30','移動', '','move', '6', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti26','特急 しおさい３号','', 'move', '6', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti27','圓福寺（飯沼観音）', '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています。(千葉県銚子市馬場町2934)','spot', '6', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti28','徒歩', '','move', '6', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti29','社会貢献活動 浜辺のゴミ拾い','', 'experience', '6', 120, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti30','特急 しおさい14号', '','move', '6', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti31','移動','', 'move', '10', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti32','観光', '犬吠埼灯台','spot', '10', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti33','移動', '','move', '10', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti34','アクティビティ','キャンプ場運営体験 イベントのスタッフ', 'experience', '10', 300, 8000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti35','移動', '','move', '10', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti31','特急 しおさい３号','', 'move', '10', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti32','犬吠埼灯台', '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。(千葉県銚子市犬吠埼957612)','spot', '10', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti33','徒歩', '','move', '10', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti34','キャンプ場運営体験 イベントのスタッフ','', 'experience', '10', 300, 8000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti35','特急 しおさい14号', '','move', '10', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti36','移動','', 'move', '11', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti37','観光', '地球の丸く見える丘展望館','spot', '11', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti38','移動', '','move', '11', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti39','アクティビティ','キャンプ中級者体験 ブッシュクラフト火おこし', 'experience', '11', 60, 5000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti40','移動', '','move', '11', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti36','特急 しおさい３号','', 'move', '11', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti37','地球の丸く見える丘展望館', '標高90mの屋上展望スペースからは360度の大パノラマが楽しめます。水平線の両端が丸みを帯びて見えることから、その名が付けられました。(千葉県銚子市天王台1421-13)','spot', '11', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti38','徒歩', '','move', '11', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti39','キャンプ中級者体験 ブッシュクラフト火おこし','', 'experience', '11', 60, 5000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti40','特急 しおさい14号', '','move', '11', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti41','移動','', 'move', '12', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti42','観光', '圓福寺（飯沼観音）','spot', '12', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti43','移動', '','move', '12', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti44','アクティビティ','トレインランニング', 'experience', '12', 300, 3000, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti45','移動', '','move', '12', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti41','特急 しおさい３号','', 'move', '12', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti42','圓福寺（飯沼観音）', '真言宗の寺院で、貴重な美術品や古文書が保管されています。特に「釈迦涅槃殿」は千葉県の重要文化財に指定されています。(千葉県銚子市馬場町2934)','spot', '12', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti43','徒歩', '','move', '12', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti44','トレインランニング','', 'experience', '12', 300, 3000, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti45','特急 しおさい14号', '','move', '12', 60, 1500, 5);
 
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti46','移動','', 'move', '13', 30, 400, 1);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti47','観光', '犬吠埼灯台','spot', '13', 60, 500, 2);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti48','移動', '','move', '13', 20, 300, 3);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti49','アクティビティ','スペシャルオファー<複業> ショップの企画担当', 'experience', '13', 0, 0, 4);
-INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti50','移動', '','move', '13', 60, 200, 5);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti46','特急 しおさい３号','', 'move', '13', 60, 1500, 1);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti47','犬吠埼灯台', '銚子のシンボルとして知られる白亜の灯台です。本州で最も早く朝日が昇る場所としても有名です。(千葉県銚子市犬吠埼957612)','spot', '13', 60, 500, 2);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti48','徒歩', '','move', '13', 20, 300, 3);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti49','スペシャルオファー<複業> ショップの企画担当','', 'experience', '13', 0, 0, 4);
+INSERT INTO auster.travel_spot_itinerary (id, title, description, kind, travel_spot_id, take_time, price, `order`) VALUES ('iti50','特急 しおさい14号', '','move', '13', 60, 1500, 5);
 
 
 CREATE TABLE `travel_spot_itinerary_item`
