@@ -30,7 +30,7 @@ func NewClient() *Client {
 	}
 }
 
-// URL
+// URL -
 func (c *Client) URL() string {
 	return fmt.Sprintf("http://%s:%s", c.host, c.port)
 }
