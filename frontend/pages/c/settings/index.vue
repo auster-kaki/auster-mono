@@ -84,7 +84,8 @@ export default {
   },
   methods: {
     fetchUsers() {
-      return fetch('http://localhost:8080/users', {
+
+      return fetch(`${process.env.BASE_URL}/users`, {
         headers: {
           'Content-Type': 'application/json'
         }

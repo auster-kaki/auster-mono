@@ -1,87 +1,92 @@
 <template>
-  <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
-    <v-stepper-header style="box-shadow: unset !important;">
-      <v-stepper-step :complete="currentStep > 1" step="1" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 2" step="2" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 3" step="3" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 4" step="4" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 5" step="5" />
-      <v-divider />
-      <v-stepper-step :complete="currentStep > 6" step="6" />
-    </v-stepper-header>
+  <div>
+    <v-stepper v-model="currentStep" class="mb-16" flat max-width="1200px" style="margin: 0 auto;">
+      <v-stepper-header style="box-shadow: unset !important;">
+        <v-stepper-step :complete="currentStep > 1" step="1" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 2" step="2" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 3" step="3" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 4" step="4" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 5" step="5" />
+        <v-divider />
+        <v-stepper-step :complete="currentStep > 6" step="6" />
+      </v-stepper-header>
 
-    <v-stepper-items>
-      <v-stepper-content step="1">
-        <departure-selection
-          :departure-place="departureForm.departurePlace"
-          :departure-date="departureForm.departureDate"
-          :return-date="departureForm.returnDate"
-          :departure-time="departureForm.departureTime"
-          :return-time="departureForm.returnTime"
-          :interests="departureForm.interests"
-          @submit="handleDepatureSelectionSubmit"
-        />
-      </v-stepper-content>
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <departure-selection
+            :departure-place="departureForm.departurePlace"
+            :departure-date="departureForm.departureDate"
+            :return-date="departureForm.returnDate"
+            :departure-time="departureForm.departureTime"
+            :return-time="departureForm.returnTime"
+            :interests="departureForm.interests"
+            @submit="handleDepatureSelectionSubmit"
+          />
+        </v-stepper-content>
 
-      <v-stepper-content step="2">
-        <destination-selection
-          @destination-selected="handleDestinationSelected"
-        />
-        <v-btn text @click="currentStep -= 1">
-          戻る
-        </v-btn>
-      </v-stepper-content>
+        <v-stepper-content step="2">
+          <destination-selection
+            @destination-selected="handleDestinationSelected"
+          />
+          <v-btn text @click="currentStep -= 1">
+            戻る
+          </v-btn>
+        </v-stepper-content>
 
-      <v-stepper-content step="3">
-        <experience-selection
-          :experiences="experienceForm.experiences"
-          @click="handleSelectExperience"
-        />
-        <v-container>
-          <v-row class="mt-4 pb-4">
-            <v-btn text @click="currentStep -= 1">戻る</v-btn>
-          </v-row>
-        </v-container>
-      </v-stepper-content>
-      <v-stepper-content style="padding: 8px" step="4">
-        <diary-carousel :diary="createdDiary" @select="handleSelectDiary" />
-        <v-btn text @click="currentStep -= 1">
-          戻る
-        </v-btn>
-      </v-stepper-content>
-      <v-stepper-content step="5">
-        <h2 class="text-center mb-4">旅程</h2>
-        <NewDiaryItinerary
-          :bring="bring"
-          :itinerary="itinerary"
-        />
-        <v-container>
-          <v-row class="mt-4 pb-4">
-            <v-btn text @click="currentStep -= 1">戻る</v-btn>
-            <v-spacer />
-            <v-btn color="primary" @click="onGoToConfirm">申し込み確認画面へ</v-btn>
-          </v-row>
-        </v-container>
-      </v-stepper-content>
-      <v-stepper-content step="6">
-        <NewDiaryConfirm
-          :itinerary="itinerary"
-          @confirm="handleConfirm"
-        />
-        <v-container>
-          <v-row class="mt-4 pb-4">
-            <v-btn text @click="currentStep -= 1">戻る</v-btn>
-            <v-spacer />
-            <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
-          </v-row>
-        </v-container>
-      </v-stepper-content>
-    </v-stepper-items>
-  </v-stepper>
+        <v-stepper-content step="3">
+          <experience-selection
+            :experiences="experienceForm.experiences"
+            @click="handleSelectExperience"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+        <v-stepper-content style="padding: 8px" step="4">
+          <diary-carousel :diary="createdDiary" @select="handleSelectDiary" />
+          <v-btn text @click="currentStep -= 1">
+            戻る
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="5">
+          <h2 class="text-center mb-4">旅程</h2>
+          <NewDiaryItinerary
+            :bring="bring"
+            :itinerary="itinerary"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
+              <v-spacer />
+              <v-btn color="primary" @click="onGoToConfirm">申し込み確認画面へ</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+        <v-stepper-content step="6">
+          <NewDiaryConfirm
+            :itinerary="itinerary"
+            @confirm="handleConfirm"
+          />
+          <v-container>
+            <v-row class="mt-4 pb-4">
+              <v-btn text @click="currentStep -= 1">戻る</v-btn>
+              <v-spacer />
+              <v-btn color="primary" @click="handleConfirm">予約する</v-btn>
+            </v-row>
+          </v-container>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -164,7 +169,8 @@ export default {
           'name': '銚子市観光課',
           'address': '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）'
         }
-      ]
+      ],
+      loading: false
     }
   },
   mounted() {
@@ -178,6 +184,7 @@ export default {
       this.currentStep += 1
     },
     async handleDestinationSelected(id) {
+      this.loading = true
       this.destinationForm.id = id
       const params = new URLSearchParams({
         user_id: this.userInfo.id,
@@ -230,9 +237,12 @@ export default {
         this.currentStep += 1
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error)
+      } finally {
+        this.loading = false
       }
     },
     async handleSelectExperience(id) {
+      this.loading = true
       try {
         const response = await fetch(`${process.env.BASE_URL}/travel_spots/${id}/diary`, {
           method: 'POST',
@@ -268,9 +278,12 @@ export default {
 
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error)
+      } finally {
+        this.loading = false
       }
     },
     async handleSelectDiary(_id) {
+      this.loading = true
       const params = new URLSearchParams({
         user_id: this.userInfo.id
       })
@@ -296,43 +309,52 @@ export default {
         this.currentStep += 1
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error)
+      } finally {
+        this.loading = false
       }
     },
     onGoToConfirm() {
       this.currentStep += 1
     },
     async handleConfirm() {
-      await fetch(`${process.env.BASE_URL}/reservations`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user_id: this.userInfo.id,
-          travel_spot_id: this.selectedTravelSpotId,
-          travel_spot_diary_id: this.createdDiary.id.toString(),
-          from_date: this.departureForm.departureDate,
-          to_date: this.departureForm.returnDate
+      this.loading = true
+      try {
+        await fetch(`${process.env.BASE_URL}/reservations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: this.userInfo.id,
+            travel_spot_id: this.selectedTravelSpotId,
+            travel_spot_diary_id: this.createdDiary.id.toString(),
+            from_date: this.departureForm.departureDate,
+            to_date: this.departureForm.returnDate
+          })
         })
-      })
 
-      const selectedExperience = this.experienceForm.experiences.find((experience) => experience.id === this.selectedTravelSpotId)
-      const vendor = this.vendorMaster.find((vendor) => vendor.id === selectedExperience.vendorId)
+        const selectedExperience = this.experienceForm.experiences.find((experience) => experience.id === this.selectedTravelSpotId)
+        const vendor = this.vendorMaster.find((vendor) => vendor.id === selectedExperience.vendorId)
 
-      await fetch(`${process.env.BASE_URL}/encounters`,{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user_id: this.userInfo.id,
-          name: vendor.name,
-          place: vendor.address,
-          date: this.departureForm.departureDate,
-          description: this.createdDiary.title,
+        await fetch(`${process.env.BASE_URL}/encounters`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: this.userInfo.id,
+            name: vendor.name,
+            place: vendor.address,
+            date: this.departureForm.departureDate,
+            description: this.createdDiary.title
+          })
         })
-      })
-      this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
+        this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

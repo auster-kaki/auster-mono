@@ -62,7 +62,19 @@ export default {
       start_url: '/', // 起動時のURL
       background_color: '#ffffff', // スプラッシュスクリーンの背景色
       theme_color: '#3CB371', // ステータスバーやナビゲーションバーの色
-      lang: 'ja' // アプリの言語設定
+      lang: 'ja', // アプリの言語設定
+      icons: [
+        {
+          src: '/pwa_icon_192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/pwa_icon_512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
     },
     workbox: {
       enabled: true // 開発モードでも有効にする場合は true
