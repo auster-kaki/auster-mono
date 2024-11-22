@@ -46,16 +46,8 @@
           class="px-4 py-2 mb-2"
           @click="handleSelect"
         >
-          <span class="text-white font-weight-bold">これにする</span>
+          <span class="text-white font-weight-bold">この体験日記にする</span>
         </v-btn>
-        <v-sheet style="position: absolute; top: 0; right: 0;">
-          <v-btn icon @click="showShareMessage">
-            <v-icon size="x-large">mdi-share-variant</v-icon>
-          </v-btn>
-          <v-btn icon class="mr-4" @click="showDownloadMessage">
-            <v-icon size="x-large">mdi-download</v-icon>
-          </v-btn>
-        </v-sheet>
       </v-sheet>
     </v-card>
     <v-snackbar v-model="snackbar" :timeout="2000" color="accent" class="text-center">
