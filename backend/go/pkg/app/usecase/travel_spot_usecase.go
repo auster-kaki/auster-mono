@@ -33,7 +33,30 @@ func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.Us
 	if err != nil {
 		return nil, err
 	}
-	return travelSpots, nil
+	rs, err := u.repository.Reservation().GetEndedReservations(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	// 体験のレベルに応じて表示する体験を絞り込む
+	// レベル1: 0回以上の体験したことがある
+	// レベル2: 3回以上の体験したことがある
+	// レベル3: 5回以上の体験したことがある
+	out := make(entity.TravelSpots, 0)
+	for _, travelSpot := range travelSpots {
+		if (travelSpot.Level == entity.TravelSpotLevel1) ||
+			(travelSpot.Level == entity.TravelSpotLevel2 && len(rs) >= 3) ||
+			(travelSpot.Level == entity.TravelSpotLevel3 && len(rs) >= 5) {
+			out = append(out, travelSpot)
+		}
+	}
+	slices.SortFunc(out, func(a, b *entity.TravelSpot) int {
+		return int(b.Level) - int(a.Level)
+	})
+	if len(out) > 4 {
+		out = out[:4]
+	}
+	return out, nil
 }
 
 type CreateDiaryOutput struct {

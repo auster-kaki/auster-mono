@@ -59,22 +59,23 @@ CREATE TABLE `travel_spot`
     `description` text COLLATE utf8mb4_bin        NOT NULL COMMENT '説明',
     `address`     varchar(255) COLLATE utf8mb4_bin NOT NULL,
     `photo_path`  varchar(255) COLLATE utf8mb4_bin NOT NULL,
+    `level`       int NOT NULL COMMENT '難易度',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='旅行先の体験スポット';
 
 -- 体験スポット
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('1', 'gyo1', '釣り体験 ヒラマサ', 180, '船釣りでヒラマサを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/1/output (9).jpg');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('10', 'can2', 'キャンプ場運営体験 イベントのスタッフ', 300, '周辺地域のショップ様と共同開催するイベントのスタッフ業務をお任せします', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/10/');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('11', 'can1', 'キャンプ中級者体験 ブッシュクラフト火おこし', 60, 'キャンパーが一度は憧れるブッシュクラフト、火おこし体験ができます', '千葉県長生郡一宮町東浪見1611', '/assets/images/travel_spots/11/');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('12', 'can3', 'トレインランニング', 300, '銚子電鉄の駅を自分の足で巡りながら大自然を駆け抜けるトレインランニングを体験できます', '千葉県銚子市新生町2丁目297番地', '/assets/images/travel_spots/12/');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('13', 'can2', 'スペシャルオファー<複業> ショップの企画担当', 0, 'キャンプ場周辺のショップで企画担当を募集します', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/13/');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('2', 'gyo1', '釣り体験 シイラ', 240, '船釣りでクロカジキを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/2/3F2B9C03-A756-4C00-B08A-96C196E699F7.jpg');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('3', 'gyo1', '釣り体験 ヒラメ', 180, '船釣りでヒラメを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/3/19420E4F-630F-4525-ADF0-D33C1FD74561.jpg');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('4', 'gyo1', '漁業体験 競りの見学', 120, '競りの市場を見学できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/4/9186BC41-B7AB-4B04-B173-D9CC9DD8F46C.jpg');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/5/ryo (1).jpg');
-INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）', '/assets/images/travel_spots/6/');
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('1', 'gyo1', '釣り体験 ヒラマサ', 180, '船釣りでヒラマサを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/1/', 1);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('10', 'can2', 'キャンプ場運営体験 イベントのスタッフ', 300, '周辺地域のショップ様と共同開催するイベントのスタッフ業務をお任せします', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/10/', 1);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('11', 'can1', 'キャンプ中級者体験 ブッシュクラフト火おこし', 60, 'キャンパーが一度は憧れるブッシュクラフト、火おこし体験ができます', '千葉県長生郡一宮町東浪見1611', '/assets/images/travel_spots/11/', 2);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('12', 'can3', 'トレインランニング', 300, '銚子電鉄の駅を自分の足で巡りながら大自然を駆け抜けるトレインランニングを体験できます', '千葉県銚子市新生町2丁目297番地', '/assets/images/travel_spots/12/', 2);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('13', 'can2', 'スペシャルオファー<複業> ショップの企画担当', 0, 'キャンプ場周辺のショップで企画担当を募集します', '千葉県大網白里市四天木2761-40', '/assets/images/travel_spots/13/', 3);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('2', 'gyo1', '釣り体験 シイラ', 240, '船釣りでクロカジキを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/2/', 1);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('3', 'gyo1', '釣り体験 ヒラメ', 180, '船釣りでヒラメを釣る体験ができます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/3/', 1);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('4', 'gyo1', '漁業体験 競りの見学', 120, '競りの市場を見学できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/4/', 1);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('5', 'gyo1', '漁業体験 定置網漁', 180, '定置網漁を体験できます', '千葉県銚子市川口町 2丁目6528番地', '/assets/images/travel_spots/5/', 2);
+INSERT INTO auster.travel_spot (id, vendor_id, title, take_time, description, address, photo_path, level) VALUES ('6', 'gyo2', '社会貢献活動 浜辺のゴミ拾い', 120, '銚子の海岸に打ち上げられた漂流物の清掃を実施します', '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）', '/assets/images/travel_spots/6/', 2);
 
 CREATE TABLE `travel_spot_itinerary`
 (
