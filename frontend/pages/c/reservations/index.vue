@@ -118,14 +118,14 @@ export default {
         const data = await response.json()
 
         // APIレスポンスを変換
-        this.reservations = data.map(item => ({
-          id: item.ID,
-          title: `旅行 ${item.TravelSpotID}`, // 仮のタイトル
-          fromDate: item.FromDate.split('T')[0],
-          toDate: item.ToDate.split('T')[0],
-          city: '仮の旅行先',
-          image: 'https://example.com/default.jpg', // 仮の画像URL
-          isOffer: item.IsOffer
+        this.reservations = data.reservations.map(item => ({
+          id: item.id,
+          title: item.travel_spot_title,
+          fromDate: item.from_date.split('T')[0],
+          toDate: item.to_date.split('T')[0],
+          city: '銚子',
+          image: `${process.env.BASE_URL}/images/${item.diary_photo_path}`,
+          isOffer: item.is_offer
         }))
       } catch (error) {
         console.error('予約の取得に失敗しました', error)
