@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -22,14 +23,19 @@ func NewImageHandler() []Input {
 func getImage(w http.ResponseWriter, r *http.Request) {
 	// ファイルの存在確認
 	filename := r.PathValue("path")
-	fmt.Println(filename)
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
+	decodedFilename, err := url.QueryUnescape(filename)
+	if err != nil {
+		response.HandleError(r.Context(), w, fmt.Errorf("failed to decode filename. %w", err))
+		return
+	}
+
+	if _, err := os.Stat(decodedFilename); os.IsNotExist(err) {
 		response.HandleError(r.Context(), w, fmt.Errorf("image not found path:%s. %w", filename, err))
 		return
 	}
 
 	// Content-Typeの設定
-	ext := filepath.Ext(filename)
+	ext := filepath.Ext(decodedFilename)
 	switch ext {
 	case ".jpg", ".jpeg":
 		w.Header().Set("Content-Type", "image/jpeg")
@@ -43,5 +49,5 @@ func getImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// ファイルを送信
-	http.ServeFile(w, r, filename)
+	http.ServeFile(w, r, decodedFilename)
 }
