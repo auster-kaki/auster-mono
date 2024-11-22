@@ -71,11 +71,11 @@ type UserInput struct {
 	Name    string
 	Gender  string
 	Age     int
-	Photo   UserPhoto
+	Photo   Photo
 	Hobbies entity.Hobbies
 }
 
-type UserPhoto struct {
+type Photo struct {
 	Filename    string
 	Body        []byte
 	ContentType string
