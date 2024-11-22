@@ -16,7 +16,7 @@ func NewTravelSpotDiary(db *bun.DB) *TravelSpotDiary {
 	return &TravelSpotDiary{db: db}
 }
 
-func (t *TravelSpotDiary) Create(ctx context.Context, ents ...entity.TravelSpotDiary) error {
+func (t *TravelSpotDiary) Create(ctx context.Context, ents ...*entity.TravelSpotDiary) error {
 	if _, err := t.db.NewInsert().Model(&ents).Exec(ctx); err != nil {
 		return handleError(err)
 	}
@@ -46,9 +46,9 @@ func (t *TravelSpotDiary) GetByIDs(ctx context.Context, ids []entity.TravelSpotD
 	return res, nil
 }
 
-func (t *TravelSpotDiary) FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.TravelSpotDiary, error) {
-	res := &entity.TravelSpotDiary{}
-	if err := t.db.NewSelect().Model(res).
+func (t *TravelSpotDiary) FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.TravelSpotDiaries, error) {
+	res := entity.TravelSpotDiaries{}
+	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
 		Where("travel_spot_id = ?", travelSpotID).
 		Scan(ctx); err != nil {

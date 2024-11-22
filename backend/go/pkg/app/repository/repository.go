@@ -64,16 +64,18 @@ type TravelSpotItineraryItemRepository interface {
 }
 
 type TravelSpotDiaryRepository interface {
-	Create(ctx context.Context, travelSpotDiaries ...entity.TravelSpotDiary) error
+	Create(ctx context.Context, travelSpotDiaries ...*entity.TravelSpotDiary) error
 	Update(ctx context.Context, travelSpotDiary *entity.TravelSpotDiary) error
 	FindByID(ctx context.Context, id entity.TravelSpotDiaryID) (*entity.TravelSpotDiary, error)
 	GetByIDs(ctx context.Context, ids []entity.TravelSpotDiaryID) (entity.TravelSpotDiaries, error)
-	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.TravelSpotDiary, error)
+	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.TravelSpotDiaries, error)
 }
 
 type ReservationRepository interface {
-	Create(ctx context.Context, reservations ...entity.Reservation) error
+	Create(ctx context.Context, reservations ...*entity.Reservation) error
 	FindByID(ctx context.Context, id entity.ReservationID) (*entity.Reservation, error)
+	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.Reservations, error)
+	FindSpecialOfferByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.Reservation, error)
 	GetEndedReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
 	GetUpcomingReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
 }

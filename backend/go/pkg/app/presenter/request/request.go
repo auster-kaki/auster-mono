@@ -61,5 +61,6 @@ type Reservation struct {
 }
 
 type DiaryDescription struct {
+	UserID      string `json:"user_id"`
 	Description string `json:"description"`
 }

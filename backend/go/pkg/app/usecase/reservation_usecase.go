@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"context"
+	_ "embed"
 	"errors"
 	"fmt"
 	"path/filepath"
+	"slices"
 	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -31,7 +33,7 @@ type CreateReservationInput struct {
 
 func (u *ReservationUseCase) Create(ctx context.Context, input *CreateReservationInput) (entity.ReservationID, error) {
 	id := austerid.Generate[entity.ReservationID]()
-	if err := u.repository.Reservation().Create(ctx, entity.Reservation{
+	if err := u.repository.Reservation().Create(ctx, &entity.Reservation{
 		ID:                id,
 		UserID:            input.UserID,
 		TravelSpotID:      input.TravelSpotID,
@@ -145,8 +147,20 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 	}, nil
 }
 
-func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, id entity.ReservationID, photo Photo) (string, error) {
-	reservation, err := u.repository.Reservation().FindByID(ctx, id)
+//go:embed img/fishing.jpeg
+var fishingImg []byte
+
+//go:embed img/camp.jpg
+var campingImg []byte
+
+type UpdateDiaryPhotoInput struct {
+	ID     entity.ReservationID
+	UserID entity.UserID
+	Photo  Photo
+}
+
+func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, input UpdateDiaryPhotoInput) (string, error) {
+	reservation, err := u.repository.Reservation().FindByID(ctx, input.ID)
 	if err != nil {
 		return "", err
 	}
@@ -157,9 +171,9 @@ func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, id entity.Res
 	}
 
 	path, err := austerstorage.Save(
-		austerstorage.ContentType(photo.ContentType),
-		filepath.Join("travel_spot_diaries", string(travelSpotDiary.UserID), string(reservation.TravelSpotDiaryID), photo.Filename),
-		photo.Body,
+		austerstorage.ContentType(input.Photo.ContentType),
+		filepath.Join("travel_spot_diaries", string(travelSpotDiary.UserID), string(reservation.TravelSpotDiaryID), input.Photo.Filename),
+		input.Photo.Body,
 	)
 	if err != nil {
 		return "", err
@@ -170,11 +184,21 @@ func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, id entity.Res
 		return "", err
 	}
 
+	if err := u.createSpecialOffer(ctx, input.UserID, reservation.TravelSpotID); err != nil {
+		return "", err
+	}
+
 	return path, nil
 }
 
-func (u *ReservationUseCase) UpdateDiaryDescription(ctx context.Context, id entity.ReservationID, description string) error {
-	reservation, err := u.repository.Reservation().FindByID(ctx, id)
+type UpdateDiaryDescriptionInput struct {
+	ID          entity.ReservationID
+	UserID      entity.UserID
+	Description string
+}
+
+func (u *ReservationUseCase) UpdateDiaryDescription(ctx context.Context, input UpdateDiaryDescriptionInput) error {
+	reservation, err := u.repository.Reservation().FindByID(ctx, input.ID)
 	if err != nil {
 		return err
 	}
@@ -184,8 +208,99 @@ func (u *ReservationUseCase) UpdateDiaryDescription(ctx context.Context, id enti
 		return err
 	}
 
-	travelSpotDiary.Description = description
+	travelSpotDiary.Description = input.Description
 	if err := u.repository.TravelSpotDiary().Update(ctx, travelSpotDiary); err != nil {
+		return err
+	}
+
+	if err := u.createSpecialOffer(ctx, input.UserID, reservation.TravelSpotID); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *ReservationUseCase) createSpecialOffer(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) error {
+	// スペシャルオファーが存在すれば何もしない
+	offer, err := u.repository.Reservation().FindSpecialOfferByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if err != nil && !errors.Is(err, repository.ErrNotFound) {
+		return err
+	}
+	if offer != nil {
+		return nil
+	}
+
+	userHobbies, err := u.repository.UserHobby().GetByUserID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	hobbies, err := u.repository.Hobby().GetByIDs(ctx, userHobbies.HobbyIDs())
+	if err != nil {
+		return err
+	}
+
+	var (
+		specialOffers  = entity.Reservations{}
+		specialDiaries = entity.TravelSpotDiaries{}
+	)
+	if slices.Contains(hobbies.Names(), "釣り") {
+		path, err := austerstorage.Save(austerstorage.JPEG, "/travel_spot_diaries/special/fishing.jpg", fishingImg)
+		if err != nil {
+			return err
+		}
+		diary := &entity.TravelSpotDiary{
+			ID:           austerid.Generate[entity.TravelSpotDiaryID](),
+			UserID:       userID,
+			TravelSpotID: "",
+			Title:        "漁師の想いを発信",
+			Date:         time.Date(2024, 12, 22, 0, 0, 0, 0, time.Local),
+			PhotoPath:    path,
+			Description:  "銚子の漁業組合でマーケターとして働き始めた。漁師さんたちの真摯な仕事ぶりや、美味しい魚が獲れる銚子の魅力を、SNSやWebで発信する役割だ。今日は朝市場で撮影し、鮮度抜群の魚の様子や、活気ある競りの雰囲気を配信。漁師さんたちの誇りと情熱を、より多くの人に伝えていきたい。",
+		}
+
+		specialOffers = append(specialOffers, &entity.Reservation{
+			ID:                austerid.Generate[entity.ReservationID](),
+			UserID:            userID,
+			TravelSpotID:      "",
+			TravelSpotDiaryID: diary.ID,
+			FromDate:          time.Date(2024, 12, 22, 0, 0, 0, 0, time.Local),
+			ToDate:            time.Date(2024, 12, 25, 0, 0, 0, 0, time.Local),
+			IsOffer:           true,
+		})
+		specialDiaries = append(specialDiaries, diary)
+	}
+
+	if slices.Contains(hobbies.Names(), "キャンプ") {
+		path, err := austerstorage.Save(austerstorage.JPEG, "/travel_spot_diaries/special/camp.jpg", campingImg)
+		if err != nil {
+			return err
+		}
+
+		diary := &entity.TravelSpotDiary{
+			ID:           austerid.Generate[entity.TravelSpotDiaryID](),
+			UserID:       userID,
+			TravelSpotID: "",
+			Title:        "自然と音楽の交差点",
+			Date:         time.Date(2024, 12, 22, 0, 0, 0, 0, time.Local),
+			PhotoPath:    path,
+			Description:  "銚子のアウトドアショップで、イベント企画の仕事を始めた。キャンプ場でのカクテルバーや、アコースティックライブなど、自然の中での特別な体験を提供。今日は秋のイベントの打ち合わせで、スタッフと意見交換。夕暮れのキャンプサイトで音楽を楽しむ企画が好評で、次回は規模を拡大することに。趣味を仕事にできる喜びを実感。",
+		}
+		specialOffers = append(specialOffers, &entity.Reservation{
+			ID:                austerid.Generate[entity.ReservationID](),
+			UserID:            userID,
+			TravelSpotID:      "",
+			TravelSpotDiaryID: diary.ID,
+			FromDate:          time.Date(2024, 12, 22, 0, 0, 0, 0, time.Local),
+			ToDate:            time.Date(2024, 12, 25, 0, 0, 0, 0, time.Local),
+			IsOffer:           true,
+		})
+		specialDiaries = append(specialDiaries, diary)
+	}
+
+	if err := u.repository.Reservation().Create(ctx, specialOffers...); err != nil {
+		return err
+	}
+	if err := u.repository.TravelSpotDiary().Create(ctx, specialDiaries...); err != nil {
 		return err
 	}
 	return nil

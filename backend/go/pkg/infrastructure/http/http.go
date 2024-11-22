@@ -25,8 +25,7 @@ func NewClient() *Client {
 	return &Client{
 		client: &http.Client{},
 		host:   cmp.Or(os.Getenv("DIARY_HOST"), "localhost"),
-		//NOTE: ローカル環境で利用する場合は80にする
-		port: cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
+		port:   cmp.Or(os.Getenv("DIARY_PORT"), ""),
 	}
 }
 
@@ -93,10 +92,6 @@ func (c *Client) CreateImage(ctx context.Context, input appRPC.CreateImageInput)
 	var response struct {
 		JobID  string `json:"job_id"`
 		Status string `json:"status"`
-	}
-
-	if err != nil {
-		return appRPC.CreateImageOutput{}, err
 	}
 
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
