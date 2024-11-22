@@ -24,7 +24,7 @@
               style="position:absolute; bottom: 10px; right: 10px; background: #fafafa !important;"
               class="elevation-4"
               text-color="accent"
-              @click="handleChipClick"
+              @click="triggerFileInput"
             >
               <v-icon size="24" color="accent">mdi-camera</v-icon>
               画像更新
@@ -52,6 +52,13 @@
     <v-snackbar v-model="snackbar" :timeout="2000" color="accent" class="text-center">
       {{ snackbarMessage }}
     </v-snackbar>
+    <!-- 非表示のファイル入力 -->
+    <input
+      ref="fileInput"
+      type="file"
+      style="display: none;"
+      @change="handleFileChange"
+    />
   </v-container>
 </template>
 
@@ -78,6 +85,7 @@ export default {
     const snackbar = ref(false)
     const snackbarMessage = ref('')
     const localContent = ref(props.diary.content)
+    const fileInput = ref(null)
 
     const updateContent = (value) => {
       emit('input', value)
@@ -109,18 +117,44 @@ export default {
       emit('camera-click')
     }
 
+    const triggerFileInput = () => {
+      fileInput.value.click()
+    }
+
+    // ファイルが選択されたときの処理
+    const handleFileChange = async (event) => {
+      const file = event.target.files[0]
+      if (!file) return
+
+      const formData = new FormData()
+      formData.append('photo', file)
+      try {
+        await fetch(`${process.env.BASE_URL}/reservations/${props.diary.id}/diary_photo`, {
+          method: 'PATCH',
+          body: formData
+        })
+        emit('camera-click')
+      } catch (error) {
+        console.error('Error uploading photo:', error)
+        showMessage('写真のアップロードに失敗しました')
+      }
+    }
+
     return {
       snackbar,
       snackbarMessage,
       localContent,
+      fileInput,
       updateContent,
       showDownloadMessage,
       showBookmarkMessage,
       handleSelect,
       updateDiary,
-      handleChipClick
+      handleChipClick,
+      triggerFileInput,
+      handleFileChange,
     }
-  }
+  },
 }
 </script>
 

@@ -64,7 +64,7 @@ export default defineComponent({
         <v-list>
           <v-list-item v-for="(item, index) in itinerary.filter(i => i.kind === 'spot')" :key="index">
             <v-list-item-content>
-              <v-list-item-title>{{ item.takeTime }}</v-list-item-title>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
               <v-list-item-subtitle>{{ item.price }}円</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

@@ -120,13 +120,14 @@ export default {
           }
         })
         const res = await response.json()
-        this.diaries = res.map(item => ({
-          image: 'todo',
-          title: item.ID,
-          date: item.FromDate.split('T')[0],
-          location: item.TravelSpotID,
-          content: item.TravelSpotDairyID,
-          isOffer: item.IsOffer
+        this.diaries = res.reservations.map(item => ({
+          image: `${process.env.BASE_URL}/images${item.diary_photo_path}`,
+          id: item.id,
+          title: item.travel_spot_title,
+          date: item.from_date.split('T')[0],
+          location: '銚子',
+          content: item.travel_spot_description,
+          isOffer: item.is_offer
         }))
 
       } catch (error) {

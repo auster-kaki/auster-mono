@@ -39,6 +39,7 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
+          v-if="isOffer"
           color="primary"
           class="px-4 py-2 mb-2"
           @click="acceptTheOffer"
