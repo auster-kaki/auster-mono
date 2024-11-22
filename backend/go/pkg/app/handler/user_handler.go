@@ -149,7 +149,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 			}
 			return hobbies
 		}(),
-		Photo: usecase.UserPhoto{
+		Photo: usecase.Photo{
 			Filename:    handler.Filename,
 			Body:        photo,
 			ContentType: handler.Header.Get("Content-Type"),
@@ -207,7 +207,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 			}
 			return hobbies
 		}(),
-		Photo: usecase.UserPhoto{
+		Photo: usecase.Photo{
 			Filename:    handler.Filename,
 			Body:        photo,
 			ContentType: handler.Header.Get("Content-Type"),
