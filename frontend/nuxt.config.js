@@ -25,7 +25,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'apple-touch-icon', href: '/icon.png' } // iOS用アイコン
+      { rel: 'apple-touch-icon', href: '/auster-mono/pwa_icon_192x192.png' } // iOS用アイコン
     ]
   },
 
@@ -54,23 +54,24 @@ export default {
     '@nuxtjs/pwa'
   ],
   pwa: {
-    manifest: {
-      name: 'My PWA App', // アプリの名前
-      short_name: 'MyApp', // アイコン下に表示される短縮名
+
+  manifest: {
+      name: 'SUNT', // アプリの名前
+      short_name: 'SUNT', // アイコン下に表示される短縮名
       description: 'A Progressive Web App built with Nuxt.js',
       display: 'standalone', // フルスクリーンモードを指定
-      start_url: '/', // 起動時のURL
+      start_url: '/auster-mono/c/histories', // 起動時のURL
       background_color: '#ffffff', // スプラッシュスクリーンの背景色
       theme_color: '#3CB371', // ステータスバーやナビゲーションバーの色
       lang: 'ja', // アプリの言語設定
       icons: [
         {
-          src: '/pwa_icon_192x192.png',
+          src: '/auster-mono/pwa_icon_192x192.png',
           sizes: '192x192',
           type: 'image/png'
         },
         {
-          src: '/pwa_icon_512x512.png',
+          src: '/auster-mono/pwa_icon_512x512.png',
           sizes: '512x512',
           type: 'image/png'
         }
