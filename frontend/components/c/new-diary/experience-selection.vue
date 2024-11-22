@@ -87,7 +87,7 @@ export default defineComponent({
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn class="primary" @click="selectExperience(experience.id)">この体験の日記を見る</v-btn>
+                <v-btn class="primary" @click="selectExperience(experience.id)">この体験日記を見る</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

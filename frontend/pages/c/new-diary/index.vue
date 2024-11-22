@@ -209,7 +209,7 @@ export default {
           experiences = data.slice(0, 4).map((spot, _i) => ({
             id: spot.ID,
             vendorId: spot.VendorID,
-            image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
+            image: spot.PhotoPath ? `${process.env.BASE_URL}/images${spot.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
             address: spot.Address,
@@ -220,7 +220,7 @@ export default {
           experiences = data.map((spot, _i) => ({
             id: spot.ID,
             vendorId: spot.VendorID,
-            image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
+            image: spot.PhotoPath ? `${process.env.BASE_URL}/images${spot.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
             address: spot.Address,
