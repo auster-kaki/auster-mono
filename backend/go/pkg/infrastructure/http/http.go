@@ -25,8 +25,7 @@ func NewClient() *Client {
 	return &Client{
 		client: &http.Client{},
 		host:   cmp.Or(os.Getenv("DIARY_HOST"), "localhost"),
-		//NOTE: ローカル環境で利用する場合は80にする
-		port: cmp.Or(os.Getenv("DIARY_PORT"), "5050"),
+		port:   cmp.Or(os.Getenv("DIARY_PORT"), ""),
 	}
 }
 
