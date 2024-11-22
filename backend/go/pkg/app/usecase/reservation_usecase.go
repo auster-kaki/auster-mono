@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
@@ -144,21 +145,32 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 	}, nil
 }
 
-func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, id entity.ReservationID, photo []byte) error {
+func (u *ReservationUseCase) UpdateDiaryPhoto(ctx context.Context, id entity.ReservationID, photo Photo) (string, error) {
 	reservation, err := u.repository.Reservation().FindByID(ctx, id)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	travelSpotDiary, err := u.repository.TravelSpotDiary().FindByID(ctx, reservation.TravelSpotDiaryID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	if _, err := austerstorage.Save(austerstorage.JPEG, travelSpotDiary.PhotoPath, photo); err != nil {
-		return err
+	path, err := austerstorage.Save(
+		austerstorage.ContentType(photo.ContentType),
+		filepath.Join("travel_spot_diaries", string(travelSpotDiary.UserID), string(reservation.TravelSpotDiaryID), photo.Filename),
+		photo.Body,
+	)
+	if err != nil {
+		return "", err
 	}
-	return nil
+
+	travelSpotDiary.PhotoPath = path
+	if err := u.repository.TravelSpotDiary().Update(ctx, travelSpotDiary); err != nil {
+		return "", err
+	}
+
+	return path, nil
 }
 
 func (u *ReservationUseCase) UpdateDiaryDescription(ctx context.Context, id entity.ReservationID, description string) error {

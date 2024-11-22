@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -34,7 +33,30 @@ func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.Us
 	if err != nil {
 		return nil, err
 	}
-	return travelSpots, nil
+	rs, err := u.repository.Reservation().GetEndedReservations(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	// 体験のレベルに応じて表示する体験を絞り込む
+	// レベル1: 0回以上の体験したことがある
+	// レベル2: 3回以上の体験したことがある
+	// レベル3: 5回以上の体験したことがある
+	out := make(entity.TravelSpots, 0)
+	for _, travelSpot := range travelSpots {
+		if (travelSpot.Level == entity.TravelSpotLevel1) ||
+			(travelSpot.Level == entity.TravelSpotLevel2 && len(rs) >= 3) ||
+			(travelSpot.Level == entity.TravelSpotLevel3 && len(rs) >= 5) {
+			out = append(out, travelSpot)
+		}
+	}
+	slices.SortFunc(out, func(a, b *entity.TravelSpot) int {
+		return int(b.Level) - int(a.Level)
+	})
+	if len(out) > 4 {
+		out = out[:4]
+	}
+	return out, nil
 }
 
 type CreateDiaryOutput struct {
@@ -54,19 +76,34 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	if err != nil {
 		return nil, fmt.Errorf("failed to find travel spot: %w", err)
 	}
+	/*
+		日記を生成する条件
+		1. 初めて体験を選択した場合
+		2. 予約後、もう一度体験を選択した場合
 
-	// 同じユーザで同じ体験が既に生成されたいた場合は再生成しないで即時返す
-	travelSpotDiary, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
-	if dErr != nil && !errors.Is(dErr, repository.ErrNotFound) {
+		日記を生成しない条件
+		1. 初めて体験を選択した後、一度予約をせずに戻り、もう一度同じ体験を選択した場合
+	*/
+	rs, err := u.repository.Reservation().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find reservation: %w", err)
+	}
+
+	travelSpotDiaries, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
+	if dErr != nil && dErr != repository.ErrNotFound {
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", dErr)
 	}
-	if travelSpotDiary != nil {
-		return &CreateDiaryOutput{
-			ID:          travelSpotDiary.ID,
-			Title:       travelSpotDiary.Title,
-			PhotoPath:   travelSpotDiary.PhotoPath,
-			Description: travelSpotDiary.Description,
-		}, nil
+	for _, travelSpotDiary := range travelSpotDiaries {
+		// 日記を生成しない条件
+		// 1. 初めて体験を選択した後、一度予約をせずに戻り、もう一度同じ体験を選択した場合
+		if !slices.Contains(rs.TravelSpotDiaryIDs(), travelSpotDiary.ID) {
+			return &CreateDiaryOutput{
+				ID:          travelSpotDiary.ID,
+				Title:       travelSpotDiary.Title,
+				PhotoPath:   travelSpotDiary.PhotoPath,
+				Description: travelSpotDiary.Description,
+			}, nil
+		}
 	}
 
 	gOut, err := u.generateDiary(ctx, user, travelSpot)

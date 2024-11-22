@@ -152,7 +152,7 @@ func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Req
 		id  = entity.ReservationID(r.PathValue("reservation_id"))
 	)
 
-	file, _, err := r.FormFile("photo")
+	file, handler, err := r.FormFile("photo")
 	if err != nil {
 		response.HandleError(ctx, w, err)
 		return
@@ -164,12 +164,16 @@ func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Req
 		response.HandleError(ctx, w, err)
 		return
 	}
-
-	if err := h.reservationUseCase.UpdateDiaryPhoto(ctx, id, photo); err != nil {
+	out, err := h.reservationUseCase.UpdateDiaryPhoto(ctx, id, usecase.Photo{
+		Filename:    handler.Filename,
+		Body:        photo,
+		ContentType: handler.Header.Get("Content-Type"),
+	})
+	if err != nil {
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.NoContent(w)
+	response.Created(w, out)
 }
 
 func (h *ReservationHandler) UpdateDescription(w http.ResponseWriter, r *http.Request) {
