@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/handler"
+	"github.com/auster-kaki/auster-mono/pkg/app/handler/middleware"
 	infraHTTP "github.com/auster-kaki/auster-mono/pkg/infrastructure/http"
 	"github.com/auster-kaki/auster-mono/pkg/infrastructure/rdb"
 	"github.com/auster-kaki/auster-mono/pkg/logging"
@@ -43,7 +44,9 @@ func _main() error {
 	}
 
 	logging.Info(context.Background(), "server is running on :8080")
-	if err := http.ListenAndServe(":8080", cors.AllowAll().Handler(mux)); err != nil {
+	if err := http.ListenAndServe(":8080",
+		middleware.NewRecover().Handle(cors.AllowAll().Handler(mux)),
+	); err != nil {
 		return err
 	}
 	return nil
