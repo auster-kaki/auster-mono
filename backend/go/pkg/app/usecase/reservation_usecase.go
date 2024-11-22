@@ -99,9 +99,9 @@ func (u *ReservationUseCase) List(ctx context.Context, input ListOutputInput) (*
 
 type GetReservationOutput struct {
 	Reservation           *entity.Reservation
+	TravelSpot            *entity.TravelSpot
 	TravelSpotItineraries entity.TravelSpotItineraries
 	TravelSpotDiary       *entity.TravelSpotDiary
-	Photo                 []byte
 }
 
 func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.ReservationID) (*GetReservationOutput, error) {
@@ -109,6 +109,12 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 	if err != nil {
 		return nil, err
 	}
+
+	travelSpot, err := u.repository.TravelSpot().FindByID(ctx, reservation.TravelSpotID)
+	if err != nil {
+		return nil, err
+	}
+
 	travelSpotItineraries, err := u.repository.TravelSpotItinerary().GetByTravelSpotID(ctx, reservation.TravelSpotID)
 	if err != nil {
 		return nil, err
@@ -118,16 +124,11 @@ func (u *ReservationUseCase) GetReservation(ctx context.Context, id entity.Reser
 		return nil, err
 	}
 
-	photo, err := austerstorage.Get(travelSpotDiary.PhotoPath)
-	if err != nil {
-		return nil, err
-	}
-
 	return &GetReservationOutput{
 		Reservation:           reservation,
+		TravelSpot:            travelSpot,
 		TravelSpotItineraries: travelSpotItineraries,
 		TravelSpotDiary:       travelSpotDiary,
-		Photo:                 photo,
 	}, nil
 }
 

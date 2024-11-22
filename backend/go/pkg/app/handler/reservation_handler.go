@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"io"
-	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -86,6 +85,7 @@ func (h *ReservationHandler) List(w http.ResponseWriter, r *http.Request) {
 			"id":                      reservation.ID,
 			"from_date":               reservation.FromDate,
 			"to_date":                 reservation.ToDate,
+			"is_offer":                reservation.IsOffer,
 			"travel_spot_title":       out.TravelSpotByID[reservation.TravelSpotID].Title,
 			"travel_spot_description": out.TravelSpotByID[reservation.TravelSpotID].Description,
 			"diary_photo_path":        out.DiaryByID[reservation.TravelSpotDiaryID].PhotoPath,
@@ -106,60 +106,33 @@ func (h *ReservationHandler) GetReservation(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// 画像ファイルとjsonを返す処理
-	w.Header().Set("Content-Type", "multipart/mixed; boundary=boundary")
-
-	// マルチパートレスポンスを生成
-	multipartWriter := multipart.NewWriter(w)
-	if err := multipartWriter.SetBoundary("boundary123"); err != nil {
-		response.HandleError(r.Context(), w, err)
-		return
+	res := map[string]any{
+		"id":                      out.Reservation.ID,
+		"from_date":               out.Reservation.FromDate,
+		"to_date":                 out.Reservation.ToDate,
+		"is_offer":                out.Reservation.IsOffer,
+		"travel_spot_title":       out.TravelSpot.Title,
+		"travel_spot_description": out.TravelSpot.Description,
+		"diary_title":             out.TravelSpotDiary.Title,
+		"diary_description":       out.TravelSpotDiary.Description,
+		"diary_photo_path":        out.TravelSpotDiary.PhotoPath,
+		"travelSpotItineraries": func() []any {
+			itineraries := make([]any, 0, len(out.TravelSpotItineraries))
+			for _, itinerary := range out.TravelSpotItineraries {
+				itineraries = append(itineraries, map[string]any{
+					"id":          itinerary.ID,
+					"title":       itinerary.Title,
+					"description": itinerary.Description,
+					"kind":        itinerary.Kind,
+					"take_time":   itinerary.TakeTime,
+					"price":       itinerary.Price,
+					"order":       itinerary.Order,
+				})
+			}
+			return itineraries
+		}(),
 	}
-
-	reservationJSON, err := json.Marshal(map[string]any{
-		"Reservation":           out.Reservation,
-		"TravelSpotItineraries": out.TravelSpotItineraries,
-		"TravelSpotDiary":       out.TravelSpotDiary,
-	})
-	if err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
-	// ユーザー情報をマルチパートレスポンスに書き込む
-	reservationPart, err := multipartWriter.CreatePart(map[string][]string{
-		"Content-Type": {"application/json"},
-	})
-	if err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
-	if _, err := reservationPart.Write(reservationJSON); err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
-	// 画像をマルチパートレスポンスに書き込む
-	if out.Photo != nil {
-		diaryPhotoPart, err := multipartWriter.CreatePart(map[string][]string{
-			"Content-Type": {"image/jpeg"},
-		})
-		if err != nil {
-			response.HandleError(ctx, w, err)
-			return
-		}
-		if _, err := diaryPhotoPart.Write(out.Photo); err != nil {
-			response.HandleError(ctx, w, err)
-			return
-		}
-	}
-
-	// マルチパートレスポンスを閉じる
-	if err := multipartWriter.Close(); err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
+	response.OK(w, res)
 }
 
 func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Request) {
