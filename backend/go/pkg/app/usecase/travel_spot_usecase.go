@@ -87,7 +87,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	// goサーバにも画像を保存
 	path, err := austerstorage.Save(
 		austerstorage.ContentType(austerstorage.PNG),
-		filepath.Join("diaries", string(id), gOut.Filename),
+		filepath.Join("travel_spot_diaries", string(userID), string(id), gOut.Filename),
 		gOut.GeneratedImage,
 	)
 	if err != nil {
