@@ -36,7 +36,7 @@ export default defineComponent({
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h3 class="text-h5 mb-4">銚子について</h3>
+        <h3 class="text-h5 mb-4 text-grey">銚子について</h3>
         <v-card>
           <v-card-text>
             <v-container>
@@ -61,7 +61,7 @@ export default defineComponent({
             </v-container>
 
 
-            <v-card-title class="text-h5">銚子の魅力：海と歴史が織りなす町</v-card-title>
+            <v-card-title class="text-h5">海と歴史が織りなす町</v-card-title>
             <v-card-subtitle>千葉県の東端に位置する銚子市。豊かな自然と歴史的な街並みが魅力の町をご紹介します。
             </v-card-subtitle>
           </v-card-text>

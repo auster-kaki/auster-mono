@@ -25,10 +25,10 @@ const openDiaryModal = () => {
 
 <template>
   <v-card @click="openDiaryModal">
-    <v-img :src="value.image" height="200" style="position:relative">
+    <v-img :src="value.image" height="300" style="position:relative; object-fit: cover; object-position: center top;">
       <v-chip
         v-if="value.isOffer"
-        style="position:absolute; top: 15px; right: 10px;"
+        style="position:absolute; bottom: 15px; right: 10px;"
         class="elevation-4"
         color="accent"
         :class="['animate-bounce']"
