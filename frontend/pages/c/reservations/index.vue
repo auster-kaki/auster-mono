@@ -11,17 +11,19 @@
           v-else
           :key="reservation.id"
           class="mb-4"
+          flat
         >
           <v-row no-gutters>
             <v-col cols="4">
               <v-img
                 :src="reservation.image"
-                height="100%"
+                max-height="128px"
+                max-width="158px"
                 cover
               />
             </v-col>
             <v-col cols="8">
-              <v-card-title>{{ reservation.title }}</v-card-title>
+              <v-card-title><strong>{{ reservation.title }}</strong></v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -32,7 +34,7 @@
                     <v-spacer />
                     <v-btn
                       color="primary"
-                      text
+                      outlined
                       @click="goToItinerary(reservation.id)"
                     >
                       旅程確認・日記更新

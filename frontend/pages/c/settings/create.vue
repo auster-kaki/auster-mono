@@ -105,8 +105,7 @@ export default {
             block
             type="submit"
           >
-            <v-icon left>mdi-account-plus</v-icon>
-            新規ユーザーを作成
+            作成
           </v-btn>
         </v-form>
       </v-col>

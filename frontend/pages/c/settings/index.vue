@@ -21,8 +21,7 @@
               block
               to="/c/settings/create"
             >
-              <v-icon left>mdi-account-plus</v-icon>
-              ユーザー作成画面へ
+              新規ユーザー作成
             </v-btn>
           </v-col>
         </v-row>
@@ -84,7 +83,8 @@ export default {
   },
   methods: {
     fetchUsers() {
-      return fetch('http://localhost:8080/users', {
+
+      return fetch(`${process.env.BASE_URL}/users`, {
         headers: {
           'Content-Type': 'application/json'
         }
