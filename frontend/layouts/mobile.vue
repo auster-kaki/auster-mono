@@ -30,10 +30,10 @@ export default {
       value: 'create',
       username: '', // ユーザー名を保持するためのプロパティを追加
       navigationItems: [
-        { value: 'create', to: '/c/new-diary', icon: 'mdi-pencil', label: '予約' },
+        { value: 'create', to: '/c/new-diary', icon: 'mdi-airplane-takeoff', label: '予約' },
         { value: 'reservations', to: '/c/reservations', icon: 'mdi-calendar-check', label: '予約確認' },
-        { value: 'history', to: '/c/histories', icon: 'mdi-history', label: '日記' },
-        { value: 'settings', to: '/c/settings', icon: 'mdi-cog', label: '設定' }
+        { value: 'history', to: '/c/histories', icon: 'mdi-book-open-page-variant', label: '日記' },
+        { value: 'settings', to: '/c/settings', icon: 'mdi-account', label: 'ユーザー' }
       ]
     }
   },

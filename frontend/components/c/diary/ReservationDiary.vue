@@ -64,6 +64,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useUserStore } from '~/store/user'
 
 export default {
   props: {
@@ -82,6 +83,7 @@ export default {
   },
   emits: ['input', 'camera-click', 'update-diary'],
   setup(props, { emit }) {
+
     const snackbar = ref(false)
     const snackbarMessage = ref('')
     const localContent = ref(props.diary.content)
@@ -126,8 +128,13 @@ export default {
       const file = event.target.files[0]
       if (!file) return
 
+      const userStore = useUserStore()
+      userStore.initializeUser()
+      const userInfo = userStore.userInfo
+
       const formData = new FormData()
       formData.append('photo', file)
+      formData.append('user_id', userInfo.id)
       try {
         await fetch(`${process.env.BASE_URL}/reservations/${props.diary.id}/diary_photo`, {
           method: 'PATCH',
