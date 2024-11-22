@@ -132,7 +132,39 @@ export default {
       itinerary: [],
       userInfo: {
         id: ''
-      }
+      },
+      vendorMaster: [
+        {
+          'id': 'can1',
+          'name': 'CampsiteTORAMI',
+          'address': '千葉県長生郡一宮町東浪見1611'
+        },
+        {
+          'id': 'can2',
+          'name': 'Beach Camp 九十九里',
+          'address': '千葉県大網白里市四天木2761-40'
+        },
+        {
+          'id': 'can3',
+          'name': '銚子電気鉄道',
+          'address': '千葉県銚子市新生町2丁目297番地'
+        },
+        {
+          'id': 'gyo1',
+          'name': '銚子市漁業協同組合',
+          'address': '千葉県銚子市川口町 2丁目6528番地'
+        },
+        {
+          'id': 'gyo2',
+          'name': '銚子市生活環境課 清掃美化班',
+          'address': '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）'
+        },
+        {
+          'id': 'gyo3',
+          'name': '銚子市観光課',
+          'address': '千葉県銚子市若宮町1-1 （銚子市役所本庁舎4階）'
+        }
+      ]
     }
   },
   mounted() {
@@ -171,6 +203,7 @@ export default {
           const shuffled = data.sort(() => 0.5 - Math.random())
           experiences = shuffled.slice(0, 4).map((spot, _i) => ({
             id: spot.ID,
+            vendorId: spot.VendorID,
             image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
@@ -181,6 +214,7 @@ export default {
           // そのまま入れる
           experiences = data.map((spot, _i) => ({
             id: spot.ID,
+            vendorId: spot.VendorID,
             image: spot.PhotoPath ? `${process.env.BASE_URL}/images/${data.PhotoPath}` : 'https://placehold.jp/300x200.png',
             title: spot.Name,
             description: spot.Description,
@@ -279,6 +313,23 @@ export default {
           travel_spot_diary_id: this.createdDiary.id.toString(),
           from_date: this.departureForm.departureDate,
           to_date: this.departureForm.returnDate
+        })
+      })
+
+      const selectedExperience = this.experienceForm.experiences.find((experience) => experience.id === this.selectedTravelSpotId)
+      const vendor = this.vendorMaster.find((vendor) => vendor.id === selectedExperience.vendorId)
+
+      await fetch(`${process.env.BASE_URL}/encounters`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: this.userInfo.id,
+          name: vendor.name,
+          place: vendor.address,
+          date: this.departureForm.departureDate,
+          description: this.createdDiary.title,
         })
       })
       this.$router.push({ path: '/c/reservations', query: { reservation: 'success' } })
