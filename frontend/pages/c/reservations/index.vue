@@ -27,7 +27,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    {{ formatDate(reservation.fromDate) }} - {{ reservation.fromDate }}
+                    {{ formatDate(reservation.fromDate) }} - {{ reservation.toDate }}
                   </v-row>
                   <v-row>
                     <div>{{ reservation.city }}</div>

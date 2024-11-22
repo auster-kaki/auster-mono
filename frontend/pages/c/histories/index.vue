@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="mb-8">
     <v-tabs v-model="activeTab">
       <v-tab>日記</v-tab>
       <v-tab>出会った人々</v-tab>
@@ -111,7 +111,7 @@ export default {
       try {
         const params = new URLSearchParams({
           user_id: this.userInfo.id,
-          filter: 'yet'
+          filter: 'done'
         })
         const response = await fetch(`${process.env.BASE_URL}/reservations?${params.toString()}`, {
           method: 'GET',
@@ -128,7 +128,12 @@ export default {
           location: '銚子',
           content: item.travel_spot_description,
           isOffer: item.is_offer
-        }))
+        })).sort((a, b) => {
+          if (b.isOffer !== a.isOffer) {
+            return b.isOffer - a.isOffer;
+          }
+          return new Date(b.date) - new Date(a.date);
+        });
 
       } catch (error) {
         console.error('履歴の取得に失敗しました', error)

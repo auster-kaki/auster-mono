@@ -56,7 +56,8 @@ func (t *Reservation) GetEndedReservations(ctx context.Context, userID entity.Us
 	res := entity.Reservations{}
 	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
-		Where("to_date < CURDATE()").Scan(ctx); err != nil {
+		Where("(to_date <= CURDATE() OR is_offer = 1)").
+		Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
@@ -66,7 +67,7 @@ func (t *Reservation) GetUpcomingReservations(ctx context.Context, userID entity
 	res := entity.Reservations{}
 	if err := t.db.NewSelect().Model(&res).
 		Where("user_id = ?", userID).
-		Where("from_date >= CURDATE()").Scan(ctx); err != nil {
+		Where("from_date >= CURDATE()").Where("is_offer = 0").Scan(ctx); err != nil {
 		return nil, handleError(err)
 	}
 	return res, nil
