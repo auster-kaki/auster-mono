@@ -83,12 +83,12 @@ func (h *ReservationHandler) List(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, reservation := range out.Reservations {
 		res["reservations"] = append(res["reservations"].([]any), map[string]any{
-			"id":                            reservation.ID,
-			"from_date":                     reservation.FromDate,
-			"to_date":                       reservation.ToDate,
-			"travel_spot_title":             out.TravelSpotByID[reservation.TravelSpotID].Title,
-			"travel_spot_diary_description": out.TravelSpotByID[reservation.TravelSpotID].Description,
-			"diary_photo_path":              out.DiaryByID[reservation.TravelSpotDiaryID].PhotoPath,
+			"id":                      reservation.ID,
+			"from_date":               reservation.FromDate,
+			"to_date":                 reservation.ToDate,
+			"travel_spot_title":       out.TravelSpotByID[reservation.TravelSpotID].Title,
+			"travel_spot_description": out.TravelSpotByID[reservation.TravelSpotID].Description,
+			"diary_photo_path":        out.DiaryByID[reservation.TravelSpotDiaryID].PhotoPath,
 		})
 	}
 	response.OK(w, res)
