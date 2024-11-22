@@ -60,7 +60,7 @@ export default {
         light: {
           primary: '#4E97E0',
           accent: '#3CB371',
-          secondary: '#5f7a54',
+          secondary: '#3CB371',
           info: '#03A9F4',
           warning: '#FFEB3B',
           error: '#F44336',
