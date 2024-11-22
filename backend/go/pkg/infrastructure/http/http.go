@@ -30,7 +30,7 @@ func NewClient() *Client {
 	}
 }
 
-// URL
+// URL -
 func (c *Client) URL() string {
 	return fmt.Sprintf("http://%s:%s", c.host, c.port)
 }
@@ -134,7 +134,7 @@ func (c *Client) GetStatus(ctx context.Context, input appRPC.GetStatusInput) (ap
 	}, nil
 }
 
-// ファイル書き込みの設定をしてないので、未検証
+// GetImagePath ファイル書き込みの設定をしてないので、未検証
 func (c *Client) GetImagePath(ctx context.Context, input appRPC.GetImagePathInput) (appRPC.GetImagePathOutput, error) {
 	var (
 		filename = fmt.Sprintf("%s.png", input.JobID)

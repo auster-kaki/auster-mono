@@ -41,9 +41,9 @@ RUN python -m ensurepip --upgrade
 RUN python -m pip install --upgrade setuptools
 RUN pip install --upgrade setuptools
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=./requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+COPY ./requirements.txt ./
+
+RUN python -m pip install -r requirements.txt
 
 
 COPY ./roop ./
@@ -62,9 +62,7 @@ RUN chown -R appuser:appuser /home/roop/api/
 COPY mq.sh ./
 RUN chmod +x mq.sh && ./mq.sh
 
-RUN \
-    --mount=type=cache,target=/var/cache/apt \
-    apt-get install -y erlang-base \
+RUN apt-get install -y erlang-base \
     erlang-asn1 erlang-crypto erlang-eldap erlang-ftp erlang-inets \
     erlang-mnesia erlang-os-mon erlang-parsetools erlang-public-key \
     erlang-runtime-tools erlang-snmp erlang-ssl \
