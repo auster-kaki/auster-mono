@@ -12,6 +12,8 @@ type ContentType string
 const (
 	JPEG ContentType = "image/jpeg"
 	PNG  ContentType = "image/png"
+	HEIC ContentType = "image/heic"
+	HEIF ContentType = "image/heif"
 )
 
 // Save はローカルにデータを保存しパスを返す
@@ -21,11 +23,11 @@ func Save(content ContentType, path string, data []byte) (string, error) {
 		return "", err
 	}
 
+	path = filepath.Join(pwd, "assets", "images", path)
 	switch content {
-	case JPEG:
-		path = filepath.Join(pwd, "assets", "images", path)
-	case PNG:
-		path = filepath.Join(pwd, "assets", "images", path)
+	case PNG, JPEG:
+		// ok
+	case HEIC, HEIF:
 	default:
 		return "", fmt.Errorf("invalid content type: %s", content)
 	}
