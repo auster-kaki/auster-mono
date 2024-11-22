@@ -15,6 +15,7 @@ services:
     environment:
       MYSQL_HOST: db
       DIARY_HOST: diary
+      DIARY_PORT: 80
     volumes:
       - image-data:/assets/images
     ports:
