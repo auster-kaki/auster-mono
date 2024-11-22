@@ -38,7 +38,7 @@
       </v-card-text>
       <v-card-actions v-if="!!isHistory">
         <v-spacer />
-        <v-btn dense class="primary" @click="updateDiary">日記更新</v-btn>
+        <v-btn dense class="primary" @click="updateDiary">体験日記更新</v-btn>
       </v-card-actions>
       <v-sheet v-if="!isHistory" class="d-flex justify-center" style="position: relative;">
         <v-btn
@@ -46,7 +46,7 @@
           class="px-4 py-2 mb-2"
           @click="handleSelect"
         >
-          <span class="text-white font-weight-bold">この日記で旅程を組む</span>
+          <span class="text-white font-weight-bold">これにする</span>
         </v-btn>
         <v-sheet style="position: absolute; top: 0; right: 0;">
           <v-btn icon @click="showShareMessage">

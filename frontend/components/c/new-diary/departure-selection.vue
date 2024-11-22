@@ -123,6 +123,11 @@ export default {
       interestError: ''
     }
   },
+  watch: {
+    interests() {
+      this.validateInterests()
+    }
+  },
   methods: {
     onSubmit() {
       if (this.validateInterests()) {
@@ -137,18 +142,13 @@ export default {
       }
     },
     validateInterests() {
-      if (this.interests.length === 0 || this.interests.includes('cstkdiat6c3011a83so0')) {
+      if (this.interests.includes('cstkdiat6c3011a83so0')) {
         this.interestError = ''
         return true
       } else {
-        this.interestError = 'デモ版では「釣り」のみ選択できます'
+        this.interestError = 'デモ版では「釣り」のみ選択でき、必須です。'
         return false
       }
-    }
-  },
-  watch: {
-    interests() {
-      this.validateInterests()
     }
   }
 }
