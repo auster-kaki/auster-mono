@@ -9,9 +9,10 @@ type TravelSpotID string
 type TravelSpotLevel int
 
 const (
-	TravelSpotLevel1 TravelSpotLevel = iota + 1
-	TravelSpotLevel2
-	TravelSpotLevel3
+	TravelSpotForOffer TravelSpotLevel = 0
+	TravelSpotLevel1   TravelSpotLevel = 1
+	TravelSpotLevel2   TravelSpotLevel = 2
+	TravelSpotLevel3   TravelSpotLevel = 3
 )
 
 type TravelSpot struct {

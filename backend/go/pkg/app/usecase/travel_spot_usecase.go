@@ -45,6 +45,10 @@ func (u *TravelSpotUseCase) GetTravelSpots(ctx context.Context, userID entity.Us
 	// レベル3: 5回以上の体験したことがある
 	out := make(entity.TravelSpots, 0)
 	for _, travelSpot := range travelSpots {
+		// NOTE: オファー体験は表示しない
+		if travelSpot.Level == entity.TravelSpotForOffer {
+			continue
+		}
 		if (travelSpot.Level == entity.TravelSpotLevel1) ||
 			(travelSpot.Level == entity.TravelSpotLevel2 && len(rs) >= 3) ||
 			(travelSpot.Level == entity.TravelSpotLevel3 && len(rs) >= 5) {
