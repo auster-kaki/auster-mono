@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -90,7 +91,7 @@ func (u *TravelSpotUseCase) CreateDiary(ctx context.Context, userID entity.UserI
 	}
 
 	travelSpotDiaries, dErr := u.repository.TravelSpotDiary().FindByUserIDAndTravelSpotID(ctx, userID, travelSpotID)
-	if dErr != nil && dErr != repository.ErrNotFound {
+	if dErr != nil && !errors.Is(dErr, repository.ErrNotFound) {
 		return nil, fmt.Errorf("failed to find travel spot diary: %w", dErr)
 	}
 	for _, travelSpotDiary := range travelSpotDiaries {
