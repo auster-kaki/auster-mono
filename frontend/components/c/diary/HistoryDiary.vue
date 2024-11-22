@@ -22,7 +22,7 @@
           >
             <v-chip
               v-if="isOffer"
-              style="position:absolute; top: 15px; right: 10px;"
+              style="position:absolute; bottom: 15px; right: 10px;"
               class="elevation-4"
               color="accent"
               :class="['animate-bounce']"
