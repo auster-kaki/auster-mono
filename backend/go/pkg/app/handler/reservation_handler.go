@@ -22,7 +22,7 @@ func NewReservationHandler(r *usecase.ReservationUseCase) []Input {
 		{method: http.MethodPost, path: "/reservations", handler: h.Create},
 		{method: http.MethodGet, path: "/reservations", handler: h.List},
 		{method: http.MethodGet, path: "/reservations/{reservation_id}", handler: h.GetReservation},
-		{method: http.MethodPatch, path: "/reservations/{reservation_id}/diary_photo", handler: h.UpdateDiaryPhoto},
+		{method: http.MethodPatch, path: "/reservations/{reservation_id}/diary_photo/users/{user_id}", handler: h.UpdateDiaryPhoto},
 		{method: http.MethodPatch, path: "/reservations/{reservation_id}/diary_description", handler: h.UpdateDescription},
 	}
 }
@@ -148,8 +148,9 @@ func (h *ReservationHandler) GetReservation(w http.ResponseWriter, r *http.Reque
 
 func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Request) {
 	var (
-		ctx = r.Context()
-		id  = entity.ReservationID(r.PathValue("reservation_id"))
+		ctx    = r.Context()
+		id     = entity.ReservationID(r.PathValue("reservation_id"))
+		userID = entity.UserID(r.PathValue("user_id"))
 	)
 
 	file, handler, err := r.FormFile("photo")
@@ -165,15 +166,9 @@ func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	req := map[string]any{}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		response.HandleError(ctx, w, err)
-		return
-	}
-
 	out, err := h.reservationUseCase.UpdateDiaryPhoto(ctx, usecase.UpdateDiaryPhotoInput{
 		ID:     id,
-		UserID: entity.UserID(req["user_id"].(string)),
+		UserID: userID,
 		Photo: usecase.Photo{
 			Filename:    handler.Filename,
 			Body:        photo,
