@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"time"
 )
 
 func Decode[T any](r *http.Request, v *T) error {
@@ -21,16 +20,47 @@ func Decode[T any](r *http.Request, v *T) error {
 }
 
 type User struct {
-	Name    string   `json:"name"`
-	Age     int      `json:"age"`
-	Gender  string   `json:"gender"`
-	Hobbies []string `json:"hobbies"`
+	Name    string  `json:"name"`
+	Age     int     `json:"age"`
+	Gender  string  `json:"gender"`
+	Hobbies []Hobby `json:"hobbies"`
+}
+
+type Hobby struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type Encounter struct {
-	UserID      string    `json:"user_id"`
-	Name        string    `json:"name"`
-	Place       string    `json:"place"`
-	Date        time.Time `json:"date"`
-	Description string    `json:"description"`
+	UserID      string `json:"user_id"`
+	Name        string `json:"name"`
+	Place       string `json:"place"`
+	Date        string `json:"date"`
+	Description string `json:"description"`
+}
+
+type TravelSpot struct {
+	UserID  string `json:"user_id"`
+	HobbyID string `json:"hobby_id"`
+}
+
+type Diary struct {
+	UserID          string `json:"user_id"`
+	HobbyID         string `json:"hobby_id"`
+	TravelSpotID    string `json:"travel_spot_id"`
+	DestinationName string `json:"destination_name"`
+	Date            string `json:"date"`
+}
+
+type Reservation struct {
+	UserID            string `json:"user_id"`
+	TravelSpotID      string `json:"travel_spot_id"`
+	TravelSpotDiaryID string `json:"travel_spot_diary_id"`
+	FromDate          string `json:"from_date"`
+	ToDate            string `json:"to_date"`
+}
+
+type DiaryDescription struct {
+	UserID      string `json:"user_id"`
+	Description string `json:"description"`
 }

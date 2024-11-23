@@ -13,3 +13,11 @@ type Hobby struct {
 }
 
 type Hobbies []*Hobby
+
+func (e *Hobbies) Names() []string {
+	names := make([]string, len(*e))
+	for i, hobby := range *e {
+		names[i] = hobby.Name
+	}
+	return names
+}

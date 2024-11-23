@@ -96,6 +96,7 @@ backend/go/*.exe~
 backend/go/*.dll
 backend/go/*.so
 backend/go/*.dylib
+backend/go/tmp
 
 # Test binary, built with `go test -c`
 backend/go/*.test

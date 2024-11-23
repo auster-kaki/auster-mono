@@ -10,16 +10,13 @@ type Repository interface {
 	User() UserRepository
 	Hobby() HobbyRepository
 	UserHobby() UserHobbyRepository
-	UserItineraryHistory() UserItineraryHistoryRepository
-	Itinerary() ItineraryRepository
-	ItineraryResult() ItineraryResultRepository
 	TravelSpot() TravelSpotRepository
-	TravelSpotPhoto() TravelSpotPhotoRepository
-	TravelSpotItem() TravelSpotItemRepository
+	TravelSpotHobby() TravelSpotHobbyRepository
+	TravelSpotItinerary() TravelSpotItineraryRepository
+	TravelSpotItineraryItem() TravelSpotItineraryItemRepository
+	TravelSpotDiary() TravelSpotDiaryRepository
+	Reservation() ReservationRepository
 	Vendor() VendorRepository
-	Diary() DiaryRepository
-	DiaryTag() DiaryTagRepository
-	DiaryUser() DiaryUserRepository
 	Encounter() EncounterRepository
 }
 
@@ -31,66 +28,62 @@ type UserRepository interface {
 }
 
 type HobbyRepository interface {
+	Create(ctx context.Context, hobbies ...*entity.Hobby) error
 	GetAll(ctx context.Context) (entity.Hobbies, error)
 	GetByIDs(ctx context.Context, ids []entity.HobbyID) (entity.Hobbies, error)
+	GetByID(ctx context.Context, id entity.HobbyID) (*entity.Hobby, error)
 }
 
 type UserHobbyRepository interface {
-	Create(ctx context.Context, userHobbies ...entity.UserHobby) error
+	Create(ctx context.Context, userHobbies ...*entity.UserHobby) error
 	DeleteByUserID(ctx context.Context, userID entity.UserID) error
 	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserHobbies, error)
-}
-
-type UserItineraryHistoryRepository interface {
-	Create(ctx context.Context, userItineraryDiaries ...entity.UserItineraryHistory) error
-	GetByUserID(ctx context.Context, userID entity.UserID) (entity.UserItineraryHistories, error)
-}
-
-type ItineraryRepository interface {
-	Create(ctx context.Context, itineraries ...entity.Itinerary) error
-	GetByUserItineraryHistoryID(ctx context.Context, userItineraryDiaryID entity.UserItineraryHistoryID) (entity.Itineraries, error)
-}
-
-type ItineraryResultRepository interface {
-	Create(ctx context.Context, itineraryResults ...entity.ItineraryResult) error
-	GetByItineraryID(ctx context.Context, itineraryID entity.ItineraryID) (entity.ItineraryResults, error)
 }
 
 type TravelSpotRepository interface {
 	Create(ctx context.Context, travelSpots ...entity.TravelSpot) error
 	GetByVendorID(ctx context.Context, vendorID entity.VendorID) (entity.TravelSpots, error)
+	FindByID(ctx context.Context, id entity.TravelSpotID) (*entity.TravelSpot, error)
+	GetByIDs(ctx context.Context, ids []entity.TravelSpotID) (entity.TravelSpots, error)
 }
 
-type TravelSpotPhotoRepository interface {
-	Create(ctx context.Context, travelSpotPhotos ...entity.TravelSpotPhoto) error
-	GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotPhotos, error)
+type TravelSpotHobbyRepository interface {
+	GetByHobbyID(ctx context.Context, hobbyID entity.HobbyID) (entity.TravelSpotHobbies, error)
 }
 
-type TravelSpotItemRepository interface {
-	Create(ctx context.Context, travelSpotItems ...entity.TravelSpotItem) error
-	GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotItems, error)
+type TravelSpotItineraryRepository interface {
+	Create(ctx context.Context, travelSpotItineraries ...entity.TravelSpotItinerary) error
+	GetByTravelSpotID(ctx context.Context, travelSpotID entity.TravelSpotID) (entity.TravelSpotItineraries, error)
+	GetByTravelSpotIDs(ctx context.Context, travelSpotIDs []entity.TravelSpotID) (entity.TravelSpotItineraries, error)
+	GetByKinds(ctx context.Context, kinds []string) (entity.TravelSpotItineraries, error)
+}
+
+type TravelSpotItineraryItemRepository interface {
+	Create(ctx context.Context, travelSpotItineraryItems ...entity.TravelSpotItineraryItem) error
+	GetByTravelSpotItineraryIDs(ctx context.Context, travelSpotItineraryIDs []entity.TravelSpotItineraryID) (entity.TravelSpotItineraryItems, error)
+}
+
+type TravelSpotDiaryRepository interface {
+	Create(ctx context.Context, travelSpotDiaries ...*entity.TravelSpotDiary) error
+	Update(ctx context.Context, travelSpotDiary *entity.TravelSpotDiary) error
+	FindByID(ctx context.Context, id entity.TravelSpotDiaryID) (*entity.TravelSpotDiary, error)
+	GetByIDs(ctx context.Context, ids []entity.TravelSpotDiaryID) (entity.TravelSpotDiaries, error)
+	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.TravelSpotDiaries, error)
+}
+
+type ReservationRepository interface {
+	Create(ctx context.Context, reservations ...*entity.Reservation) error
+	FindByID(ctx context.Context, id entity.ReservationID) (*entity.Reservation, error)
+	FindByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (entity.Reservations, error)
+	FindSpecialOfferByUserIDAndTravelSpotID(ctx context.Context, userID entity.UserID, travelSpotID entity.TravelSpotID) (*entity.Reservation, error)
+	GetEndedReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
+	GetUpcomingReservations(ctx context.Context, userID entity.UserID) (entity.Reservations, error)
 }
 
 type VendorRepository interface {
 	Create(ctx context.Context, vendors ...entity.Vendor) error
 	GetAll(ctx context.Context) (entity.Vendors, error)
 	FindByID(ctx context.Context, id entity.VendorID) (*entity.Vendor, error)
-}
-
-type DiaryRepository interface {
-	Create(ctx context.Context, diaries ...entity.Diary) error
-	FindByID(ctx context.Context, id entity.DiaryID) (*entity.Diary, error)
-	GetByIDs(ctx context.Context, ids []entity.DiaryID) (entity.Diaries, error)
-}
-
-type DiaryTagRepository interface {
-	Create(ctx context.Context, diaryTags ...entity.DiaryTag) error
-	GetByDiaryID(ctx context.Context, diaryID entity.DiaryID) (entity.DiaryTags, error)
-}
-
-type DiaryUserRepository interface {
-	Create(ctx context.Context, diaryUsers ...entity.DiaryUser) error
-	GetByUserID(ctx context.Context, userID entity.UserID) (entity.DiaryUsers, error)
 }
 
 type EncounterRepository interface {

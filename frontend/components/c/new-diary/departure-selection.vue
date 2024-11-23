@@ -13,7 +13,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="departureDate"
             label="行きの日付"
@@ -22,18 +22,7 @@
             type="date"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            v-model="returnDate"
-            label="帰りの日付"
-            outlined
-            dense
-            type="date"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="departureTime"
             label="出発時間"
@@ -42,7 +31,18 @@
             type="time"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
+      </v-row>
+      <v-row>
+        <v-col cols="6" md="6">
+          <v-text-field
+            v-model="returnDate"
+            label="帰りの日付"
+            outlined
+            dense
+            type="date"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6" md="6">
           <v-text-field
             v-model="returnTime"
             label="到着時間"
@@ -57,9 +57,12 @@
           <v-select
             v-model="interests"
             :items="interestOptions"
-            label="興味関心"
+            item-text="name"
+            item-value="id"
+            label="趣味"
             outlined
             dense
+            :error-messages="interestError"
           ></v-select>
         </v-col>
       </v-row>
@@ -77,7 +80,7 @@ export default {
   props: {
     initialDeparturePlace: {
       type: String,
-      default: null
+      default: ''
     },
     initialDepartureDate: {
       type: String,
@@ -101,29 +104,51 @@ export default {
     }
   },
   data() {
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
     return {
-      departurePlace: this.initialDeparturePlace,
-      departureDate: this.initialDepartureDate,
-      departureTime: this.initialDepartureTime,
-      returnDate: this.initialReturnDate,
-      returnTime: this.initialReturnTime,
-      departurePlaceOptions: ['東京', '大阪', '名古屋', '福岡', '札幌', '仙台', '広島', '那覇'],
+      departurePlace: this.initialDeparturePlace || '東京',
+      departureDate: this.initialDepartureDate || today.toISOString().substr(0, 10),
+      departureTime: this.initialDepartureTime || '12:00',
+      returnDate: this.initialReturnDate || tomorrow.toISOString().substr(0, 10),
+      returnTime: this.initialReturnTime || '18:00',
+      departurePlaceOptions: ['東京', '新宿', '渋谷', '池袋', '上野', '品川', '秋葉原', '銀座'],
       interests: this.initialInterests,
       interestOptions: [
-        '旅行', '料理', 'スポーツ', '音楽', '映画', '読書', 'アート', 'テクノロジー'
-      ]
+        { id: 'cstkdiat6c3011a83so0', name: '釣り' },
+        { id: 'cstkdiat6c3011a83sog', name: 'キャンプ' },
+      ],
+      interestError: ''
     }
   },
   methods: {
     onSubmit() {
-      this.$emit('submit', {
-        departurePlace: this.departurePlace,
-        departureDate: this.departureDate,
-        departureTime: this.departureTime,
-        returnDate: this.returnDate,
-        returnTime: this.returnTime,
-        interests: this.interests
-      })
+      if (this.validateInterests()) {
+        this.$emit('submit', {
+          departurePlace: this.departurePlace,
+          departureDate: this.departureDate,
+          departureTime: this.departureTime,
+          returnDate: this.returnDate,
+          returnTime: this.returnTime,
+          interests: this.interests
+        })
+      }
+    },
+    validateInterests() {
+      if (this.interests.length === 0 || this.interests.includes('cstkdiat6c3011a83so0')) {
+        this.interestError = ''
+        return true
+      } else {
+        this.interestError = 'デモ版では「釣り」のみ選択できます'
+        return false
+      }
+    }
+  },
+  watch: {
+    interests() {
+      this.validateInterests()
     }
   }
 }

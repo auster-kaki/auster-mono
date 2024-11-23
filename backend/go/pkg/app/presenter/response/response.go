@@ -1,12 +1,14 @@
 package response
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/auster-kaki/auster-mono/pkg/app/repository"
+	"github.com/auster-kaki/auster-mono/pkg/logging"
 )
 
 // OK - 200
@@ -24,56 +26,31 @@ func NoContent(w http.ResponseWriter) {
 	writeResponseJSON(w, http.StatusNoContent, nil)
 }
 
-// BadRequest - 400
-func BadRequest(w http.ResponseWriter, err error) {
-	writeResponseJSON(w, http.StatusBadRequest, map[string]any{
-		"message": handleErrorMessage(err),
-	})
-}
-
-// Unauthorized - 401
-func Unauthorized(w http.ResponseWriter, err error) {
-	writeResponseJSON(w, http.StatusUnauthorized, map[string]any{
-		"message": handleErrorMessage(err),
-	})
-}
-
-// Forbidden - 403
-func Forbidden(w http.ResponseWriter, err error) {
-	writeResponseJSON(w, http.StatusForbidden, map[string]any{
-		"message": handleErrorMessage(err),
-	})
-}
-
-// NotFound - 404
-func NotFound(w http.ResponseWriter, err error) {
-	writeResponseJSON(w, http.StatusNotFound, map[string]any{
-		"message": handleErrorMessage(err),
-	})
-}
-
-// InternalError - 500
-func InternalError(w http.ResponseWriter, err error) {
-	writeResponseJSON(w, http.StatusInternalServerError, map[string]any{
-		"message": handleErrorMessage(err),
-	})
-}
-
-func handleErrorMessage(err error) string {
+// HandleError - 500
+func HandleError(ctx context.Context, w http.ResponseWriter, err error) {
+	logging.Error(ctx, fmt.Sprintf("code: %d, message: %s", http.StatusInternalServerError, err.Error()))
+	var (
+		code = http.StatusInternalServerError
+		msg  = err.Error()
+	)
 	switch {
 	case errors.Is(err, repository.ErrNotFound):
-		return "見つかりませんでした"
+		code = http.StatusNotFound
+		msg = "見つかりませんでした"
 	case errors.Is(err, repository.ErrAlreadyExists):
-		return "既に存在します"
+		code = http.StatusConflict
+		msg = "既に存在します"
 	case errors.Is(err, repository.ErrDuplicate):
-		return "重複しています"
+		code = http.StatusConflict
+		msg = "重複しています"
 	case errors.Is(err, repository.ErrNotExists):
-		return "存在しません"
+		code = http.StatusNotFound
+		msg = "存在しません"
 	case errors.Is(err, repository.ErrUnimplemented):
-		return "未実装です"
-	default:
-		return err.Error()
+		code = http.StatusNotImplemented
+		msg = "未実装です"
 	}
+	writeResponseJSON(w, code, map[string]any{"message": msg})
 }
 
 func writeResponseJSON(w http.ResponseWriter, statusCode int, body any) {

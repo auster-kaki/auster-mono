@@ -1,29 +1,32 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'ExperienceSelection',
   props: {
-    video: {
-      type: String,
-      required: true
-    },
-    videoTitle: {
-      type: String,
-      required: true
-    },
-    videoDescription: {
-      type: String,
-      required: true
-    },
     experiences: {
       type: Array,
       required: true
     }
   },
+  setup() {
+    const selectedLanguage = ref('ja')
+    const videoSrc = ref('/new-diary/choshi.mp4')
+
+    const changeLanguage = (lang: string) => {
+      selectedLanguage.value = lang
+      videoSrc.value = lang === 'ja' ? '/new-diary/choshi.mp4' : '/new-diary/choshi-en.mp4'
+    }
+
+    return {
+      selectedLanguage,
+      videoSrc,
+      changeLanguage
+    }
+  },
   methods: {
     selectExperience(id: string) {
-      this.$emit('select-experience', id)
+      this.$emit('click', id)
     }
   }
 })
@@ -36,9 +39,31 @@ export default defineComponent({
         <h3 class="text-h5 mb-4">銚子について</h3>
         <v-card>
           <v-card-text>
-            <video :src="video" controls class="w-100"></video>
-            <v-card-title class="text-h5">{{ videoTitle }}</v-card-title>
-            <v-card-subtitle>{{ videoDescription }}</v-card-subtitle>
+            <v-container>
+              <v-row class="d-flex justify-center">
+                <video
+                  controls
+                  class="responsive-video" :src="videoSrc" />
+              </v-row>
+              <v-row>
+                <v-spacer />
+                <v-select
+                  v-model="selectedLanguage"
+                  :items="[
+                  { text: '日本語', value: 'ja' },
+                  { text: 'English', value: 'en' }
+                ]"
+                  class="ml-4"
+                  style="max-width: 150px;"
+                  @change="changeLanguage"
+                ></v-select>
+              </v-row>
+            </v-container>
+
+
+            <v-card-title class="text-h5">銚子の魅力：海と歴史が織りなす町</v-card-title>
+            <v-card-subtitle>千葉県の東端に位置する銚子市。豊かな自然と歴史的な街並みが魅力の町をご紹介します。
+            </v-card-subtitle>
           </v-card-text>
         </v-card>
       </v-col>
@@ -51,8 +76,9 @@ export default defineComponent({
             <v-card>
               <v-img :src="experience.image" :alt="experience.title" height="200" style="position:relative" cover>
                 <v-chip
-                  v-if="experience.hasFurusatoNozei" color="primary"
-                  style="position:absolute; top: 10px; right: 10px;">ふるさと納税対象
+                  v-if="experience.hasFurusatoNozei" color="accent" outlined
+                  style="position:absolute; top: 10px; right: 10px; background: #fafafa !important;">
+                  <strong>ふるさと納税対象</strong>
                 </v-chip>
               </v-img>
               <v-card-title>{{ experience.title }}</v-card-title>
@@ -61,7 +87,7 @@ export default defineComponent({
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="selectExperience(experience.id)">体験する</v-btn>
+                <v-btn class="primary" @click="selectExperience(experience.id)">この体験の日記を見る</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -72,5 +98,10 @@ export default defineComponent({
 </template>
 
 <style scoped>
+/* レスポンシブ動画スタイル */
+.responsive-video {
+  width: 100%; /* 画面幅に合わせる */
+  max-width: 800px; /* 最大幅を設定 */
+  height: auto; /* 縦横比を維持 */
+}
 </style>
-

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col cols="12">
-        <h2 class="text-center mb-4">予約一覧</h2>
+        <h2 class="text-center mb-4">予約確認</h2>
         <v-card v-if="reservations.length === 0" flat>
           <v-card-text class="text-center">予約がありません</v-card-text>
         </v-card>
@@ -11,33 +11,91 @@
           v-else
           :key="reservation.id"
           class="mb-4"
-          @click="goToItinerary(reservation.id)"
+          flat
         >
-          <v-img
-            :src="reservation.image"
-            height="200"
-            cover
-          ></v-img>
-          <v-card-title>{{ reservation.title }}</v-card-title>
-          <v-card-subtitle>
-            {{ formatDate(reservation.departureDate) }} - {{ reservation.departureCity }}
-          </v-card-subtitle>
+          <v-row no-gutters>
+            <v-col cols="4">
+              <v-img
+                :src="reservation.image"
+                max-height="128px"
+                max-width="158px"
+                cover
+              />
+            </v-col>
+            <v-col cols="8">
+              <v-card-title><strong>{{ reservation.title }}</strong></v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    {{ formatDate(reservation.fromDate) }} - {{ reservation.fromDate }}
+                  </v-row>
+                  <v-row>
+                    <div>{{ reservation.city }}</div>
+                    <v-spacer />
+                    <v-btn
+                      color="primary"
+                      outlined
+                      @click="goToItinerary(reservation.id)"
+                    >
+                      旅程確認・日記更新
+                    </v-btn>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      dense
+      :close-text="snackbar.closeText"
+      :close-icon="snackbar.closeIcon"
+    >
+      {{ snackbar.text }}
+      <template #action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          <v-icon>{{ snackbar.closeIcon }}</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+import { useUserStore } from '~/store/user'
+
 export default {
   name: 'IndexPage',
   layout: 'mobile',
   data() {
     return {
-      reservations: []
+      userInfo: {},
+      reservations: [],
+      snackbar: {
+        show: false,
+        text: '',
+        timeout: 3000,
+        color: 'success',
+        closeText: '閉じる',
+        closeIcon: 'mdi-close'
+      }
     }
   },
-  async created() {
+  async mounted() {
+    if (this.$route.query.reservation === 'success') {
+      this.showSnackbar('予約が完了しました！')
+    }
+    const userStore = useUserStore()
+    userStore.initializeUser()
+    this.userInfo = userStore.userInfo
     await this.fetchReservations()
   },
   methods: {
@@ -48,38 +106,36 @@ export default {
       this.$router.push(`/c/reservations/${id}/itinerary`)
     },
     async fetchReservations() {
+      const params = new URLSearchParams({
+        user_id: this.userInfo.id,
+        filter: 'yet'
+      })
       try {
-        // API呼び出しのコメントアウト
-        // const response = await this.$axios.get('/api/reservations')
-        // this.reservations = response.data
-
-        // ダミーデータを返す
-        this.reservations = [
-          {
-            id: 1,
-            title: '東京旅行',
-            departureDate: '2023-07-01',
-            departureCity: '大阪',
-            image: 'https://example.com/tokyo.jpg'
-          },
-          {
-            id: 2,
-            title: '京都観光',
-            departureDate: '2023-08-15',
-            departureCity: '名古屋',
-            image: 'https://example.com/kyoto.jpg'
-          },
-          {
-            id: 3,
-            title: '北海道ツアー',
-            departureDate: '2023-09-20',
-            departureCity: '東京',
-            image: 'https://example.com/hokkaido.jpg'
+        const response = await fetch(`${process.env.BASE_URL}/reservations?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
           }
-        ]
+        })
+        const data = await response.json()
+
+        // APIレスポンスを変換
+        this.reservations = data.reservations.map(item => ({
+          id: item.id,
+          title: item.travel_spot_title,
+          fromDate: item.from_date.split('T')[0],
+          toDate: item.to_date.split('T')[0],
+          city: '銚子',
+          image: `${process.env.BASE_URL}/images/${item.diary_photo_path}`,
+          isOffer: item.is_offer
+        }))
       } catch (error) {
         console.error('予約の取得に失敗しました', error)
       }
+    },
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
     }
   }
 }
