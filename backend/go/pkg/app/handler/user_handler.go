@@ -34,7 +34,7 @@ func (h *UserHandler) GetHobbies(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }
 
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -159,7 +159,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.Created(w, map[string]string{"id": string(id)})
+	response.Created(w, r, map[string]string{"id": string(id)})
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
@@ -216,5 +216,5 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, nil)
+	response.OK(w, r, nil)
 }

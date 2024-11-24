@@ -30,7 +30,7 @@ func (h *EncounterHandler) GetEncounters(w http.ResponseWriter, r *http.Request)
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }
 
 func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +49,7 @@ func (h *EncounterHandler) Create(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.Created(w, nil)
+	response.Created(w, r, nil)
 }
 
 func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +59,7 @@ func (h *EncounterHandler) GetEncounter(w http.ResponseWriter, r *http.Request) 
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }
 
 func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -78,5 +78,5 @@ func (h *EncounterHandler) Update(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(r.Context(), w, err)
 		return
 	}
-	response.OK(w, nil)
+	response.OK(w, r, nil)
 }

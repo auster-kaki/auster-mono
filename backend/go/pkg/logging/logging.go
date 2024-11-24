@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -33,6 +34,10 @@ func init() {
 
 func Info(ctx context.Context, msg string) {
 	slog.InfoContext(ctx, msg)
+}
+
+func InfoRequest(ctx context.Context, r *http.Request, msg string) {
+	slog.InfoContext(ctx, msg, slog.String("method", r.Method), slog.String("path", r.URL.Path))
 }
 
 func Warn(ctx context.Context, msg string) {

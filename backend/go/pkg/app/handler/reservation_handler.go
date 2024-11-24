@@ -58,7 +58,7 @@ func (h *ReservationHandler) Create(w http.ResponseWriter, r *http.Request) {
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.Created(w, out)
+	response.Created(w, r, out)
 }
 
 func (h *ReservationHandler) List(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +103,7 @@ func (h *ReservationHandler) List(w http.ResponseWriter, r *http.Request) {
 			"diary_photo_path":        photoPath,
 		})
 	}
-	response.OK(w, res)
+	response.OK(w, r, res)
 }
 
 func (h *ReservationHandler) GetReservation(w http.ResponseWriter, r *http.Request) {
@@ -155,7 +155,7 @@ func (h *ReservationHandler) GetReservation(w http.ResponseWriter, r *http.Reque
 			return itineraries
 		}(),
 	}
-	response.OK(w, res)
+	response.OK(w, r, res)
 }
 
 func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Request) {
@@ -191,7 +191,7 @@ func (h *ReservationHandler) UpdateDiaryPhoto(w http.ResponseWriter, r *http.Req
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.Created(w, out)
+	response.Created(w, r, out)
 }
 
 func (h *ReservationHandler) UpdateDescription(w http.ResponseWriter, r *http.Request) {
@@ -213,5 +213,5 @@ func (h *ReservationHandler) UpdateDescription(w http.ResponseWriter, r *http.Re
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.NoContent(w)
+	response.NoContent(w, r)
 }

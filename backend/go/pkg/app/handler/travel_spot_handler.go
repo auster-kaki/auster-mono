@@ -37,7 +37,7 @@ func (h *TravelSpotHandler) GetTravelSpots(w http.ResponseWriter, r *http.Reques
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }
 
 func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) {
@@ -78,7 +78,6 @@ func (h *TravelSpotHandler) CreateDiary(w http.ResponseWriter, r *http.Request) 
 		response.HandleError(ctx, w, err)
 		return
 	}
-
 }
 
 func (h *TravelSpotHandler) GetItineraries(w http.ResponseWriter, r *http.Request) {
@@ -92,5 +91,5 @@ func (h *TravelSpotHandler) GetItineraries(w http.ResponseWriter, r *http.Reques
 		response.HandleError(ctx, w, err)
 		return
 	}
-	response.OK(w, out)
+	response.OK(w, r, out)
 }

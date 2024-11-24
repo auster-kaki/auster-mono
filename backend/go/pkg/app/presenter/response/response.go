@@ -12,18 +12,25 @@ import (
 )
 
 // OK - 200
-func OK(w http.ResponseWriter, body any) {
+func OK(w http.ResponseWriter, r *http.Request, body any) {
+	log(r, "ok")
 	writeResponseJSON(w, http.StatusOK, body)
 }
 
 // Created - 201
-func Created(w http.ResponseWriter, body any) {
+func Created(w http.ResponseWriter, r *http.Request, body any) {
+	log(r, "created")
 	writeResponseJSON(w, http.StatusCreated, body)
 }
 
 // NoContent - 204
-func NoContent(w http.ResponseWriter) {
+func NoContent(w http.ResponseWriter, r *http.Request) {
+	log(r, "no content")
 	writeResponseJSON(w, http.StatusNoContent, nil)
+}
+
+func log(r *http.Request, message string) {
+	logging.InfoRequest(context.Background(), r, message)
 }
 
 // HandleError - 500
